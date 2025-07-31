@@ -1,0 +1,14 @@
+{% load static %}
+
+{% block buttonaddForTable %}
+
+<div class="actionButtonsForTable">
+    {% comment %} <div id="loadTable">
+        <i class="icon-spinner2 spinner"></i>
+    </div> {% endcomment %}
+    <a class="button-add cursor-pointer" data-toggle="modal" data-target="#modal_default">
+        <img src="{% static 'images/icons/add.svg' %}">
+    </a>
+</div>
+
+{% endblock %}

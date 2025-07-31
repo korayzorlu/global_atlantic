@@ -1,0 +1,216 @@
+{% load static %}
+
+<form method="post" action="/purchase_order_add/oc_{{orderConfirmation.id}}_{{inquiryIdList}}/" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-add-2" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Create Purchase Order</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row p-2 pt-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        {{orderConfirmation.project.projectNo}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="table-{{elementTagSub}}-{{quotationPart.quotation.id}}-sourcePart" class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width:5%;">Select</th>
+                                <th scope="col" style="width:55%;">Supplier</th>
+                                <th scope="col" style="width:15%;">Total</th>
+                                <th scope="col" style="width:5%;">Currency</th>
+                                <th scope="col" style="width:20%;">PO</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for inquiry in inquiries %}
+                                    <tr>
+                                        {% if inquiry.purchaseOrder %}
+                                            <td><input class="form-check-input purchaseOrderSupplier-{{orderConfirmation.id}}" type="checkbox" value="{{inquiry.id}}" checked disabled name="purchaseOrderSupplier" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        {% else %}
+                                            <td><input class="form-check-input purchaseOrderSupplier-{{orderConfirmation.id}}" type="checkbox" value="{{inquiry.id}}" checked name="purchaseOrderSupplier" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        {% endif %}
+                                        <td class="ps-1 pe-1">{{inquiry.supplier}}</td>
+                                        <td class="text-end ps-1 pe-1">{{inquiry.totalPrice|floatformat:2}}</td>
+                                        <td class="ps-1 pe-1">{{inquiry.currency}}</td>
+                                        <td class="ps-1 pe-1">{{inquiry.purchaseOrder}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit">Create</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var orderConfirmationId = "{{orderConfirmation.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/sale/purchase_order_add/oc_{{orderConfirmation.id}}_{{inquiryIdList}}/";
+    var user = "{{user.id}}";
+
+    $("#form-{{elementTag}}-{{elementTagId}}-add-2").submit(function (event) {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        event.preventDefault();
+
+        var formData = $(this).serializeArray();
+    
+        $.ajax({
+            type: "POST",
+            url: "/sale/purchase_order_add/oc_{{orderConfirmation.id}}_{{inquiryIdList}}/",  // Formunuzun işleneceği view'ın URL'si
+            data: formData,
+            success: function (response, status, xhr) {
+                // Başarılı yanıt geldiğinde mesajı görüntüleyin
+                if (xhr.status === 204) {
+                    setTimeout(function() {
+                    
+                        let navTagSub = $("#navTag-{{elementTag}}-{{elementTagId}}");
+                        let tabPaneSub = $("#tabPane-{{elementTag}}-{{elementTagId}}");
+                    
+                        navTagSub.prev().children("a").addClass("active");
+                        
+                        navTagSub.prev().children("a").children("button").show();
+                        $("#table-{{elementTag}}").DataTable().columns.adjust();
+                        
+                        navTagSub.remove();
+                        tabPaneSub.remove();
+
+                        addUpdateDataModalL.hide();
+
+                        $("#table-purchaseOrder").DataTable().ajax.reload(function() {
+                            htmx.process("#table-purchaseOrder");
+                        }, false);
+
+                        if($("#navTag-purchaseOrder").length > 0){
+                            $("#navTagLink-orderConfirmation").removeClass("active");
+                            $("#tabPane-orderConfirmation").removeClass("active show");
+                            $("#navTagLink-purchaseOrder").addClass("active");
+                            $("#tabPane-purchaseOrder").addClass("active show");
+
+                            fetch('/sale/api/purchase_orders?ordering=-id&user={{user.id}}&orderConfirmation__id={{elementTagId}}&format=datatables', {method : "GET"})
+                            .then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                if(data["data"].length > 1){
+                                    $("#tabNavSub-purchaseOrder .nav-link").removeClass("active");
+                                    $("#tabContSub-purchaseOrder .tab-pane").removeClass("active show");
+                                    $("#navTagLink-purchaseOrder-table").addClass("active");
+                                    $("#tabPane-purchaseOrder-table").addClass("active show");
+
+                                    $("#table-purchaseOrder").DataTable().ajax.reload(function() {
+                                        htmx.process("#table-purchaseOrder");
+                                        for(let i = 0; i < data["data"].length; i++){
+                                          $("#table-purchaseOrder").DataTable().rows().every(function() {
+                                            var rowNode = this.node();
+                                            var rowData = this.data();
+                                            if (rowData["id"] == data["data"][i]["id"]) {
+                                                $(rowNode).css("background-color", "#fdde6c");
+                                                $(rowNode).css("font-weight", "bold");
+                                            }
+                                          });
+                                        };
+                                    }, false);
+                                }else{
+                                    htmx.ajax("GET", "/sale/purchase_order_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                                    window.history.pushState({}, '', "/sale/purchase_order_update/" + data["data"][0]["id"] + "/");
+                                };
+                            });
+                        }else{
+                            htmx.ajax("GET", "/sale/purchase_order_data", {target:"#tabCont", swap:"afterbegin"});
+                            setNavTabPurchaseOrder();
+                            fetch('/sale/api/purchase_orders?ordering=-id&user={{user.id}}&orderConfirmation__id={{elementTagId}}&format=datatables', {method : "GET"})
+                            .then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                if(data["data"].length > 1){
+                                    $("#tabNavSub-purchaseOrder .nav-link").removeClass("active");
+                                    $("#tabContSub-purchaseOrder .tab-pane").removeClass("active show");
+                                    $("#navTagLink-purchaseOrder-table").addClass("active");
+                                    $("#tabPane-purchaseOrder-table").addClass("active show");
+
+                                    $("#table-purchaseOrder").DataTable().ajax.reload(function() {
+                                        htmx.process("#table-purchaseOrder");
+                                        for(let i = 0; i < data["data"].length; i++){
+                                          $("#table-purchaseOrder").DataTable().rows().every(function() {
+                                            var rowNode = this.node();
+                                            var rowData = this.data();
+                                            if (rowData["id"] == data["data"][i]["id"]) {
+                                                $(rowNode).css("background-color", "#fdde6c");
+                                                $(rowNode).css("font-weight", "bold");
+                                            }
+                                          });
+                                        };
+                                    }, false);
+                                }else{
+                                    htmx.ajax("GET", "/sale/purchase_order_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                                    window.history.pushState({}, '', "/sale/purchase_order_update/" + data["data"][0]["id"] + "/");
+                                };
+                            });
+                        };
+                
+                    setTimeout(function() {
+                        $("body").busyLoad("hide", {
+                        animation: "fade"
+                        });
+                    }, 500);
+                
+                    }, 500);
+                    $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+                    // Mesajı belirli bir süre sonra gizle
+                    setTimeout(function() {
+                    $("#message-container-inside-{{elementTag}}-{{elementTagId}}-add-2").fadeOut("slow");
+                    }, 500); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+                }
+            },
+            error: function (xhr, status, error) {
+                //spinner durdurur
+                $("body").busyLoad("hide", {
+                    animation: "fade"
+                });
+                // Hata durumunda mesajı görüntüleyin
+                $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+            }
+        });
+      
+  
+      
+  
+    });
+
+</script>
+
+{% block javascript %}
+
+
+<script src="{% static 'js/sale/purchase_order/add.js' %}"></script>
+
+{% endblock javascript %}

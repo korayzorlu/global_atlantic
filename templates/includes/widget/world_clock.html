@@ -1,0 +1,102 @@
+{% load static %}
+
+<div class="col-md-3 border wordCLockWidget">
+    <div class="row p-3 pt-1 d-block">
+        <div class="col-md-12">
+
+            <div class="row d-none">
+                <div class="col-md-12 text-end fs-5">
+                    <button class="btn btn-tertiary p-2 removeWordClock">
+                        <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row mb-3 p-2 ps-0">
+                <div class="col-md-12 text-start fs-5">
+                    World Clock
+                </div>
+            </div>
+
+            <div class="row p-0">
+                <div class="col-md-12 text-center fs-5 p-0">
+                    <table class="table table-striped table-hover dataTable no-footer dashboardTable" id="timeTable" onload="updateTime()">
+                        <thead>
+                            <tr>
+                                <th class="text-red-esms fw-bold">LOCATION</th>
+                                <th class="text-red-esms fw-bold">LOCAL TIME</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt="">New York</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeNewYork"></span>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/germany.png' %}" height="30px" class="m-1"alt=""> Berlin</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeGermany"></span>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> London</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeLondon"></span>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/south-korea.png' %}" height="30px" class="m-1"alt=""> Seoul</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeSeoul"></span>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/chinese-flag.png' %}" height="30px" class="m-1"alt=""> Shanghai</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeBeijing"></span>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/canada.png' %}" height="30px" class="m-1"alt=""> Toronto</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeCanada"></span>  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-start"><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> Tokyo</td>
+                                <td class="text-start">
+                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                    <span class="ms-2" id="timeTokyo"></span>  
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //WordClock
+    function updateTime() {
+        document.getElementById("timeNewYork").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "America/New_York"});
+        document.getElementById("timeGermany").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "Europe/Berlin"});
+        document.getElementById("timeLondon").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "Europe/London"});
+        document.getElementById("timeCanada").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "America/Toronto"});
+        document.getElementById("timeTokyo").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "Asia/Tokyo"});
+        document.getElementById("timeSeoul").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "Asia/Seoul"});
+        document.getElementById("timeBeijing").innerText = new Date().toLocaleTimeString("tr-TR", {timeZone: "Asia/Shanghai"});
+    }
+
+    setInterval(updateTime, 1000);
+    updateTime();
+</script>

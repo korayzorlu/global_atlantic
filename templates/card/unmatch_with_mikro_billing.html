@@ -1,0 +1,49 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+<form hx-post="{{ request.path }}" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-withUnmatch" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Unmatch with current in Mikro?</h5>
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit">Unmatch</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var billingId = "{{billing.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/card/billing_unmatch_with_mikro/b_{{billing.id}}";
+    var user = "{{user.id}}";
+
+    $("#form-" + elementTag +  "-" + elementTagId + "-withUnmatch").submit(function (event) {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+
+        event.preventDefault();
+
+        addUpdateDataModal.hide();
+
+    });
+</script>
+
+{% block javascript %}
+
+
+
+
+{% endblock javascript %}

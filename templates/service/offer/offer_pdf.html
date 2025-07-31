@@ -1,0 +1,69 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+        {{offer.offerNo}} - PDF
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 5%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} p-3 fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+    <iframe id="iframe-pdf" src="/media/docs/{{request.user.profile.sourceCompany.id}}/service/offer/documents/{{offer.offerNo}}.pdf?v={{version}}" width="100%" height="800px"></iframe>
+    {% comment %} <iframe src="/media/temp_pdf/{{inquiry.inquiryNo}}.pdf" width="100%" height="800px"></iframe> {% endcomment %}
+</div>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var offerId = "{{offer.id}}";
+    var pageUrl = "/service/offer_pdf/{{elementTagId}}/";
+
+    //tablo oluşurken loading spinner'ını açar
+    $("#tabPane-" + elementTag).busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "#fff",
+        color: "#455359",
+        textColor: "#455359"
+    });
+
+    $.ajax({
+        url: "/service/offer_pdf/{{elementTagId}}/", // Django view URL'si
+        type: "GET", // veya "POST" işlem türüne bağlı olarak
+        success: function (data) {
+            //tablo oluştuğunda loading spinner'ını kapatır
+            $("#tabPane-" + elementTag).busyLoad("hide", {
+                animation: "fade"
+            });
+        },
+        error: function () {
+            //tablo oluştuğunda loading spinner'ını kapatır
+            $("#tabPane-" + elementTag).busyLoad("hide", {
+                animation: "fade"
+            });
+        },
+    });
+
+    $(document).ready(function () {
+        setHTMX();
+        setNavTabSub();
+
+        
+    });
+
+    
+
+</script>
+
+{% block javascript %}
+
+
+
+{% endblock javascript %}
+

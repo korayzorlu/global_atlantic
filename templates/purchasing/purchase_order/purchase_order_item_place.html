@@ -1,0 +1,118 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<form hx-post="{{request.path}}" class="modal-content form-container border" id="form-{{elementTag}}-" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Place Item</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row p-2 pt-0">
+                    <div class="col-md-8 bg-red-esms text-white">
+                        <strong>Part Unique: </strong> {{partUnique}} | <strong>Part No: </strong> {{part.partNo}}
+                    </div>
+                    <div class="col-md-4 bg-blue-esms text-white">
+                        <strong>Unit: </strong>{{part.unit}} | <strong>Quantity: </strong> {{purchaseOrderItem.quantity}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="table-{{elementTagSub}}-{{purchaseOrderItem.purchaseOrder.id}}-sourceItem" class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width:5%;">Select</th>
+                                <th scope="col" style="width:10%;">WH Code</th>
+                                <th scope="col" style="width:65%;">Warehouse Name</th>
+                                <th scope="col" style="width:10%;">Stock In WH</th>
+                                <th scope="col" style="width:10%;">Location</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for warehouse in warehouses %}
+                                    <tr>
+                                        <td><input class="form-check-input warehouse-{{purchaseOrderItem.purchaseOrder.id}}" type="radio" value="{{warehouse.id}}" id="select-all-{{elementTagSub}}-warehouse" name="warehouse" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        <td class="text-start ps-1 pe-1">{{warehouse.code}}</td>
+                                        <td class="text-start ps-1 pe-1">{{warehouse.name}}</td>
+                                        <td class="text-end ps-1 pe-1">{{warehouse.stock}}</td>
+                                        <td class="text-end ps-1 pe-1"><input class="form-control form-control-sm" type="text" id="input-{{elementTagSub}}-location-{{warehouse.id}}"/></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary bg-red-esms text-white" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger bg-blue-esms" type="button" id="placePurchaseOrderItem">Place</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/purchasing/purchase_order_item_place/";
+    var user = "{{user.id}}";
+
+    //$("#table-purchaseOrderPartExcel").DataTable().columns.adjust();
+
+    $("#placePurchaseOrderItem").on("click", function(){
+        $(".tableBox-inform-purchasingPurchaseOrderPart-{{purchaseOrderItem.purchaseOrder.id}} .dataTables_scroll").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        
+        
+        $('.warehouse-{{purchaseOrderItem.purchaseOrder.id}}').each( function(e) {
+            
+            if ($(this).is( ":checked" )) {
+                var selectedWarehouseId = $(this).val();
+                var selectedWArehouseLocation = $(`#input-{{elementTagSub}}-location-${selectedWarehouseId}`).val();
+                htmx.ajax("POST", "/purchasing/purchase_order_item_place/?iii={{purchaseOrderItem.id}}" + "&w=" + selectedWarehouseId + "&l=" + selectedWArehouseLocation);
+                addUpdateDataModalXl.hide();
+            };
+        });
+
+        
+
+    });
+    
+
+    var day = new Date().getDate()
+    var month = new Date().getMonth() + 1
+    var year = new Date().getFullYear()
+
+    $('#startDate').val("01/01/2024")
+    $('#endDate').val(day + "/" + month + "/" + year)
+
+    {% comment %} $('#startDatePicker').on("valueChanged.mdb.datepicker", function(e) {
+        // get value from first datepicker and set it as minimum date in a second datepicker
+        console.log(e);
+        console.log($('#startDate').val());
+    });	 {% endcomment %}
+
+
+    //$('#companyListOC').select2();
+
+    
+
+</script>
+
+{% block javascript %}
+
+{% endblock javascript %}

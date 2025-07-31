@@ -1,0 +1,352 @@
+{% load static i18n %}
+{% block part_detail_modals %}
+<div id="part_compatibility_data" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/puzzle3.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Compatibilities' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Compatibilities</u> of this part.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForTable">
+                        <a class="button-add cursor-pointer" data-toggle="modal"
+                            data-target="#part_compatibility_add_form">
+                            <img src="{% static 'images/icons/add.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Maker' %}</th>
+                                <th>{% trans 'Maker Type' %}</th>
+                                <th>{% trans 'Maker Part Code' %}</th>
+                                <th class="dataTableAction">{% trans 'Actions' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for compatibility in part.compatibilities.all %}
+                            <tr id="{{compatibility.id}}">
+                                <td>{{compatibility.maker}}</td>
+                                <td>{{compatibility.maker_type}}</td>
+                                <td>{{compatibility.code}}</td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'parts:part_compatibility_delete' compatibility.id %}?next={{ request.path }}"
+                                            class="button-remove-row button-remove-compatibility">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="part_supplier_data" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/building.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Suppliers' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Suppliers</u> for this part.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForTable">
+                        <a class="button-add cursor-pointer" data-toggle="modal" data-target="#part_supplier_add_form">
+                            <img src="{% static 'images/icons/add.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Supplier' %}</th>
+                                <th>{% trans 'Supplier Code' %}</th>
+                                <th class="dataTableAction">{% trans 'Action' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for supplier in part.suppliers.all %}
+                            <tr id="{{supplier.id}}">
+                                <td>{{supplier.supplier}}</td>
+                                <td>{{supplier.code}}</td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'parts:part_supplier_delete' supplier.id %}?next={{ request.path }}"
+                                            class="button-remove-row button-remove-supplier">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="part_manufacturer_data" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/conveyor.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Manufacturers' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Manufacturers</u> for this part.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForTable">
+                        <a class="button-add cursor-pointer" data-toggle="modal"
+                            data-target="#part_manufacturer_add_form">
+                            <img src="{% static 'images/icons/add.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Manufacturer' %}</th>
+                                <th>{% trans 'Manufacturer Code' %}</th>
+                                <th class="dataTableAction">{% trans 'Action' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for manufacturer in part.manufacturers.all %}
+                            <tr id="{{manufacturer.id}}">
+                                <td>{{manufacturer.manufacturer}}</td>
+                                <td>{{manufacturer.code}}</td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'parts:part_manufacturer_delete' manufacturer.id %}?next={{ request.path }}"
+                                            class="button-remove-row button-remove-manufacturer">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="part_compatibility_add_form" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="quotationNumber" class="text-center">Add Compatibility</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {{ part_compatibility_add_form.non_field_errors }}
+                        {% for field in part_compatibility_add_form.visible_fields %}
+                        {% if field.name != 'part' %}
+                        <div class="form-group col-lg-12">
+                            <label>{{field.label}}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <fieldset class="card-footer border-top w-100 text-right">
+                        <button id="formSubmit" type="submit" name="part_compatibility_add_form"
+                            class="btn btn-primary btn-block">
+                            {% trans 'Add' %}
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="part_supplier_add_form" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="quotationNumber" class="text-center">Add Supplier</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {{ part_supplier_add_form.non_field_errors }}
+                        {% for field in part_supplier_add_form.visible_fields %}
+                        {% if field.name != 'part' %}
+                        <div class="form-group col-lg-12">
+                            <label>{{field.label}}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <fieldset class="card-footer border-top w-100 text-right">
+                        <button id="formSubmit" type="submit" name="part_supplier_add_form"
+                            class="btn btn-primary btn-block">
+                            {% trans 'Add' %}
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="part_manufacturer_add_form" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="quotationNumber" class="text-center">Add Manufacturer</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {{ part_manufacturer_add_form.non_field_errors }}
+                        {% for field in part_manufacturer_add_form.visible_fields %}
+                        {% if field.name != 'part' %}
+                        <div class="form-group col-lg-12">
+                            <label>{{field.label}}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <fieldset class="card-footer border-top w-100 text-right">
+                        <button id="formSubmit" type="submit" name="part_manufacturer_add_form"
+                            class="btn btn-primary btn-block">
+                            {% trans 'Add' %}
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /modal -->
+
+<!-- Modal for docs. -->
+<div id="modal_documents" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/file.svg' %}" class="rounded" width="44" height="44" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Document List' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Document list</u> of this maker.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTableScroll">
+                        <thead class="d-none">
+                            <tr>
+                                <th>{% trans 'Document Name' %}</th>
+                                <th class="dataTableAction">{% trans 'Actions' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for document in part.documents.all %}
+                            <tr>
+                                <td>
+                                    <a target="_blank" href="{{ document.file.url }}">
+                                        <img src="{% static 'images/icons/folder.svg' %}" alt=""
+                                            class="img-preview rounded mr-2">
+                                        {{ document.get_filename }}
+                                    </a>
+                                </td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'parts:part_document_delete' document.id %}?next={{ request.path }}"
+                                            class="button-remove-row">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            {% for image in part.images.all %}
+                            <tr>
+                                <td>
+                                    <a target="_blank" href="{{ image.image.url }}">
+                                        <img src="{{ image.image.url }}" alt="" class="img-preview rounded  mr-2">
+                                        {{ image.get_filename }}
+                                    </a>
+                                </td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'parts:part_image_delete' image.id %}?next={{ request.path }}"
+                                            class="button-remove-row">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <div class="form-group col-lg-12">
+                    <form action="#" class="dropzone" id="dropzone_multiple"></form>
+                    <span class="form-text text-muted">Upload your documents for this maker.</span>
+                </div> -->
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /modal -->
+{% endblock %}
+<!-- Modal Maker Types table -->

@@ -1,0 +1,53 @@
+@keyframes animateRoad {
+    0% {
+        background-position: 0% 124%;
+    }
+
+    /* Finish changes by here */
+    20% {
+        background-position: 50% 124%;
+    }
+    /* Between 20% and 100%, nothing changes */
+    80% {
+        background-position: 50% 124%;
+    }
+
+    /* Between 20% and 100%, nothing changes */
+    100% {
+        background-position: 110% 124%;
+    }
+}
+
+#iconVessel {
+    position: relative;
+    background: transparent;
+    &::before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 40px;
+        background: url("../../../images/icons/ship.svg");
+        top: -10px;
+        background-position: 0% 124%;
+        background-size: 150px 40px;
+        background-repeat: repeat-x;
+        animation: animateRoad 5s linear infinite;
+    }
+    &::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: url("../../../images/icons/sea.svg");
+        top: 41%;
+        left: 14%;
+        background-size: 32px 26px;
+        background-repeat: no-repeat;
+    }
+}
+
+@media screen and(max-width: 768px) {
+    #iconVessel {
+        display: none;
+    }
+}

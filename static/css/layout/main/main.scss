@@ -1,0 +1,248 @@
+@import url("https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap");
+@import "buttonStyle";
+@import "toogle";
+@import "animation";
+
+//COLORS FOR SVG ===============
+
+//#81C784 ----filter: invert(80%) sepia(6%) saturate(2074%) hue-rotate(73deg) brightness(85%) contrast(107%) SUCCESS;
+//#42A5F5 ----filter: invert(60%) sepia(13%) saturate(4607%) hue-rotate(181deg) brightness(98%) contrast(95%) PRIMARY;
+//#EF5350 ----filter: invert(48%) sepia(80%) saturate(2558%) hue-rotate(329deg) brightness(94%) contrast(99%) DANGER;
+//#FF7043 ----filter: invert(53%) sepia(65%) saturate(1831%) hue-rotate(332deg) brightness(102%) contrast(101%) WARNİNG;
+//#26C6DA ----filter: invert(77%) sepia(24%) saturate(2560%) hue-rotate(143deg) brightness(91%) contrast(86%) INFO;
+//#FFF ---filter: invert(100%) sepia(0%) saturate(7493%) hue-rotate(220deg) brightness(99%) contrast(102%);
+//#000 ----filter: invert(0%) sepia(3%) saturate(0%) hue-rotate(257deg) brightness(104%) contrast(104%);
+//#FFB74D ----filter: invert(92%) sepia(18%) saturate(2640%) hue-rotate(316deg) brightness(98%) contrast(114%); YELLOW
+//#AB47BC ----filter: invert(38%) sepia(39%) saturate(1810%) hue-rotate(257deg) brightness(89%) contrast(90%); VIOLET
+//#EC407A ----filter: invert(61%) sepia(79%) saturate(6090%) hue-rotate(316deg) brightness(95%) contrast(94%); PINK
+
+/* Works on Firefox */
+* {
+    font-family: "Comfortaa", sans-serif;
+}
+
+#load {
+    position: absolute;
+    top: 45%;
+    left: 55%;
+    -webkit-transform: translate(-50%);
+    -ms-transform: translate(-50%);
+    transform: translate(-50%);
+}
+
+.page-title {
+    padding: 1.5rem 0;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+
+    a {
+        margin-right: 0.5rem;
+        display: inline-block;
+        -webkit-transition: 0.2s ease;
+        -o-transition: 0.2s ease;
+        transition: 0.2s ease;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 0.125rem;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+
+        img {
+            -webkit-transition: 0.2s ease;
+            -o-transition: 0.2s ease;
+            transition: 0.2s ease;
+            width: 80%;
+            height: 80%;
+            -webkit-filter: invert(92%) sepia(18%) saturate(2640%) hue-rotate(316deg) brightness(98%) contrast(114%);
+            filter: invert(92%) sepia(18%) saturate(2640%) hue-rotate(316deg) brightness(98%) contrast(114%);
+        }
+
+        &:hover {
+            background-color: #ffb84dc4;
+
+            img {
+                width: 80%;
+                height: 80%;
+                -webkit-filter: invert(100%) sepia(23%) saturate(2097%) hue-rotate(239deg) brightness(123%)
+                    contrast(109%);
+                filter: invert(100%) sepia(23%) saturate(2097%) hue-rotate(239deg) brightness(123%) contrast(109%);
+            }
+        }
+    }
+
+    span {
+        font-size: 1.2rem;
+    }
+}
+
+.icon-trash-alt {
+    cursor: pointer;
+    -webkit-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+
+    &:hover {
+        color: red;
+    }
+}
+
+#loadTable {
+    i {
+        font-size: 1.5rem;
+    }
+}
+
+.errorlist {
+    padding: 0;
+    text-decoration: none;
+    list-style: none;
+    margin-top: 0.5rem;
+    font-size: 80%;
+    color: rgba(255, 0, 0, 0.534);
+    margin-bottom: 0;
+}
+
+.postForEdit {
+    color: #4aaeff;
+
+    &:hover {
+        color: #8ccbff;
+        text-decoration: underline;
+    }
+}
+.exit {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    padding: 0.75rem 1.25rem;
+
+    &:not(:last-child) {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .button-exit {
+        position: absolute;
+        right: 2%;
+    }
+}
+
+.btn-to-top {
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    -ms-flex-item-align: end;
+    align-self: flex-end;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 999;
+    -webkit-transition: all 0.15s ease-in-out;
+    -o-transition: all 0.15s ease-in-out;
+    transition: all 0.15s ease-in-out;
+    button {
+        background-color: #29b5f6b0;
+        display: -webkit-inline-box;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        padding: 0;
+        width: calc(2.25rem + 2px);
+        height: calc(2.25rem + 2px);
+        position: relative;
+        &:hover {
+            background-color: #29b6f6;
+        }
+        i {
+            color: #ffffff;
+        }
+    }
+}
+
+.btn-to-top-visible {
+    visibility: visible;
+    opacity: 1;
+}
+
+.content-wrapper {
+    overflow-y: auto;
+}
+
+.dataTable {
+    thead {
+        th {
+            &:nth-child(2) {
+                border-left: 0px;
+            }
+        }
+    }
+}
+
+.dataTableAction {
+    padding: 0.75rem 1.25rem !important;
+    width: 5%;
+    text-align: center;
+    &::before,
+    &::after {
+        content: " " !important;
+    }
+}
+
+.counter-icon {
+    font-size: 2rem;
+    position: absolute;
+    left: 50%;
+    margin-left: -1rem;
+}
+
+@media (min-width: 768px) {
+    .sidebar.sidebar-light.sidebar-main.sidebar-fixed.sidebar-expand-md {
+        background-color: transparent;
+        -webkit-box-shadow: none !important;
+        box-shadow: none !important;
+        border: none;
+    }
+}
+
+::-moz-selection {
+    background-color: #51a2db;
+}
+
+::selection {
+    background-color: #51a2db;
+}
+::-moz-selection {
+    background-color: #51a2db;
+}
+::selection {
+    background-color: #51a2db;
+}
+
+.sidebar-content {
+    scrollbar-width: none !important;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}

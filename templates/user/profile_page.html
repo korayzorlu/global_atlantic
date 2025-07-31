@@ -1,0 +1,395 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "../layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %} User Profile {% endblock %}
+{% block mainDirectory %}User{% endblock %}
+{% block childDirectory %}Profile{% endblock childDirectory %}
+{% block href %}{% url 'user:dashboard' %}{% endblock %}
+{% block mainRouteUrl %}{% url 'user:profile_page' %}{% endblock %}
+{% block mainRoute %}Profil Page{% endblock %}
+{% block childRoute %}-{% endblock %}
+
+{% block content %}
+<!-- Content bloğu -->
+<div class="d-xl-flex align-items-xl-start">
+    <!-- Left sidebar component -->
+    <div class="sidebar sidebar-light bg-transparent sidebar-component sidebar-component-left wmin-300 border-0 shadow-0 sidebar-expand-xl">
+
+        <!-- Sidebar content -->
+        <div class="sidebar-content">
+            <!-- Navigation -->
+            <div class="card">
+                <div class="card-body bg-indigo-400 text-center card-img-top">
+                    <div class="card-img-actions d-inline-block mb-3">
+                        {% if profile_form.instance.image %}
+                        <img id="profile-image-main" src="{{ profile_form.instance.image.url }}" alt="avatar"
+                             data-default="{% static 'images/icons/enchanted.svg' %}" class="rounded-circle profile-image"
+                             width="170" height="170">
+                        {% else %}
+                        <img id="profile-image-main" src="{% static 'images/icons/enchanted.svg' %}" alt="avatar"
+                             data-default="{% static 'images/icons/enchanted.svg' %}" class="rounded-circle profile-image"
+                             width="170" height="170">
+                        {% endif %}
+                        <div class="card-img-actions-overlay rounded-circle">
+                            <label id="profile-remove"
+                                   class="btn btn-outline-danger border-2 btn-icon rounded-pill m-0 mr-2">
+                                <i class="icon-cross2"></i>
+                            </label>
+                            <label class="btn btn-outline-white border-2 btn-icon rounded-pill m-0">
+                                <i class="icon-plus3"></i>
+                                <input type="file" name="{{ profile_form.image.name }}" accept="image/*" hidden>
+                            </label>
+                        </div>
+                    </div>
+                    <h6 class="font-weight-semibold mb-0">{{ request.user.get_full_name }}</h6>
+                    <span class="d-block opacity-75">{{ request.user.profile.position }}</span>
+
+                    <div class="list-icons list-icons-extended mt-3">
+                        <a href="{% if profile_form.facebook.value %} {{ profile_form.facebook.value }} {% else %}#{% endif %}"
+                           target="{% if profile_form.facebook.value %}_blank{% else %}{% endif %}"
+                           class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body"
+                           data-original-title="Google Drive"><i class="icon-facebook"></i></a>
+                        <a href="{% if profile_form.twitter.value %} {{ profile_form.twitter.value }} {% else %}#{% endif %}"
+                           target="{% if profile_form.twitter.value %}_blank{% else %}{% endif %}"
+                           class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body"
+                           data-original-title="Twitter"><i class="icon-twitter"></i></a>
+                        <a href="{% if profile_form.instagram.value %} {{ profile_form.instagram.value }} {% else %}#{% endif %}"
+                           target="{% if profile_form.instagram.value %}_blank{% else %}{% endif %}"
+                           class="list-icons-item text-white" data-popup="tooltip" title="" data-container="body"
+                           data-original-title="Github"><i class="icon-instagram "></i></a>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <ul class="nav nav-sidebar mb-2">
+                        <li class="nav-item-header">Navigation</li>
+                        <li class="nav-item">
+                            <a href="#profile" class="nav-link active" data-toggle="tab">
+                                <i class="icon-user"></i>
+                                My profile
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#schedule" class="nav-link" data-toggle="tab">
+                                <i class="icon-calendar3"></i>
+                                Schedule
+                                <span class="font-size-sm font-weight-normal opacity-75 ml-auto">02:56pm</span>
+                            </a>
+                        </li>
+                        <li class="nav-item-divider"></li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="logout" data-toggle="tab">
+                                <i class="icon-switch2"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /navigation -->
+            <!-- Online users -->
+            <div class="card">
+                <div class="card-header bg-transparent border-bottom header-elements-inline">
+                    <span class="card-title font-weight-semibold">Online users</span>
+                    <div class="header-elements">
+                        <span class="badge bg-success badge-pill">49</span>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <ul class="media-list">
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="{% static 'lib/global_assets/images/placeholders/placeholder.jpg' %}"
+                                     width="36" height="36" class="rounded-circle" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold">James Alexander</a>
+                                <div class="font-size-sm text-muted">Santa Ana, CA.</div>
+                            </div>
+                            <div class="ml-3 align-self-center">
+                                <span class="badge badge-mark border-success"></span>
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="{% static 'lib/global_assets/images/placeholders/placeholder.jpg' %}"
+                                     width="36" height="36" class="rounded-circle" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold">Jeremy Victorino</a>
+                                <div class="font-size-sm text-muted">Dowagiac, MI.</div>
+                            </div>
+                            <div class="ml-3 align-self-center">
+                                <span class="badge badge-mark border-danger"></span>
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="{% static 'lib/global_assets/images/placeholders/placeholder.jpg' %}"
+                                     width="36" height="36" class="rounded-circle" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold">Margo Baker</a>
+                                <div class="font-size-sm text-muted">Kasaan, AK.</div>
+                            </div>
+                            <div class="ml-3 align-self-center">
+                                <span class="badge badge-mark border-success"></span>
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="{% static 'lib/global_assets/images/placeholders/placeholder.jpg' %}"
+                                     width="36" height="36" class="rounded-circle" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold">Beatrix Diaz</a>
+                                <div class="font-size-sm text-muted">Neenah, WI.</div>
+                            </div>
+                            <div class="ml-3 align-self-center">
+                                <span class="badge badge-mark border-warning"></span>
+                            </div>
+                        </li>
+
+                        <li class="media">
+                            <a href="#" class="mr-3">
+                                <img src="{% static 'lib/global_assets/images/placeholders/placeholder.jpg' %}"
+                                     width="36" height="36" class="rounded-circle" alt="">
+                            </a>
+                            <div class="media-body">
+                                <a href="#" class="media-title font-weight-semibold">Richard Vango</a>
+                                <div class="font-size-sm text-muted">Grapevine, TX.</div>
+                            </div>
+                            <div class="ml-3 align-self-center">
+                                <span class="badge badge-mark border-grey-400"></span>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card-footer border-light d-flex justify-content-between align-items-center py-2">
+                    <a href="#" class="text-default">
+                        All users
+                    </a>
+
+                    <div>
+                        <a href="#" class="text-default" data-popup="tooltip" title="Conference room"><i
+                                class="icon-comment"></i></a>
+                        <a href="#" class="text-default ml-2" data-popup="tooltip" title="Settings"><i
+                                class="icon-gear"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- /online users -->
+        </div>
+        <!-- /sidebar content -->
+    </div>
+    <!-- /left sidebar component -->
+    <!-- Right content -->
+    <div class="tab-content w-100">
+        <div class="tab-pane fade active show" id="profile">
+
+            <!-- Sales stats -->
+            <div class="card">
+                <div class="card-header header-elements-sm-inline">
+                    <h6 class="card-title">Weekly statistics</h6>
+                    <div class="header-elements">
+                        <span><i class="icon-history mr-2 text-success"></i> Updated 3 hours ago</span>
+
+                        <div class="list-icons ml-3">
+                            <a class="list-icons-item" data-action="reload"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div class="chart has-fixed-height" id="tornado_negative_stack"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /sales stats -->
+
+            <!-- Profile info -->
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <h5 class="card-title">Profile information</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <label>{{user_form.first_name.label}}</label>
+                                    {{user_form.first_name}}
+                                    {{user_form.first_name.errors}}
+                                </div>
+                                <div class="col-xl-4">
+                                    <label>{{user_form.last_name.label}}</label>
+                                    {{user_form.last_name}}
+                                    {{user_form.last_name.errors}}
+                                </div>
+                                <div class="col-xl-4">
+                                    <label>{{user_form.email.label}}</label>
+                                    {{user_form.email}}
+                                    {{user_form.email.errors}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    <label>{{profile_form.position.label}}</label>
+                                    {{profile_form.position}}
+                                    {{profile_form.position.errors}}
+                                </div>
+                                <div class="col-xl-4">
+                                    <label>{{profile_form.phone_number.label}}</label>
+                                    {{profile_form.phone_number}}
+                                    {{profile_form.phone_number.errors}}
+                                </div>
+                                <div class="col-xl-4">
+                                    <label>{{profile_form.address.label}}</label>
+                                    {{profile_form.address}}
+                                    {{profile_form.address.errors}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    {{ profile_form.language.label_tag }}
+                                    {{ profile_form.language }}
+                                    <small class="form-text text-danger">
+                                        {{ profile_form.language.errors }}
+                                    </small>
+                                </div>
+                                <div class="col-xl-4">
+                                    {{ profile_form.theme.label_tag }}
+                                    {{ profile_form.theme }}
+                                    {{ profile_form.theme.errors }}
+                                </div>
+                                <div class="col-xl-4">
+                                    <label>{% trans 'Department' %}:</label>
+                                    <input class="form-control" value="{{ request.user.profile.department }}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    {{ profile_form.degree.label_tag }}
+                                    {{ profile_form.degree }}
+                                </div>
+                                <div class="col-xl-4">
+                                    {{ profile_form.birthday.label_tag }}
+                                    {{ profile_form.birthday }}
+                                </div>
+                                <div class="col-xl-4">
+                                    <label>{% trans 'Team' %}:</label>
+                                    <input class="form-control" value="{{ request.user.team.all.0.name }}" disabled>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-xl-4">
+                                    {{ profile_form.facebook.label_tag }}
+                                    {{ profile_form.facebook }}
+                                    {{ profile_form.facebook.errors }}
+                                </div>
+                                <div class="col-xl-4">
+                                    {{ profile_form.twitter.label_tag }}
+                                    {{ profile_form.twitter }}
+                                    {{ profile_form.twitter.errors }}
+                                </div>
+                                <div class="col-xl-4">
+                                    {{ profile_form.instagram.label_tag }}
+                                    {{ profile_form.instagram }}
+                                    {{ profile_form.instagram.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- /profile info -->
+        </div>
+
+        <div class="tab-pane fade" id="schedule">
+
+            <!-- Available hours -->
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <h6 class="card-title">Available hours</h6>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="chart-container">
+                        <div class="chart has-fixed-height" id="available_hours"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- /available hours -->
+
+            <!-- Schedule -->
+            <div class="card">
+                <div class="card-header header-elements-inline">
+                    <h5 class="card-title">My schedule</h5>
+                    <div class="header-elements">
+                        <div class="list-icons">
+                            <a class="list-icons-item" data-action="collapse"></a>
+                            <a class="list-icons-item" data-action="reload"></a>
+                            <a class="list-icons-item" data-action="remove"></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="my-schedule"></div>
+                </div>
+            </div>
+            <!-- /schedule -->
+
+        </div>
+    </div>
+    <!-- /right content -->
+</div>
+<!-- /inner container -->
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    let _csrfToken = "{{ csrf_token }}" // due to conflict with theme csrfToken declared after all the js for this page
+    var profile_image_api_url = "{% url 'profile_image_api' request.user.id %}"
+
+</script>
+<script src="{% static 'js/profile/image_controller.js' %}"></script>
+<script src="{% static 'js/profile/profile.js' %}"></script>
+{% endblock javascript %}

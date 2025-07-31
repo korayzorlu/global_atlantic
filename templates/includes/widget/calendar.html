@@ -1,0 +1,32 @@
+{% load static %}
+
+<div class="col-md-6 border calendarWidget">
+    <div class="row p-3 pt-1 pb-0 d-block">
+        <div class="col-md-12">
+
+            <div class="row d-none">
+                <div class="col-md-12 text-end fs-5">
+                    <button class="btn btn-tertiary p-2 removeCalendarWidget">
+                        <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row mb-3 p-2 ps-0">
+                <div class="col-md-12 text-start fs-5">
+                    Calendar
+                </div>
+            </div>
+
+            <div class="row p-0 mb-3">
+                <div class="col-md-12 text-center fs-5 p-0 overflow-auto" style="height: 400px;">
+                    <div class="container" style="align-items: center;">
+                        <div class="calendar" id="calendar-2" data-mdb-calendar-init data-mdb-monday-first="true" style="perspective: 1000;transition: .9s;transform-style: preserve-3d;">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

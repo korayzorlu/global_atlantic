@@ -1,0 +1,289 @@
+{% load static %}
+
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2" style="display:none;">
+  <a class="nav-link mainNavLinkSubDetail-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+    Create Inquiry
+    <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}-add-2" style="margin-left: 15%;">
+      <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+    </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+  <form method="post" action="/inquiry_add/r_{{parts.0.theRequest.project.id}}/" class="modal-content form-container" id="form-{{elementTag}}-{{elementTagId}}-add-2" enctype="multipart/form-data" style="box-shadow:none;background-color:transparent;">
+      {% csrf_token %}
+      {{ form.media }}
+
+    <div class="row" style="overflow: auto;max-height: 60vh;">
+
+      <div class="col-md-12">
+
+        <div class="row p-2 mb-1">
+          <div class="col-md-3">
+            <button class="btn btn-sm btn-secondary" type="submit">Create Inquiry</button>
+          </div>
+          <div class="col-md-3">
+            <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}-add-2"></div>
+          </div>
+        </div>
+  
+        <div class="row p-2 mb-1">
+  
+          <div class="col-md-6">
+            <div class="row p-2">
+              <div class="col-md-12 border shadow-4 border">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5 class="p-2">Suppliers</h5>
+                  </div>
+                </div>
+                <div class="row mb-1 tableBox-{{elementTagSub}}-{{elementTagId}}-inquiry">
+                  <div class="col-md-12">
+                    <table id="table-{{elementTagSub}}-{{elementTagId}}-inquiry" class="table table-sm table-bordered">
+                      <thead>
+                        <tr>
+                          {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}-inquiry" name="supplierss" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                          <th></th>
+                          <th></th>
+                          <th scope="col">#</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">Country</th>
+                          <th scope="col">City</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+  
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="col-md-6">
+            <div class="row p-2">
+              <div class="col-md-12 border shadow-4 border">
+                <div class="row">
+                  <div class="col-md-12">
+                    <h5 class="p-2">Parts</h5>
+                  </div>
+                </div>
+                <div class="row mb-1 tableBox-{{elementTagSub}}-{{elementTagId}}-part">
+                  <div class="col-md-12">
+                    <table id="table-{{elementTagSub}}-{{elementTagId}}-part" class="table table-sm table-bordered">
+                      <thead>
+                        <tr>
+                          <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}-part" name="partss" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th>
+                          <th></th>
+                          <th scope="col">#</th>
+                          <th scope="col">Part</th>
+                          <th scope="col">Description</th>
+                          <th scope="col">Quantity</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+  
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+        </div>    
+
+      </div>
+
+      
+
+    </div>
+
+  </form>
+</div>
+
+<script>
+  
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var theRequestId = "{{requestt.project.id}}";
+  var sessionKey = "{{sessionKey}}";
+  var pageUrl = "/sale/inquiry_add/r_{{elementTagId}}/";
+  var user = "{{user.id}}";
+
+  $("#form-{{elementTag}}-{{elementTagId}}-add-2").submit(function (event) {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+      animation: false,
+      spinner: "pulsar",
+      maxSize: "150px",
+      minSize: "150px",
+      text: "Loading ...",
+      background: "rgba(69, 83, 89, 0.6)",
+      color: "#455359",
+      textColor: "#fff"
+    });
+
+    event.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    tableSuppliers = $("#table-{{elementTagSub}}-{{elementTagId}}-inquiry");
+    tableParts = $("#table-{{elementTagSub}}-{{elementTagId}}-part");
+
+    for(let i = 0; i < tableSuppliers.DataTable().rows({selected:true}).data().length; i++){
+      formData.push({name: "suppliers", value: tableSuppliers.DataTable().rows({selected:true}).data()[i]["id"]});
+    };
+    for(let i = 0; i < tableParts.DataTable().rows({selected:true}).data().length; i++){
+      formData.push({name: "parts", value: tableParts.DataTable().rows({selected:true}).data()[i]["id"]});
+    };
+
+    $.ajax({
+      type: "POST",
+      url: "/sale/inquiry_add/r_{{elementTagId}}/",  // Formunuzun işleneceği view'ın URL'si
+      data: formData,
+      success: function (response, status, xhr) {
+          // Başarılı yanıt geldiğinde mesajı görüntüleyin
+          if (xhr.status === 204) {
+              setTimeout(function() {
+          
+                let navTagSub = $("#navTag-{{elementTag}}-{{elementTagId}}");
+                let tabPaneSub = $("#tabPane-{{elementTag}}-{{elementTagId}}");
+          
+                navTagSub.prev().children("a").addClass("active");
+                $("#tabPane-request-{{elementTag}}-add-1").addClass("show active");
+                
+                navTagSub.prev().children("a").children("button").show();
+                $("#table-{{elementTag}}").DataTable().columns.adjust();
+                
+                navTagSub.remove();
+                tabPaneSub.remove();
+
+                $("#createInquiryButton").removeClass("d-none");
+
+                $("#table-inquiry").DataTable().ajax.reload(function() {
+                  htmx.process("#table-inquiry");
+                }, false);
+
+                if($("#navTag-inquiry").length > 0){
+                  $("#navTagLink-request").removeClass("active");
+                  $("#tabPane-request").removeClass("active show");
+                  $("#navTagLink-inquiry").addClass("active");
+                  $("#tabPane-inquiry").addClass("active show");
+
+                  fetch('/sale/api/inquiries?ordering=-id&user={{user.id}}&project__id={{elementTagId}}&format=datatables', {method : "GET"})
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((data) => {
+                      if(data["data"].length > 1){
+                        $("#tabNavSub-inquiry .nav-link").removeClass("active");
+                        $("#tabContSub-inquiry .tab-pane").removeClass("active show");
+                        $("#navTagLink-inquiry-table").addClass("active");
+                        $("#tabPane-inquiry-table").addClass("active show");
+
+                        $("#table-inquiry").DataTable().ajax.reload(function() {
+                          htmx.process("#table-inquiry");
+                          for(let i = 0; i < data["data"].length; i++){
+                            //var selectedRow = $("#table-inquiry").DataTable().row({id:data["data"][i]["id"]}).node();
+                            //$(selectedRow).css({"background-color":"red"});
+                            $("#table-inquiry").DataTable().rows().every(function() {
+                              var rowNode = this.node();
+                              var rowData = this.data();
+                              if (rowData["id"] == data["data"][i]["id"]) {
+                                  $(rowNode).css("background-color", "#fdde6c");
+                                  $(rowNode).css("font-weight", "bold");
+                              }
+                            });
+                          };
+                        }, false);
+                        
+                      }else{
+                        htmx.ajax("GET", "/sale/inquiry_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                        window.history.pushState({}, '', "/sale/inquiry_update/" + data["data"][0]["id"] + "/");
+                      };
+                    });
+                }else{
+                  htmx.ajax("GET", "/sale/inquiry_data", {target:"#tabCont", swap:"afterbegin"})
+                    .then(() => {
+                      setNavTabSubInquiryAdd();
+                      return fetch('/sale/api/inquiries?ordering=-id&user={{user.id}}&project__id={{elementTagId}}&format=datatables', {method : "GET"});
+                    })
+                    .then((response) => {
+                      return response.json();
+                    })
+                    .then((data) => {
+                      if(data["data"].length > 1){
+                        $("#tabNavSub-inquiry .nav-link").removeClass("active");
+                        $("#tabContSub-inquiry .tab-pane").removeClass("active show");
+                        $("#navTagLink-inquiry-table").addClass("active");
+                        $("#tabPane-inquiry-table").addClass("active show");
+
+                        $("#table-inquiry").DataTable().ajax.reload(function() {
+                          htmx.process("#table-inquiry");
+                          for(let i = 0; i < data["data"].length; i++){
+                            //var selectedRow = $("#table-inquiry").DataTable().row({id:data["data"][i]["id"]}).node();
+                            //$(selectedRow).css({"background-color":"red"});
+                            $("#table-inquiry").DataTable().rows().every(function() {
+                              var rowNode = this.node();
+                              var rowData = this.data();
+                              if (rowData["id"] == data["data"][i]["id"]) {
+                                  $(rowNode).css("background-color", "#fdde6c");
+                                  $(rowNode).css("font-weight", "bold");
+                              }
+                            });
+                          };
+                        }, false);
+
+                      }else{
+                        htmx.ajax("GET", "/sale/inquiry_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                        window.history.pushState({}, '', "/sale/inquiry_update/" + data["data"][0]["id"] + "/");
+                      };
+                      
+                    })
+                };
+                
+                setTimeout(function() {
+                  //spinner durdurur
+                  $("body").busyLoad("hide", {
+                    animation: "fade"
+                  });
+                }, 500);
+          
+              }, 500);
+              $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+              // Mesajı belirli bir süre sonra gizle
+              setTimeout(function() {
+                $("#message-container-inside-{{elementTag}}-{{elementTagId}}-add-2").fadeOut("slow");
+              }, 500); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+          }
+      },
+      error: function (xhr, status, error) {
+        //spinner durdurur
+        $("body").busyLoad("hide", {
+          animation: "fade"
+        });
+          // Hata durumunda mesajı görüntüleyin
+          $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+      }
+    });
+    
+
+    
+
+  });
+    
+  
+</script>
+
+
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/inquiry/add.js' %}"></script>
+
+{% endblock javascript %}
+

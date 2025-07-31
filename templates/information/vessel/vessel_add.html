@@ -1,0 +1,79 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Add Vessel' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Information' %}{% endblock %}
+{% block childDirectory %}{% trans 'Add Vessel' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:customer_data' %}{% endblock %}
+{% block mainRoute %}Vessel{% endblock %}
+{% block childRoute %}Add Vessel{% endblock %}
+
+{% block plugins %}
+
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/vessel/vessel_add.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div class="card">
+    <div class="card-body pb-0">
+        <div class="media flex-md-row mb-2">
+            <a id="iconVessel" href="#" class="align-self-md-start mr-3">
+                <img src="{% static 'images/icons/pier.svg' %}" class="rounded" width="44" height="44" alt="">
+            </a>
+            <div class="media-body">
+                <h5 class="media-title font-weight-semibold">{% trans 'Add Vessel' %}</h5>
+                <ul class="list-inline list-inline-dotted text-muted mb-0">
+                    <li class="list-inline-item">Enter the <u>vessel</u> information.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                {% for field in vessel_add_form.visible_fields %}
+                <div class="form-group col-lg-6 col-xl-4">
+                    <label>{{field.label}}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+                {{vessel_add_form.flag_url}}
+            </div>
+            <!-- /Vessel info -->
+            <fieldset class="card-body border-top w-100 text-right">
+                <button ype="submit" class="btn btn-primary">{% trans 'Create' %}</button>
+            </fieldset>
+        </form>
+    </div>
+
+    <!-- /inner container -->
+</div>
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    companies_customers_api_url = new URL(window.location.href)
+    companies_customers_api_url.pathname = "{% url 'information:companies_customers_api' %}"
+    contacts_api_url = new URL(window.location.href)
+    contacts_api_url.pathname = "{% url 'information:contacts_api' %}"
+    vesselfinder_imo_api = "{% url 'information:vesselfinder_imo_api' 0 %}"
+</script>
+<script src="{% static 'js/information/vessel/vessel_add.js' %}"></script>
+{% endblock javascript %}

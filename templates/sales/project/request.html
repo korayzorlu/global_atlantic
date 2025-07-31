@@ -1,0 +1,213 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Request' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Project' %}{% endblock %}
+{% block childDirectory %}{% trans 'Request' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:customer_data' %}{% endblock %}
+{% block mainRoute %}Request{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block right_aside %}
+{% include "./right_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/company/company_add.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div class="card">
+
+  <!--excel and pdf buttons-->
+  <ul class="fab-menu fab-menu-top" data-fab-toggle="hover">
+    <li>
+        <a class="fab-menu-btn btn bg-gray btn-float rounded-round btn-icon">
+            <i class="fab-icon-open icon-grid3"></i>
+            <i class="fab-icon-close icon-cross2"></i>
+        </a>
+        <ul class="fab-menu-inner">
+            <li>
+                <div data-fab-label="Pdf">
+                    <a id="pdfButton" href="{% url 'sales:project_request_pdf' project.id %}"  target="_blank" class="btn bg-transparent rounded-round btn-icon btn-float btn-request-pdf">
+                        <i class="icon-file-pdf"></i>
+                    </a>
+                </div>
+            </li>
+            <li>
+                <div data-fab-label="Excel">
+                    <a id="excelButton" href="{% url 'sales:project_request_excel' project.id %}" target="_blank" class="btn bg-transparent rounded-round btn-icon btn-float btn-request-excel">
+                        <i class="icon-file-excel"></i>
+                    </a>
+                </div>
+            </li>
+        </ul>
+        
+    </li>
+</ul>
+<!--excel and pdf buttons-->
+
+    <div class="card-header">
+        <div class="media flex-md-row mb-2">
+<!--            <a id="iconBuild" href="#" class="align-self-md-start mr-3">-->
+<!--                <img src="{% static 'images/icons/building.svg' %}" class="rounded" width="44" height="44" alt="">-->
+<!--            </a>-->
+            <div class="media-body">
+               <div class="wizard-form steps-basic wizard clearfix" role="application">
+                    <div class="steps clearfix">
+                        <ul role="tablist">
+                            <li role="tab" class="current">
+                                <a href="{% url 'sales:project_request' project.id %}" class="">
+                                    <span class="number">1</span>
+                                    {% trans "Request" %}
+                                </a>
+                            </li>
+                            <li role="tab" class="">
+                                <a href="{% url 'sales:project_inquiry' project.id %}" class="">
+                                    <span class="current-info audible">current step: </span>
+                                    <span class="number">2</span>
+                                    {% trans "Inquiry" %}
+                                </a>
+                            </li>
+                            <li role="tab" class="">
+                                <a href="{% url 'sales:project_quotation' project.id %}" class="">
+                                    <span class="number">3</span>
+                                    {% trans "Quotation" %}
+                                </a>
+                            </li>
+                            {% if not not_confirmed_quotation %}
+                                    <li role="tab" class="">
+                                        <a href="{% url 'sales:project_purchase_order' project.id %}" class="">
+                                            <span class="number">4</span>
+                                            {% trans "Purchase Order" %}
+                                        </a>
+                                    </li>
+                                    <li role="tab" class="last">
+                                        <a href="{% url 'sales:project_delivery' project.id %}" class="">
+                                            <span class="number">5</span>
+                                            {% trans "Delivery" %}
+                                        </a>
+                                    </li>
+                            {% endif %}
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="header-elements">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        {% if not not_confirmed_quotation %}
+
+            <form id="form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    {% for field in project_request_form %}
+                    <div class="form-group col-lg-3">
+                        <label>{{field.label}}</label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <!-- /Company info -->
+                <fieldset class="card-body border-top w-100 text-center">
+                    <button id="formSubmit" type="submit" class="btn btn-sm btn-success">{% trans 'Save' %}</button>
+                    <a id="duplicateRequest" type="submit" data-project-id="{{project.id}}" class="btn btn-sm btn-danger">{% trans 'Duplicate Request' %}</a>
+                    
+                    <a href="{% url 'sales:project_'|add:next_stage project.id %}"
+                    class="btn btn-sm btn-primary next_stage">
+                        {% trans 'Next' %}
+                    </a>
+                </fieldset>
+            </form>
+       
+            <div class="col-md-5 mx-auto py-2">
+                <h5 style="text-align: center">{% trans 'Add Part' %}</h5>
+                <div class="input-group">
+                    <input type="text" class="form-control" name="query">
+                    <input type="number" class="form-control" name="quantity" value="1" min="1" step="1">
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-warning" name="add_part">{% trans 'Add Part' %}</button>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+        
+
+        <table id="requestDataTable" class="table table-striped table-hover w-100 table-bordered border no-footer">
+            <colgroup>
+                <col span="1">
+                <col span="1">
+                <col span="1">
+                <col span="1" style="width: 1%; white-space: nowrap">
+                <col span="1" style="width: 1%; white-space: nowrap">
+                <col span="1" style="width: 1%; white-space: nowrap">
+            </colgroup>
+            <thead>
+                <tr>
+                    <th>{% trans 'ID' %}</th>
+                    <th>{% trans 'Request ID' %}</th>
+                    <th>{% trans 'Part No' %}</th>
+                    <th>{% trans 'Part Name' %}</th>
+                    <th>{% trans 'Quantity' %}</th>
+                    <th>{% trans 'Unit' %}</th>                   
+                    <th>{% trans 'Actions' %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <!-- /inner container -->
+    <button class="overViewBTN sidebar-control sidebar-right-toggle sidebar-mobile-right-toggle"><i class="far fa-eye"></i></button>
+</div>
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    project_id={{project.id}}
+    project_update_api_url = "{% url 'sales:project_update_api' 0 %}"
+
+    parts_api_url = new URL(window.location.href)
+    parts_api_url.pathname = "{% url 'parts:parts_api' %}"
+    vessels_api_url = new URL(window.location.href)
+    vessels_api_url.pathname = "{% url 'information:vessels_api' %}"
+    contacts_api_url = new URL(window.location.href)
+    contacts_api_url.pathname = "{% url 'information:contacts_api' %}"
+    maker_types_api_url = new URL(window.location.href)
+    maker_types_api_url.pathname = "{% url 'parts:maker_types_api' %}"
+
+    request_id = {{ project.request.pk }};
+    project_request_excel_url = "{% url 'sales:project_request_excel' project.id %}"
+    project_request_pdf_url = "{% url 'sales:project_request_pdf' project.id %}"
+    
+    request_parts_api_url = "{% url 'sales:request_parts_api' %}?format=datatables"
+    request_part_create_api_url = "{% url 'sales:request_part_create_api' %}"
+    request_part_update_api_url = "{% url 'sales:request_part_update_api' 0 %}"
+</script>
+<script src="{% static 'js/sales/project/request/request.js' %}"></script>
+<script>
+    const project_document_create_api_url = "{% url 'sales:project_document_create_api' %}"
+    const project_documents_api_url = "{% url 'sales:project_documents_api' %}?project="+project_id
+    const project_document_update_api_url = "{% url 'sales:project_document_update_api' 0 %}"
+    const project_duplicate_api_url = "{% url 'sales:project_duplicate_api' 0 %}"
+    const project_continue_url = "{% url 'sales:project_continue' 0 %}";
+</script>
+<script src="{% static 'js/sales/project/right_sidebar/right_sidebar.js' %}"></script>
+{% endblock javascript %}

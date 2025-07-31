@@ -1,0 +1,128 @@
+
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        <i class="fa-solid fa-building me-2"></i>
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+    <div class="globalBoxes">
+        <div class="box">
+            {% comment %} <div class="large-boxes row d-flex justify-content-center">
+                <div class="col-md-6 align-self-center box" style="background:#efdecd;">
+
+                    <div class="row mb-3 d-flex justify-content-center">
+                        <div class="col-md-6 text-center">
+                            <span>Search Vessel By IMO Number</span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 d-flex justify-content-center">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" rows="1" style="background-color: #fff; resize: none;">
+                        </div>
+                    </div>
+
+                    <div class="row mb-3 d-flex justify-content-center">
+                        <div class="col-md-6 text-center">
+                            <button class="btn btn-info" type="submit">Search</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div> {% endcomment %}
+
+            <!-- Container for demo purpose -->
+            <div class="container my-1 py-1">
+
+                <!-- Section: Design Block -->
+                <section class="mb-10 background-radial-gradient overflow-hidden">
+                <style>
+                    .background-radial-gradient {
+                    background-color: hsl(218, 41%, 15%);
+                    background-image: url('https://w.wallhaven.cc/full/w8/wallhaven-w8myvx.jpg');
+                    }
+                </style>
+            
+                <div class="container px-4 py-5 px-md-5 text-center text-lg-start my-5">
+                    <div class="row gx-lg-5 align-items-center mb-5">
+                    <div class="col-lg-6 mb-5 mb-lg-0" style="z-index: 10">
+                        <h1 class="my-5 display-3 fw-bold ls-tight" style="color: hsl(218, 81%, 95%)" >
+                        Vessel<br>Data
+                        </h1>
+                    </div>
+            
+                    <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
+                        <div
+                            id="radius-shape-1"
+                            class="position-absolute rounded-circle shadow-5-strong"
+                            ></div>
+                        <div
+                            id="radius-shape-2"
+                            class="position-absolute shadow-5-strong"
+                            ></div>
+            
+                        <div class="card bg-glass">
+                        <div class="card-body px-4 py-5 px-md-5">
+                            <form>
+                            <!-- 2 column grid layout with text inputs for the first and last names -->
+                            <div class="row">
+                                <div class="col-md-12 mb-4">
+                                <div class="form-outline">
+                                    <input type="text" class="form-control" id="form3Example1" rows="1" style="background-color: #fff; resize: none;">
+                                    <label class="form-label" for="form3Example1">IMO Number</label>
+                                </div>
+                                </div>
+                            </div>
+            
+                            <button type="submit" class="btn btn-primary btn-block mb-4">Search</button>
+            
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </section>
+                <!-- Section: Design Block -->
+            
+            </div>  
+            <!-- Container for demo purpose -->
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var pageUrl = "/card/card_data/"
+    
+
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/scan/datatable.js' %}"></script>
+
+{% endblock javascript %}

@@ -1,0 +1,34 @@
+{% load static %}
+
+<form method="post" action="/quotation_revision/{{quotation.id}}/" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-revision" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Revise this quotation?</h5>
+    </div>
+    {% if ocpoList %}
+        <div class="modal-body">
+            <i class="fa-solid fa-triangle-exclamation"></i> Warning: {% for ocpo in ocpoList %}{{ocpo}},{% endfor %} will be deleted.
+        </div>
+    {% endif %}
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit" name="deleteRequest">Confirm</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var quotaitonId = "{{quotation.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/sale/quotation_revision/{{elementTagId}}/";
+    var user = "{{user.id}}";
+</script>
+
+{% block javascript %}
+
+
+<script src="{% static 'js/sale/quotation/revision.js' %}"></script>
+
+{% endblock javascript %}

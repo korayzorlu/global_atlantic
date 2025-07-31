@@ -1,0 +1,12 @@
+table th:first-child,
+table td:first-child {
+  display: none;
+}
+table th:nth-child(2),
+table td:nth-child(2) {
+  display: none;
+}
+
+.dataTable thead th:nth-child(3) {
+  border-left: 0px;
+}/*# sourceMappingURL=vessel_data.css.map */

@@ -1,0 +1,92 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Employee Type Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Human Resource' %}{% endblock %}
+{% block childDirectory %}{% trans 'Employee Type Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'hr:employee_type_data' %}{% endblock %}
+{% block mainRoute %}{% trans 'Employee Type' %}{% endblock %}
+{% block childRoute %}{% trans 'Detail Employee Type' %}{% endblock %}
+
+{% block content %}
+{% url 'hr:employee_type_edit' employee_type.id as edit_url %}
+{% url 'hr:employee_type_delete' employee_type.id as delete_url %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/parts/maker/maker_detail.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-12">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                             alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Employee Type Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Employee Type</u> information.</li>
+                        </ul>
+                    </div>
+                        {% block buttoneditremove %}
+                        {% include "components/buttoneditremove.html" with edit_url=edit_url delete_url=delete_url %}
+                        {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col>
+                    </colgroup>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="text-muted">{% trans "Employee Type Name" %}</th>
+                        <td>{{ employee_type.name }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "About" %}</th>
+                        <td>{{ employee_type.about }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            {% trans 'Users' %}
+                        </th>
+                        <td class="p-0">
+                            {% for member in employee_type.members.all %}
+                            <div class="w-100 exit">
+                                <a href="{% url 'hr:user_detail' member.pk %}" target="_blank"
+                                   class="font-weight-semibold letter-icon-title">
+                                    {{ member.user }}</a>
+                            </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /Employee Type info -->
+</div>
+
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    let companyEditURL = "{% url 'hr:employee_type_edit' employee_type.id %}"
+    let companyDeleteURL = "{% url 'hr:employee_type_delete' employee_type.id %}"
+
+</script>
+<script type="module" src="{% static 'js/hr/employee_type/employee_type_detail/employee_type_detail.js' %}"></script>
+{% endblock javascript %}

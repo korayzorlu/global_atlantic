@@ -1,0 +1,42 @@
+@keyframes engine {
+    0% {
+        -webkit-transform: rotate(-1deg);
+        -ms-transform: rotate(-1deg);
+        transform: rotate(-1deg);
+    }
+    20% {
+        -webkit-transform: rotate(1deg);
+        -ms-transform: rotate(1deg);
+        transform: rotate(1deg);
+    }
+    40% {
+        -webkit-transform: rotate(-1deg);
+        -ms-transform: rotate(-1deg);
+        transform: rotate(-1deg);
+    }
+    60% {
+        -webkit-transform: rotate(1deg);
+        -ms-transform: rotate(1deg);
+        transform: rotate(1deg);
+    }
+    80% {
+        -webkit-transform: rotate(-2deg);
+        -ms-transform: rotate(-2deg);
+        transform: rotate(-2deg);
+    }
+    100% {
+        -webkit-transform: rotate(1deg);
+        -ms-transform: rotate(1deg);
+        transform: rotate(1deg);
+    }
+}
+
+#iconPart {
+    animation: engine 1s linear infinite;
+}
+
+@media screen and(max-width: 768px) {
+    #iconPart {
+        display: none;
+    }
+}

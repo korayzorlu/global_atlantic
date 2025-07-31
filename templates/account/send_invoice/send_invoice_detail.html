@@ -1,0 +1,545 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+        {{sendInvoice.customer.name}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 5%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+        <!-- <div style="display: flex;justify-content: end;">
+          <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+          </button>
+        </div> -->
+    </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{% url 'account:send_invoice_update' sendInvoice.id %}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+          <button class="tableTopButtons inTableButtons" id="save-{{elementTag}}-{{elementTagId}}" type="submit" name="saveButton">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+          </button>
+          {% if sendInvoice.paidPrice == 0 %}
+          <button class="tableTopButtons inTableButtons" id="remove-{{elementTag}}-{{elementTagId}}" type="button">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+          </button>
+          {% endif %}
+          <button class="tableTopButtons inTableButtons" id="pdf-{{elementTag}}-{{elementTagId}}" type="button" hx-get="/account/send_invoice_pdf/{{elementTagId}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true">
+            <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+          </button>
+          {% comment %} <div class="dropdown">
+            <button class="tableTopButtons inTableButtons dropdown-toggle" type="button" data-mdb-dropdown-init aria-expanded="false" name="pdfButton">
+              <img src="/static/images/icons/flaticon/{{user.profile.theme}}/setting.svg" alt="" style="height: 18px;">
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                  <a class="dropdown-item" hx-get="/account/send_invoice_pdf_html/{{user.profile.sourceCompany.id}}" hx-target="#addUpdateDataDialogXl" hx-push-url="true" style="cursor:pointer;">Pdf Settings</a>
+                </li>
+            </ul>
+          </div> {% endcomment %}
+        <!-- <button class="tableTopButtons inTableButtons" type="submit" name="saveButton"><i class="fa-solid fa-floppy-disk" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save"></i></button>
+        <a class="tableTopButtons inTableButtons" href="#"><i class="fa-solid fa-trash" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Remove"></i></a>
+        <a class="tableTopButtons inTableButtons" c><i class="fa-solid fa-print" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Print"></i></a> -->   
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        {% if sendInvoice.payed == True %}
+            <div id="payed-container-{{elementTag}}-{{elementTagId}}">
+                <div class='alert p-1 mb-0 mr-2 me-3' role='alert' data-mdb-color='success'><i class='fas fa-circle-check me-3'></i>Paid</div>
+            </div>
+            
+        {% else %}
+            <div id="payed-container-{{elementTag}}-{{elementTagId}}">
+                <div class='alert p-1 mb-0 mr-2 me-3' role='alert' data-mdb-color='warning'><i class='fas fa-exclamation-triangle me-3'></i>Waiting for payment</div>
+            </div>
+        {% endif %}
+        
+        <div class="form-check form-switch me-4">
+          {{form.ready}}
+          <label for="textFormOutline" class="form-check-label">Ready</label>
+        </div>
+        
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none; padding:0;">
+
+                <div class="row">
+                    <div class="col-md-8 m-0">
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <div class="form-outline">
+                                    {% comment %} <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{sendInvoice.customer}}" readonly> {% endcomment %}
+                                    {{form.customer}}
+                                    <label for="{{form.customer.field.widget.attrs.id}}" class="form-label select-label">Customer</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <div class="form-outline">
+                                    {{form.vessel}}
+                                    <label for="{{form.vessel.field.widget.attrs.id}}" class="form-label select-label">Vessel</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <div class="form-outline">
+                                    {{form.billing}}
+                                    <label for="{{form.billing.field.widget.attrs.id}}" class="form-label select-label">Billing Name</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline">
+                                    {{form.careOf}}
+                                    <label for="{{form.careOf.field.widget.attrs.id}}" class="form-label">Care Of</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline">
+                                    {{form.transport}}
+                                    <label for="{{form.transport.field.widget.attrs.id}}" class="form-label">Transport</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline">
+                                    {{form.awb}}
+                                    <label for="{{form.awb.field.widget.attrs.id}}" class="form-label">AWB</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline datepicker">
+                                    {{form.deliveryDate}}
+                                    <label for="{{form.deliveryDate.field.widget.attrs.id}}" class="form-label">Delivery Date</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 m-0">
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{sendInvoice.orderConfirmation.orderConfirmationNo}}" readonly>
+                                    <label for="textFormOutline" class="form-label">Order Confirmation</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <div class="form-outline">
+                                    {{form.sendInvoiceNo}}
+                                    <label for="{{form.sendInvoiceNo.field.widget.attrs.id}}" class="form-label">Invoice No</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{sendInvoice.discountPrice}}" readonly>
+                                    <label for="textFormOutline" class="form-label">Project Discount({{sendInvoice.currency.symbol}})</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline datepicker">
+                                    <input type="text" id="formOutline-{{elementTag}}-paymentDate-{{sendInvoice.id}}" class="form-control form-control-sm" value="{{sendInvoice.paymentDate|date:'d/m/Y'}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-paymentDate-{{sendInvoice.id}}" class="form-label">Payment Date</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline datepicker">
+                                    {{form.sendInvoiceDate}}
+                                    <label for="{{form.sendInvoiceDate.field.widget.attrs.id}}" class="form-label">Invoice Date</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline">
+                                    {{form.extraDiscountPrice}}
+                                    <label for="{{form.extraDiscountPrice.field.widget.attrs.id}}" class="form-label">Discount({{sendInvoice.currency.symbol}})</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <div class="form-outline">
+                                    {{form.vat}}
+                                    <label for="{{form.vat.field.widget.attrs.id}}" class="form-label">Vat(%)</label>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                {% if sendInvoice.paidPrice != 0 %}
+                                    <div class="form-outline">
+                                        <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{sendInvoice.currency.code}}" readonly>
+                                        <label for="textFormOutline" class="form-label">Currency</label>
+                                    </div>
+                                {% else %}
+                                    <div class="form-outline">
+                                        {{form.currency}}
+                                        <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-outline">
+                                    {{form.exchangeRate}}
+                                    <label for="{{form.exchangeRate.field.widget.attrs.id}}" class="form-label">Exchange Rate (TRY)</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                <div class="row">
+                    <div class="col-md-12 mb-1">
+                        <!-- Tab Navs -->
+                        <ul class="nav nav-pills mb-1" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+                            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                                <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} active m-0" data-mdb-pill-init
+                                    id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-toggle="tab"
+                                    href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab"
+                                    aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                                    Items
+                                </a>
+                            </li>
+                            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+                                <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} m-0" data-mdb-pill-init
+                                    id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-toggle="tab"
+                                    href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab"
+                                    aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                                    Expenses
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- Tab Navs -->
+
+                        <!-- Tabs Content -->
+                        <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+
+                            <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+
+                                <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                            
+                                </div>
+                                
+                                <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                                <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}" name="parts" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th>
+                                            <th></th>
+                                            <th>ID</th>
+                                            <th>Part</th>
+                                            <th>Description</th>
+                                            <th>Remark</th>
+                                            <th>Turkish Description</th>
+                                            <th>Quantity</th>
+                                            <th>Unit</th>
+                                            <th>Unit Price</th>
+                                            <th>Total Price</th>
+                                            <th>Currency</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody">
+                                    
+                                    </tbody>
+                                </table>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+                        
+                                <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-expense" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-expense">
+                                
+                                </div>
+                                <div class="row mb-4 switchConnect">
+                                    <div class="col-md-12">
+                                    
+                                    <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-expense" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-expense">
+                            
+                                    </div>
+                        
+                                    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}-expense">
+                                        <table id="table-{{elementTagSub}}-{{elementTagId}}-expense" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}-expenses" name="expenses" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th>
+                                                    <th></th>
+                                                    <th>ID</th>
+                                                    <th>Code</th>
+                                                    <th>Description</th>
+                                                    <th>Quantity</th>
+                                                    <th>Unit</th>
+                                                    <th>Unit Price</th>
+                                                    <th>Total Price</th>
+                                                    <th>Currency</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbody">
+                                                    
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- Tabs Content-end -->
+
+ 
+                    </div>
+                </div>
+
+                <div class="row mb-2" style="display: flex;justify-content: end;">
+                    <div class="col-md-12">
+                        <div class="input-group input-group-sm">
+                            <label class="input-group-text" id="inputGroup-sizing-sm" >Only</label>
+                            {{form.only}}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display: flex;justify-content: end;">
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm mb-1">
+                            <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="inputGroup-sizing-sm">Net Total</label>
+                            <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="sendInvoiceTotalNetPrice-{{sendInvoice.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="" readonly/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm mb-1">
+                            <label class="input-group-text w-50 rounded-0 bg-red-esms text-white" id="inputGroup-sizing-sm">Discount Total</label>
+                            <input type="text" class="form-control rounded-0 text-end bg-red-esms text-white" style="opacity: 0.9;" id="sendInvoiceTotalDiscountPrice-{{sendInvoice.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="" readonly/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="input-group input-group-sm mb-1">
+                            <label class="input-group-text w-50 rounded-0 bg-red-esms text-white" id="inputGroup-sizing-sm">Vat Total</label>
+                            <input type="text" class="form-control rounded-0 text-end bg-red-esms text-white" style="opacity: 0.9;" id="sendInvoiceTotalVatPrice-{{sendInvoice.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="" readonly/>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <label class="input-group-text w-50 rounded-0 fw-bold bg-blue-esms text-white" id="inputGroup-sizing-sm">TOTAL</label>
+                                    <input type="text" class="form-control rounded-0 text-end fw-bold bg-blue-esms text-white" style="opacity: 0.9;" id="sendInvoiceTotalTotalPrice-{{sendInvoice.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="inputGroup-sizing-sm">Payment</label>
+                                    <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="sendInvoiceTotalPayment-{{sendInvoice.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="input-group input-group-sm">
+                                    <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="inputGroup-sizing-sm">Balance</label>
+                                    <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="sendInvoiceTotalBalance-{{sendInvoice.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                
+
+      </div>
+    
+  </form>
+
+</div>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var sendInvoiceId = "{{sendInvoice.id}}";
+    var pageUrl = "/account/send_invoice_update/{{elementTagId}}/";
+    var currencySymbol = "{{sendInvoice.currency.symbol}}";
+    var userId = "{{user.id}}";
+
+    $("#sendInvoiceTotalNetPrice-{{sendInvoice.id}}").val(
+        "{{sendInvoice.currency.symbol}} " + Number("{{sendInvoice.netPrice}}").toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+    );
+    $("#sendInvoiceTotalDiscountPrice-{{sendInvoice.id}}").val(
+        "{{sendInvoice.currency.symbol}} " + (Number("{{sendInvoice.discountPrice}}") + Number("{{sendInvoice.extraDiscountPrice}}")).toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+    );
+    $("#sendInvoiceTotalVatPrice-{{sendInvoice.id}}").val(
+        "{{sendInvoice.currency.symbol}} " + Number("{{sendInvoice.vatPrice}}").toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+    );
+    $("#sendInvoiceTotalTotalPrice-{{sendInvoice.id}}").val(
+        "{{sendInvoice.currency.symbol}} " + Number("{{sendInvoice.totalPrice}}").toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+    );
+    $("#sendInvoiceTotalPayment-{{sendInvoice.id}}").val(
+        "{{sendInvoice.currency.symbol}} " + Number("{{sendInvoice.paidPrice}}").toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+    );
+    $("#sendInvoiceTotalBalance-{{sendInvoice.id}}").val(
+        "{{sendInvoice.currency.symbol}} " + Number("{{sendInvoiceBalance}}").toLocaleString('tr-TR', { minimumFractionDigits: 2 })
+    );
+
+    // Company seçildiğinde AJAX isteği yaparak Vessel ve Person'ları günceller
+    $('#{{form.customer.field.widget.attrs.id}}').on('change', function() {
+        var companyInformId = $(this).val();
+        console.log(companyInformId);
+        $("#select-wrapper-id_vessel .form-label.select-fake-value").text("");
+        $.ajax({
+            url: '/card/api/vessels',
+            data: {'company__id': companyInformId},
+            dataType: 'json',
+            success: function(data) {
+                console.log("vessels");
+                console.log(data);
+                console.log("vessels-end");
+                $('#{{form.vessel.field.widget.attrs.id}}').empty();
+                $('#{{form.billing.field.widget.attrs.id}}').empty();
+                $('#{{form.vessel.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+                $('#{{form.billing.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+                $.each(data, function(i, vessel) {
+                    $('#{{form.vessel.field.widget.attrs.id}}').append($('<option>').val(vessel.id).text(vessel.name));
+                });
+                //$("#id_vessel").trigger("change");
+            }
+        });
+    });
+
+    // Vessel seçildiğinde AJAX isteği yaparak Billing'ları günceller
+    $('#{{form.vessel.field.widget.attrs.id}}').on('change', function() {
+        var vesselInformId = $(this).val();
+        $.ajax({
+            url: '/card/api/billings',
+            data: {'vessel__id': vesselInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#{{form.billing.field.widget.attrs.id}}').empty();
+                $('#{{form.billing.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+                $.each(data, function(i, billing) {
+                    $('#{{form.billing.field.widget.attrs.id}}').append($('<option>').val(billing.id).text(billing.name));
+                });
+                //$("#id_billing").trigger("change");
+            }
+        });
+    });
+
+    // Currency seçildiğinde AJAX isteği yaparak Part'lardaki fiyatları günceller
+    $('#{{form.currency.field.widget.attrs.id}}').on('change', function() {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+
+        //quotaiton part'ları güncelleyen istek
+        var currencyInformId = $(this).val();
+        console.log(currencyInformId);
+        htmx.ajax("POST", "/account/send_invoice_part_currency_update/si_{{sendInvoice.id}}_c_" + currencyInformId + "/");
+        htmx.on("htmx:beforeSwap", (e) => {
+            /* if(e.detail.xhr.status == 204){
+                $("#message-container-{{elementTag}}-{{elementTagId}}").html('<div id="message-container-inside--{{elementTag}}-{{elementTagId}}"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+                $.ajax({
+                    url: '/account/api/send_invoices',
+                    data: {'id': '{{sendInvoice.id}}'},
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        $.each(data, function(i, sendInvoice) {
+                            console.log(sendInvoice.paidPrice)
+                            let remainingPrice = sendInvoice.totalPrice - sendInvoice.paidPrice;
+                            $("#totalTotalPrice-{{elementTagSub}}-{{elementTagId}}").val(sendInvoice.currency.symbol + " " + sendInvoice.netPrice.toLocaleString('tr-TR', { currency: sendInvoice.currency.code, minimumFractionDigits: 2 }));
+                            $("#totalDiscountPrice-{{elementTagSub}}-{{elementTagId}}").val(sendInvoice.currency.symbol + " " + sendInvoice.discountPrice.toLocaleString('tr-TR', { currency: sendInvoice.currency.code, minimumFractionDigits: 2 }));
+                            $("#totalVatPrice-{{elementTagSub}}-{{elementTagId}}").val(sendInvoice.currency.symbol + " " + sendInvoice.vatPrice.toLocaleString('tr-TR', { currency: sendInvoice.currency.code, minimumFractionDigits: 2 }));
+                            $("#totalFinalPrice-{{elementTagSub}}-{{elementTagId}}").val(sendInvoice.currency.symbol + " " + sendInvoice.totalPrice.toLocaleString('tr-TR', { currency: sendInvoice.currency.code, minimumFractionDigits: 2 }));
+                            $("#totalRemainingPrice-{{elementTagSub}}-{{elementTagId}}").val(sendInvoice.currency.symbol + " " + remainingPrice.toLocaleString('tr-TR', { currency: sendInvoice.currency.code, minimumFractionDigits: 2 }));
+                        });
+                    }
+                });
+            }; */
+            //Tabloyu yeniler
+            $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}} .dataTables_scrollBody").busyLoad("show", {
+                animation: false,
+                spinner: "pulsar",
+                maxSize: "150px",
+                minSize: "150px",
+                text: "Loading ...",
+                background: "rgba(69, 83, 89, 0.6)",
+                color: "#455359",
+                textColor: "#fff"
+            });
+            $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().ajax.reload();
+            $("#table-{{elementTagSub}}-{{elementTagId}}").on( 'draw.dt', function () {
+                htmx.process("#table-{{elementTagSub}}-{{elementTagId}}");
+                $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}} .dataTables_scrollBody").busyLoad("hide", {
+                    animation: "fade"
+                });
+                //spinner durdurur
+                $("body").busyLoad("hide", {
+                    animation: "fade"
+                });
+            });
+            $("#table-{{elementTagSub}}-{{elementTagId}}-expense").DataTable().ajax.reload();
+            $("#table-{{elementTagSub}}-{{elementTagId}}-expense").on( 'draw.dt', function () {
+                htmx.process("#table-{{elementTagSub}}-{{elementTagId}}-expense");
+                $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-expense .dataTables_scrollBody").busyLoad("hide", {
+                    animation: "fade"
+                });
+            });
+        });
+        // Mesajı belirli bir süre sonra gizle
+        setTimeout(function() {
+        $("#message-container-inside--{{elementTag}}-{{elementTagId}}").fadeOut("slow");
+        }, 2000); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+    });
+
+    $(".addClose-{{elementTag}}").click(function() {
+        document.getElementById("addFormBlock-{{elementTag}}").innerHTML = "";
+        $(".tableBox-{{elementTag}}").eq(0).removeClass("col-md-4");
+        $(".addForm-{{elementTag}}").eq(0).removeClass("col-md-8");
+        $("#table-{{elementTag}}").DataTable().ajax.reload(function(){
+            htmx.process('#table-{{elementTag}}');
+        },false);
+        $("#table-{{elementTag}}_filter").show();
+    });
+
+    $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-1").on("shown.bs.tab", function(e){
+        $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+    });
+    $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+        $("#table-{{elementTagSub}}-{{elementTagId}}-expense").DataTable().columns.adjust();
+    });
+
+    $("#remove-{{elementTag}}-{{elementTagId}}").on("click", function(){
+
+        let idList = []
+        let typeList = []
+        idList.push("{{elementTagId}}");
+        htmx.ajax("GET", "/account/send_invoice_delete/" + idList, "#addUpdateDataDialog");
+
+    });
+
+
+
+</script>
+
+{% block javascript %}
+
+
+
+<script src="{% static 'js/account/send_invoice/detail.js' %}"></script>
+
+{% endblock javascript %}
+

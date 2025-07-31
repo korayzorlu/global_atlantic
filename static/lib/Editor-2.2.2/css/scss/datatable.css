@@ -1,0 +1,20 @@
+table.dataTable tr.highlight {
+  animation-duration: 1s;
+  animation-name: dte-highlight;
+}
+table.dataTable tr.dte-inlineAdd td,
+table.dataTable tr.dte-inlineAdd th {
+  vertical-align: top;
+}
+
+@keyframes dte-highlight {
+  from {
+    box-shadow: 0 0 0 rgb(235, 121, 15);
+  }
+  50% {
+    box-shadow: 0 0 5px rgb(235, 121, 15);
+  }
+  to {
+    box-shadow: 0 0 10px rgba(235, 121, 15, 0);
+  }
+}/*# sourceMappingURL=datatable.css.map */

@@ -1,0 +1,120 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+<form hx-post="{{ request.path }}" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-withMatch" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Match company in Mikro</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row d-none" id="matchMikroTableBlock-{{elementTagSub}}-{{elementTagId}}">
+            <div class="col-md-12">
+                <div class="row p-2 pt-0 pb-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        Current Company
+                    </div>
+                </div>
+                <div class="row mb-3 p-2 pt-0 pb-0">
+                    <table class="table table-striped table-hover table-bordered dataTable no-footer mt-0 p-0" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="bg-blue-esms text-white">Hesap Kodu</th>
+                                <th class="bg-blue-esms text-white">Company Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="w-25">{{company.hesapKodu}}</td>
+                                <td class="w-75">{{company.name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row p-2 pt-0 pb-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        Company Found In Mikro
+                    </div>
+                </div>
+                <div class="row mb-1 p-2 pt-0 pb-0 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                    <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer mt-0 p-0" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="bg-blue-esms text-white d-none">guid</th>
+                                <th class="bg-blue-esms text-white">Cari Kodu</th>
+                                <th class="bg-blue-esms text-white">Cari Ünvan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row" id="matchMikroLoaderBlock-{{elementTagSub}}-{{elementTagId}}">
+            <div class="col-md-12">
+                <div class="overflow-hidden" id="matchMikroLoader-{{elementTagSub}}-{{elementTagId}}" style="height:100px;">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" id="matchMikroButton-{{elementTagSub}}-{{elementTagId}}" type="submit" disabled>Match</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var sessionKey = "{{sessionKey}}";
+    var user = "{{user.id}}";
+
+    $("#matchMikroLoader-{{elementTagSub}}-{{elementTagId}}").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "60px",
+        minSize: "60px",
+        text: "Searching Mikro database please wait...",
+        background: window.getComputedStyle($(".tab-content")[0]).backgroundColor,
+        color: "#455359",
+        textColor: "#455359",
+        textPosition: "bottom",
+        textClass: "fs-6"
+    });
+
+    $("#form-" + elementTag +  "-" + elementTagId + "-withMatch").submit(function (event) {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff",
+        });
+
+        event.preventDefault();
+
+        addUpdateDataModal.hide();
+
+    });
+</script>
+
+{% block javascript %}
+
+<script>
+    wsMain.send(JSON.stringify({
+        "type": "match_mikro_new",
+        "location" : "match_mikro_company",
+        "message" : {"type":"company","cariKod":"{{company.hesapKodu}}","cariName":"{{company.name}}","companyId":"{{company.id}}","mikroDBName":"{{user.profile.sourceCompany.mikroDBName}}"},
+    }));
+</script>
+
+
+{% endblock javascript %}

@@ -1,0 +1,923 @@
+{% load static %}
+
+{% load widget_tweaks %}
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+
+      {{orderTracking.theRequest.requestNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{% url 'sale:order_tracking_update' orderTracking.id %}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+            <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+                <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+            </button>
+            <button class="tableTopButtons inTableButtons" type="button" name="saveButton">
+                <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+            </button>
+            <button class="tableTopButtons inTableButtons" type="button" name="pdfButton" hx-get="/sale/commerical_invoice_pdf/oc_{{orderConfirmation.id}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true">
+                <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+            </button>
+            <div class="dropdown">
+                <button class="tableTopButtons inTableButtons dropdown-toggle" type="button" data-mdb-dropdown-init aria-expanded="false" name="pdfButton">
+                    <img src="/static/images/icons/flaticon/{{user.profile.theme}}/setting.svg" alt="" style="height: 18px;">
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" hx-get="/account/commerical_invoice_add/ot_{{orderTracking.id}}/" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create Commerical Invoice</a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" hx-get="/sale/dispatch_order_add/ot_{{orderTracking.id}}/" hx-target="#addUpdateDataDialogL" hx-push-url="true" style="cursor:pointer;">Create Dispatch Order</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- <button class="tableTopButtons inTableButtons" type="button" name="saveButton"><i class="fa-solid fa-floppy-disk" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save"></i></button> -->
+            <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+            <div class="form-check form-switch me-4">
+                {{orderTrackingForm.collected}}
+                <label for="{{orderTrackingForm.collected.field.widget.attrs.id}}" class="form-check-label">Collected</label>
+            </div>
+            {% comment %} {% if orderTracking.invoiced == True %}
+                <div class="form-check form-switch ml-5">
+                    {{orderTrackingForm.delivered}}
+                    <label for="textFormOutline" class="form-check-label">Delivered</label>
+                </div>
+            {% endif %} {% endcomment %}
+            <div class="form-check form-switch ml-5">
+                {{orderTrackingForm.delivered}}
+                <label for="{{orderTrackingForm.delivered.field.widget.attrs.id}}" class="form-check-label">Delivered</label>
+            </div>
+        </div>
+
+      <div class="modal-body" style="box-shadow:none; padding:0;overflow: hidden;max-height: 100vh;">
+
+        <!-- Tabs navs -->
+        <ul class="nav nav-pills p-1" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                <a class="nav-link active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                    Order Tracking
+                </a>
+            </li>
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                    Customs
+                </a>
+            </li>
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-3">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-3" aria-selected="true">
+                    Live Tracking
+                </a>
+            </li>
+        </ul>
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+        <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+
+          <div class="tab-pane fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" style="max-height: 80vh;">
+            <div class="row mb-4 pt-0" style="border-radius:0;margin:2px;padding-top:15px;">
+
+                <div class="col-md-3">
+                    <div class="row p-1">
+                        <div class="col-md-12 shadow-4 border ">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Info</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        <input type="text" id="formOutline-{{elementTag}}-project" class="form-control form-control-sm" value="{{orderTracking.project.projectNo}}" readonly>
+                                        <label for="formOutline-{{elementTag}}-project" class="form-label">Request No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        <input type="text" id="formOutline-{{elementTag}}-customer" class="form-control form-control-sm" value="{{orderTracking.theRequest.customer}}" readonly>
+                                        <label for="formOutline-{{elementTag}}-customer" class="form-label">Customer</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        <input type="text" id="formOutline-{{elementTag}}-vessel" class="form-control form-control-sm" value="{{orderTracking.theRequest.vessel}}" readonly>
+                                        <label for="formOutline-{{elementTag}}-vessel" class="form-label">Vessel</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        <input type="text" id="formOutline-{{elementTag}}-maker" class="form-control form-control-sm" value="{{orderTracking.theRequest.maker}}" readonly>
+                                        <label for="formOutline-{{elementTag}}-maker" class="form-label">Maker</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        <input type="text" id="formOutline-{{elementTag}}-type" class="form-control form-control-sm" value="{{orderTracking.theRequest.makerType}}" readonly>
+                                        <label for="formOutline-{{elementTag}}-type" class="form-label">Type</label>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-md-12 shadow-4 border ">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5 d-flex justify-content-between">
+                                    <span class="">Documents</span>
+                                    {% comment %} <span class="">Documents</span>
+                                    <div class="uploader">
+                                        <label class="upload-icon" for="dosyaYUkle">
+                                            <i class="fa-solid fa-plus" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Add a new"></i>
+                                        </label>
+                                        <input type="file" id="dosyaYUkle" name="dosya">
+                                    </div> {% endcomment %}
+                                    <!-- <a class="tableTopButtons inTableButtons" href="#">
+                                        <i class="fa-solid fa-plus" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Add a new"></i>
+                                    </a> -->
+                                </div>
+                            </div>
+                            <div class="row" id="orderTrackingDocumentRow-{{elementTag}}-{{elementTagId}}">
+                                <div class="col-md-12" style="height:240px;">
+
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row p-1">
+                        <div class="col-md-12 shadow-4 border ">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Notes</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{orderTrackingForm.note}}
+                                        <label for="{{orderTrackingForm.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="col-md-5">
+                    <div class="row p-1">
+                        <div class="col-md-12 shadow-4 border ">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Collection</div>
+                            </div>
+
+                            <div class="row p-2">
+                                <div class="col-md-12">
+
+                                    <div class="accordion accordion-borderless overflow-auto" id="addFormBlock-inform-always-{{elementTagSub}}-{{elementTagId}}" hx-target="this" style="max-height:540px">
+                                
+
+                                        {{ collectionFormSet.management_form }}
+                                        {% for collection, collectionForm in collectionFormList %}
+                                            <div class="d-none">
+                                                {{collectionForm.id}}
+                                                {{collectionForm.orderTracking}}
+                                                {{collectionForm.purchaseOrder}}
+                                            </div>
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingTwo">
+                                                    <button
+                                                    class="accordion-button collapsed"
+                                                    data-mdb-collapse-init
+                                                    type="button" data-mdb-toggle="collapse" 
+                                                    data-mdb-target="#accordionItem-{{collection.id}}"
+                                                    aria-expanded="false"
+                                                    aria-controls="accordionItem-{{collection.id}}"
+                                                    style="height:10px;">
+                                                        {{collection.purchaseOrder.purchaseOrderNo}} - <span class="text-truncate" style="max-width:200px;">{{collection.purchaseOrder.inquiry.supplier.name}}</span> - {{collection.id}}
+                                                    </button>
+                                                </h2>
+                                                <div id="accordionItem-{{collection.id}}" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                                                    <div class="accordion-body">
+        
+                                                        <div class="row">
+                                                            <div class="col-md-9 mb-3">
+                                                                <div class="form-outline">
+                                                                    <input type="text" id="formOutline-{{elementTag}}-supplier" class="form-control form-control-sm" value="{{collection.purchaseOrder.inquiry.supplier}}" readonly>
+                                                                    <label for="formOutline-{{elementTag}}-supplier" class="form-label">Supplier</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 mb-3">
+                                                                <div class="form-outline">
+                                                                    <input type="text" id="formOutline-{{elementTag}}-place" class="form-control form-control-sm" value="{{collection.purchaseOrder.inquiry.supplier.city}}" readonly>
+                                                                    <label for="formOutline-{{elementTag}}-place" class="form-label">Supplier Place</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row border-bottom mb-3">
+                                                            <div class="col-md-12 mb-3">
+                                                                <div class="form-outline">
+                                                                    {{collectionForm.trackingNo}}
+                                                                    <label for="{{collectionForm.trackingNo.field.widget.attrs.id}}" class="form-label">Tracking No</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row border-bottom mb-3">
+                                                            <div class="col-md-4 border-right">
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.port}}
+                                                                            <label for="{{collectionForm.port.field.widget.attrs.id}}" class="form-label select-label">Port</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.country}}
+                                                                            <label for="{{collectionForm.country.field.widget.attrs.id}}" class="form-label select-label">Country</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.eta}}
+                                                                            <label for="{{collectionForm.eta.field.widget.attrs.id}}" class="form-label">ETA</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.transportationCompany}}
+                                                                            <label for="{{collectionForm.transportationCompany.field.widget.attrs.id}}" class="form-label">Transportation Com.</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.waybillNo}}
+                                                                            <label for="{{collectionForm.waybillNo.field.widget.attrs.id}}" class="form-label">Waybill No</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline datepicker">
+                                                                            {{collectionForm.dispatchDate}}
+                                                                            <label for="{{collectionForm.dispatchDate.field.widget.attrs.id}}" class="form-label">Dispatch Date</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline datepicker">
+                                                                            {{collectionForm.deliveryDate}}
+                                                                            <label for="{{collectionForm.deliveryDate.field.widget.attrs.id}}" class="form-label">Delivery Date</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.insuranceCompany}}
+                                                                            <label for="{{collectionForm.insuranceCompany.field.widget.attrs.id}}" class="form-label">Insurance Com.</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.insuranceFileNo}}
+                                                                            <label for="{{collectionForm.insuranceFileNo.field.widget.attrs.id}}" class="form-label">Insurance File No</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+        
+                                                            <div class="col-md-8">
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.agentChar}}
+                                                                            <label for="{{collectionForm.agentChar.field.widget.attrs.id}}" class="form-label">Agent</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-12 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.address}}
+                                                                            <label for="{{collectionForm.address.field.widget.attrs.id}}" class="form-label">Address</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.pic}}
+                                                                            <label for="{{collectionForm.pic.field.widget.attrs.id}}" class="form-label">PIC</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.phone}}
+                                                                            <label for="{{collectionForm.phone.field.widget.attrs.id}}" class="form-label">Phone</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.weight}}
+                                                                            <label for="{{collectionForm.weight.field.widget.attrs.id}}" class="form-label">weight</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.fax}}
+                                                                            <label for="{{collectionForm.fax.field.widget.attrs.id}}" class="form-label">Fax</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.dimensions}}
+                                                                            <label for="{{collectionForm.dimensions.field.widget.attrs.id}}" class="form-label">Dimensions</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.email}}
+                                                                            <label for="{{collectionForm.email.field.widget.attrs.id}}" class="form-label">Mail</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row border-bottom mb-3">
+                                                            <div class="col-md-12">
+                                                                <div class="row">
+                                                                    <div class="col-md-8 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.buyingTransportation}}
+                                                                            <label for="{{collectionForm.buyingTransportation.field.widget.attrs.id}}" class="form-label">Buying Transportation</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.buyingTransportationCurrency}}
+                                                                            <label for="{{collectionForm.buyingTransportationCurrency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-8 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.buyingPacking}}
+                                                                            <label for="{{collectionForm.buyingPacking.field.widget.attrs.id}}" class="form-label">Buying Packing</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.buyingPackingCurrency}}
+                                                                            <label for="{{collectionForm.buyingPackingCurrency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-md-8 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.buyingInsurance}}
+                                                                            <label for="{{collectionForm.buyingInsurance.field.widget.attrs.id}}" class="form-label">Buying Insurance</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <div class="form-outline">
+                                                                            {{collectionForm.buyingInsuranceCurrency}}
+                                                                            <label for="{{collectionForm.buyingInsuranceCurrency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-md-12 mb-3">
+                                                                <div class="form-outline">
+                                                                    {{collectionForm.note}}
+                                                                    <label for="{{collectionForm.note.field.widget.attrs.id}}" class="form-label">Collection Note</label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+        
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="col-md-4">
+                    <div class="row p-1">
+                        <div class="col-md-12 shadow-4 border ">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5 d-flex justify-content-between">
+                                    <span class="">Delivery</span>
+                                    <a class="tableTopButtons inTableButtons" href="#" id="addDelivery">
+                                        <i class="fa-solid fa-plus" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Add a new"></i>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="row p-2">
+                                <div class="col-md-12 ">
+
+                                    <div class="accordion accordion-borderless overflow-auto" id="addFormBlock-inform-always-{{elementTagSub}}-{{elementTagId}}-delivery" hx-target="this" style="max-height:300px">
+                                        
+                                        {{ deliveryFormSet.management_form }}
+                                        <div id="addFormBlock-inform-d-justDetail-ot-{{elementTagSub}}-{{elementTagId}}-delivery" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-ot-{{elementTagSub}}-{{elementTagId}}-delivery">
+            
+                                        </div>
+                                        {% for delivery, deliveryForm in deliveryFormList %}
+                                            <div class="d-none">
+                                                {{deliveryForm.id}}
+                                                {{deliveryForm.orderTracking}}
+                                                {{deliveryForm.orderConfirmation}}
+                                            </div>
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="headingTwo">
+                                                    <button class="accordion-button collapsed"
+                                                    data-mdb-collapse-init
+                                                    type="button"
+                                                    data-mdb-toggle="collapse"
+                                                    data-mdb-target="#accordionItem-{{delivery.id}}"
+                                                    aria-expanded="false"
+                                                    aria-controls="accordionItem-{{delivery.id}}"
+                                                    style="height:10px;">
+                                                        {% if delivery.trackingNo %}
+                                                            {{delivery.trackingNo}} - <span class="text-truncate" style="max-width:200px;">{{delivery.agentChar}}</span>
+                                                        {% else %}
+                                                            New Delivery
+                                                        {% endif %}
+                                                    </button>
+                                                </h2>
+                                                <div id="accordionItem-{{delivery.id}}" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+                                                    <div class="accordion-body">
+
+                                                        <div class="row border-bottom mb-3">
+                                                                <div class="col-md-12 mb-3">
+                                                                    <div class="form-outline">
+                                                                        {{deliveryForm.trackingNo}}
+                                                                        <label for="{{deliveryForm.trackingNo.field.widget.attrs.id}}" class="form-label">Tracking No</label>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                        <div class="row border-bottom mb-3">
+                                                                <div class="col-md-4 border-right">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.port}}
+                                                                                <label for="{{deliveryForm.port.field.widget.attrs.id}}" class="form-label select-label">Port</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.country}}
+                                                                                <label for="{{deliveryForm.country.field.widget.attrs.id}}" class="form-label select-label">Country</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.eta}}
+                                                                                <label for="{{deliveryForm.eta.field.widget.attrs.id}}" class="form-label">ETA</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.transportationCompany}}
+                                                                                <label for="{{deliveryForm.transportationCompany.field.widget.attrs.id}}" class="form-label">Transportation Com.</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.waybillNo}}
+                                                                                <label for="{{deliveryForm.waybillNo.field.widget.attrs.id}}" class="form-label">Waybill No</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline datepicker">
+                                                                                {{deliveryForm.dispatchDate}}
+                                                                                <label for="{{deliveryForm.dispatchDate.field.widget.attrs.id}}" class="form-label">Dispatch Date</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline datepicker">
+                                                                                {{deliveryForm.deliveryDate}}
+                                                                                <label for="{{deliveryForm.deliveryDate.field.widget.attrs.id}}" class="form-label">Delivery Date</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.insuranceCompany}}
+                                                                                <label for="{{deliveryForm.deliveryinsuranceCompanyDate.field.widget.attrs.id}}" class="form-label">Insurance Com.</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.insuranceFileNo}}
+                                                                                <label for="{{deliveryForm.insuranceFileNo.field.widget.attrs.id}}" class="form-label">Insurance File No</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="col-md-8">
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.agentChar}}
+                                                                                <label for="{{deliveryForm.agentChar.field.widget.attrs.id}}" class="form-label">Agent</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.address}}
+                                                                                <label for="{{deliveryForm.address.field.widget.attrs.id}}" class="form-label">Address</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.pic}}
+                                                                                <label for="{{deliveryForm.pic.field.widget.attrs.id}}" class="form-label">PIC</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.phone}}
+                                                                                <label for="{{deliveryForm.phone.field.widget.attrs.id}}" class="form-label">Phone</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.weight}}
+                                                                                <label for="{{deliveryForm.weight.field.widget.attrs.id}}" class="form-label">weight</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.fax}}
+                                                                                <label for="{{deliveryForm.fax.field.widget.attrs.id}}" class="form-label">Fax</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.dimensions}}
+                                                                                <label for="{{deliveryForm.dimensions.field.widget.attrs.id}}" class="form-label">Dimensions</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.email}}
+                                                                                <label for="{{deliveryForm.email.field.widget.attrs.id}}" class="form-label">Mail</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                        <div class="row border-bottom mb-3">
+                                                                <div class="col-md-12">
+                                                                    <div class="row">
+                                                                        <div class="col-md-8 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.sellingTransportation}}
+                                                                                <label for="{{deliveryForm.sellingTransportation.field.widget.attrs.id}}" class="form-label">Selling Transportation</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.sellingTransportationCurrency}}
+                                                                                <label for="{{deliveryForm.sellingTransportationCurrency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-8 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.sellingPacking}}
+                                                                                <label for="{{deliveryForm.sellingPacking.field.widget.attrs.id}}" class="form-label">Selling Packing</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.sellingPackingCurrency}}
+                                                                                <label for="{{deliveryForm.sellingPackingCurrency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="row">
+                                                                        <div class="col-md-8 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.sellingInsurance}}
+                                                                                <label for="{{deliveryForm.sellingInsurance.field.widget.attrs.id}}" class="form-label">Selling Insurance</label>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <div class="form-outline">
+                                                                                {{deliveryForm.sellingInsuranceCurrency}}
+                                                                                <label for="{{deliveryForm.sellingInsuranceCurrency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+                                                        <div class="row">
+                                                                <div class="col-md-12 mb-3">
+                                                                    <div class="form-outline">
+                                                                        {{deliveryForm.note}}
+                                                                        <label for="{{deliveryForm.note.field.widget.attrs.id}}" class="form-label">Delivery Note</label>
+                                                                    </div>
+                                                                </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        {% endfor %}
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+
+                    <div class="row p-1">
+                        <div class="col-md-12 shadow-4 border  p-2">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Parts</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3 overflow-auto" style="max-height:20vh">
+                                    <table class="table table-borderless mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Part</th>
+                                                <th>Q</th>
+                                                <th>T</th>
+                                                <th>Rm.</th>
+                                                <th>PO</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for part in parts %}
+                                            <tr>
+                                                <td><strong>{{part.purchaseOrderPart.inquiryPart.requestPart.part.partNo}}</strong></td>
+                                                <td>{{part.quantity}}</td>
+                                                <td>{{part.tracked}}</td>
+                                                {% if part.remaining == 0 %}
+                                                    <td class="text-green-600">{{part.remaining}}</td>
+                                                {% else %}
+                                                    <td class="fw-bold text-red-600">{{part.remaining}}</td>
+                                                {% endif %}
+                                                <td>{{part.purchaseOrderPart.purchaseOrder}}</td>
+                                                <td>Unset</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                
+              
+            </div>
+
+          </div>
+
+          <!-- <div class="tab-pane fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+            <div class="row p-2" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;">
+                <div class="col-md-12">
+                    <div class="row p-2">
+                        <div class="col-md-12 text-start fs-5 d-flex justify-content-between">
+                            <span class="">Documents</span>
+                            <a class="tableTopButtons inTableButtons" href="#">
+                                <i class="fa-solid fa-plus" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Add a new"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 overflow-auto" style="max-height:350px;">
+                            <div class="row p-2">
+                                {% comment %} <a href="/sale/order_tracking_documents/{{documents.request}}/">
+                                    <i class="fa-solid fa-file-pdf fa-xl"></i>
+                                    Request Form[{{orderTracking.project.projectNo}}]
+                                </a> {% endcomment %}
+                                <a hx-get="/sale/order_tracking_pdf/r_{{orderTracking.project.id}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                                    <i class="fa-solid fa-file-pdf fa-xl"></i>
+                                    Request Form[{{orderTracking.project.projectNo}}]
+                                </a>
+                            </div>
+                            {% for collection in collections %}
+                            <div class="row p-2">
+                                <a hx-get="/sale/order_tracking_pdf/i_{{collection.collection.purchaseOrder.inquiry.id}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                                    <i class="fa-solid fa-file-pdf fa-xl"></i>
+                                    Inquiry Form[{{collection.collection.purchaseOrder.inquiry.inquiryNo}}]
+                                </a>
+                            </div>
+                            {% endfor %}
+                            <div class="row p-2">
+                                <a hx-get="/sale/order_tracking_pdf/q_{{collections.0.collection.purchaseOrder.orderConfirmation.quotation.id}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                                    <i class="fa-solid fa-file-pdf fa-xl"></i>
+                                    Quotation Form[{{collections.0.collection.purchaseOrder.orderConfirmation.quotation.quotationNo}}]
+                                </a>
+                            </div>
+                            <div class="row p-2">
+                                <a hx-get="/sale/order_tracking_pdf/oc_{{collections.0.collection.purchaseOrder.orderConfirmation.id}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                                    <i class="fa-solid fa-file-pdf fa-xl"></i>
+                                    OC Form[{{collections.0.collection.purchaseOrder.orderConfirmation.orderConfirmationNo}}]
+                                </a>
+                            </div>
+                            {% for collection in collections %}
+                            <div class="row p-2">
+                                <a hx-get="/sale/order_tracking_pdf/po_{{collection.collection.purchaseOrder.id}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                                    <i class="fa-solid fa-file-pdf fa-xl"></i>
+                                    PO Form[{{collection.collection.purchaseOrder.purchaseOrderNo}}]
+                                </a>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          </div> -->
+
+          <div class="tab-pane fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+            <div class="row mb-1" style="border-radius:0;margin:2px;">
+
+
+            </div>
+
+          </div>
+
+          <div class="tab-pane fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-3">
+            <div class="row mb-1" style="border-radius:0;margin:2px;">
+
+
+            </div>
+
+          </div>
+
+        </div>
+        <!-- Tabs content -->
+
+      </div>
+      
+  </form>
+
+</div>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var orderTrackingId = "{{orderTracking.id}}";
+    var pageUrl = "/sale/order_tracking_update/{{elementTagId}}/";
+
+    $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+        $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+    });
+
+    {% comment %} $("#form-{{elementTag}}-{{elementTagId}}").submit(function(event){
+        let ee = elementTag;
+        let ei = elementTagId;
+        let u = pageUrl
+
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        event.preventDefault();
+
+        setTimeout(function() {
+            
+            let navTagSub = $("#navTag-{{elementTag}}-{{elementTagId}}");
+            let tabPaneSub = $("#tabPane-{{elementTag}}-{{elementTagId}}");
+
+            navTagSub.remove();
+            tabPaneSub.remove();
+
+            let tabContSub = $("#tabContSub-{{elementTag}}");
+
+            htmx.ajax("GET", "/sale/order_tracking_update/{{elementTagId}}/", {target:"#tabContSub-orderTracking", swap:"afterbegin"});
+            window.history.pushState({}, '', "/sale/order_tracking_update/{{elementTagId}}/");
+    
+            setTimeout(function() {
+                $("body").busyLoad("hide", {
+                    animation: "fade"
+                });
+            }, 1500);
+    
+        }, 2000);
+    }); {% endcomment %}
+
+    //delivery button control
+    $("#addDelivery").click(function() {
+        htmx.ajax('GET', "/sale/delivery_add_in_detail/ot_" + elementTagId, {target : "#addFormBlock-inform-d-justDetail-ot-{{elementTagSub}}-{{elementTagId}}-delivery", swap : "afterbegin", "push-url" : "true"});
+    });
+
+
+
+    //documents get
+    //spinner başlatır
+    $("#orderTrackingDocumentRow-{{elementTag}}-{{elementTagId}}").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+    htmx.ajax('GET', "/sale/order_tracking_document/{{elementTagId}}", "#orderTrackingDocumentRow-{{elementTag}}-{{elementTagId}}");
+
+   
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/order_tracking/detail.js' %}"></script>
+
+{% endblock javascript %}
+

@@ -1,0 +1,117 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-4 mb-3">
+          <div class="form-outline">
+            {{form.part}}
+            <label for="selectFormOutline" class="form-label select-label">Part</label>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{requestPart.part.description}}" readonly>
+            <label for="textFormOutline" class="form-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            {{ form.quantity }}
+            <label for="textFormOutline" class="form-label">Quantity</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Save</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+
+ 
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var requestPartId = "{{requestPart.id}}";
+    var theRequestId = "{{requestPart.theRequest.id}}";
+    var pageUrl = "/sale/request_part_update/{{elementTagId}}/"
+    var makerType = "{{theRequest.makerType.id}}";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+
+    
+
+    
+</script>
+
+
+<script>
+
+    // Maker seçildiğinde AJAX isteği yaparak Type'ları günceller
+    {% comment %} $('#id_maker').on('change', function() {
+        var makerInformId = $(this).val();
+        $.ajax({
+            url: '/data/api/maker_types',
+            data: {'maker': makerInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#id_makerType').empty();
+                $.each(data, function(i, type) {
+                    $('#id_makerType').append($('<option>').val(type.id).text(type.type));
+                });
+                $("#id_makerType").trigger("change");
+            }
+        });
+    });
+
+    $('#id_makerType').on('change', function() {
+        var makerTypeInformId = $(this).val();
+        $.ajax({
+            url: '/data/api/parts',
+            data: {'type': makerTypeInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#id_part').empty();
+                $.each(data, function(i, part) {
+                    $('#id_part').append($('<option>').val(part.id).text(part.partNo));
+                });
+            }
+        });
+    });
+
+    setTimeout(function(){
+        if($("#table-{{elementTagSub}}").DataTable().data().count() > 0){
+            let theMaker = $("#table-{{elementTagSub}}").DataTable().row(0).data()["maker"]
+            let theMakerType = $("#table-{{elementTagSub}}").DataTable().row(0).data()["makerType"]
+            $('#id_maker').empty();
+            $('#id_maker').append($('<option>').val(theMaker.id).text(theMaker.name));
+            $('#id_makerType').empty();
+            $('#id_makerType').append($('<option>').val(theMakerType.id).text(theMakerType.type));
+            $("#id_makerType").trigger("change")
+            
+            console.log("item var");
+            //$('#id_maker').attr("disabled", "true");
+        }else{
+            console.log("item yok");
+        }
+    },500
+    ); {% endcomment %}
+
+    
+</script>

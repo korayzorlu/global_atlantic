@@ -1,0 +1,311 @@
+{% load static %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      {{part.partNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 15%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form action="/part_update/{{part.id}}" method="post" class="modal-content form-container border border mainAddForm needs-validation" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        {% comment %} <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button> {% endcomment %}
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        <div class="form-check form-switch me-4">
+          {{form.consumable}}
+          <label for="{{form.note.consumable.widget.attrs.id}}" class="form-check-label">Consumable</label>
+        </div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none;">
+
+        <div class="row mb-3">
+
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{unique}}" readonly>
+                  <label for="textFormOutline" class="form-label">Part Unique</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.maker}}
+                  <label for="{{form.maker.field.widget.attrs.id}}" class="form-label select-label">Maker</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.type}}
+                  <label for="{{form.type.field.widget.attrs.id}}" class="form-label select-label">Type</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.manufacturer}}
+                  <label for="{{form.manufacturer.field.widget.attrs.id}}" class="form-label">Manufacturer</label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.partNo}}
+                  <label for="{{form.partNo.field.widget.attrs.id}}" class="form-label">Part No</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.group}}
+                  <label for="{{form.group.field.widget.attrs.id}}" class="form-label">Group</label>
+                </div>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="form-outline">
+                  {{form.techncialSpecification}}
+                  <label for="{{form.techncialSpecification.field.widget.attrs.id}}" class="form-label">Techncial Specification</label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-9 mb-2">
+                <div class="form-outline">
+                  {{form.description}}
+                  <label for="{{form.description.field.widget.attrs.id}}" class="form-label">Description *</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.hsCode}}
+                  <label for="{{form.hsCode.field.widget.attrs.id}}" class="form-label">HS Code</label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.crossRef}}
+                  <label for="{{form.crossRef.field.widget.attrs.id}}" class="form-label">Cross Ref.</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.ourRef}}
+                  <label for="{{form.ourRef.field.widget.attrs.id}}" class="form-label">Our Ref.</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.drawingNr}}
+                  <label for="{{form.drawingNr.field.widget.attrs.id}}" class="form-label">Drawing Nr</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.barcode}}
+                  <label for="{{form.barcode.field.widget.attrs.id}}" class="form-label">Barcode</label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.quantity}}
+                  <label for="{{form.quantity.field.widget.attrs.id}}" class="form-label select-label">Quantity</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.unit}}
+                  <label for="{{form.unit.field.widget.attrs.id}}" class="form-label select-label">Unit</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.buyingPrice}}
+                  <label for="{{form.buyingPrice.field.widget.attrs.id}}" class="form-label">Buying Price</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.retailPrice}}
+                  <label for="{{form.retailPrice.field.widget.attrs.id}}" class="form-label">Retail Price</label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <div class="form-outline">
+                  {{form.dealerPrice}}
+                  <label for="{{form.dealerPrice.field.widget.attrs.id}}" class="form-label">Dealer Price</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.wholesalePrice}}
+                  <label for="{{form.wholesalePrice.field.widget.attrs.id}}" class="form-label">Wholesale Price</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.currency}}
+                  <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                </div>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-12 mb-2">
+                <div class="form-outline">
+                  {{form.note}}
+                  <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row mb-3">
+          <div class="col-md-12 mb-3">
+
+            <!-- Tabs navs -->
+            <ul class="nav nav-pills" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+                <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle active"
+                  id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-toggle="tab"
+                  href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab"
+                  aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                  Reports
+                </a>
+              </li>
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle"
+                  id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-toggle="tab"
+                  href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab"
+                  aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                  Image
+                </a>
+              </li>
+            </ul>
+            <!-- Tabs navs -->
+
+            <!-- Tabs content -->
+            <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+
+              <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+
+                <div class="row">
+                  <div class="col-md-12">
+                    
+                    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}} overflow-auto" style="max-height:45vh;">
+                      <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th class="">Line</th>
+                                <th class="">Project</th>
+                                <th class="">Project Status</th>
+                                <th class="">Customer</th>
+                                <th class="">Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                          {% for requestPart in requestParts %}
+                            <tr>
+                                <td class="" style="width:1%;">{{forloop.counter}}</td>
+                                <td class="" style="width:10%;">{{requestPart.theRequest.requestNo}}</td>
+                                <td class="" style="width:10%;">{{requestPart.theRequest.project.get_stage_display}}</td>
+                                <td class="">{{requestPart.theRequest.customer.name}}</td>
+                                <td class="" style="width:1%;">{{requestPart.quantity}}</td>
+                            </tr>
+                          {% endfor %}
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+
+              </div>
+
+
+            </div>
+            <!-- Tabs content -->
+
+          </div>
+        </div>
+
+      </div>
+      
+      {% comment %} <div class="modal-footer shadow-5-strong d-flex justify-content-between" style="padding: 10px;box-shadow:none!important;">
+        <a hx-get="/sale/quotation_add/i_{{inquiry.id}}" hx-target="#addFormBlock-left-{{elementTag}}" class="tableTopButtons inTableButtons"><i class="fa-solid fa-file-invoice-dollar" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Create Quotation"></i></a>
+     
+      </div> {% endcomment %}
+      
+  </form>
+</div>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var partId = "{{part.id}}";
+  var pageUrl = "/data/part_update/{{elementTagId}}/"
+
+  // Maker seçildiğinde AJAX isteği yaparak Type'ları günceller
+  $('#{{form.maker.field.widget.attrs.id}}').on('change', function() {
+    var makerId = $(this).val();
+    $.ajax({
+        url: '/data/api/maker_types',
+        data: {'maker': makerId},
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            $('#{{form.type.field.widget.attrs.id}}').empty();
+            $('#{{form.type.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, type) {
+                $('#{{form.type.field.widget.attrs.id}}').append($('<option>').val(type.id).text(type.type));
+            });
+        }
+    });
+  });
+
+  htmx.ajax('GET', "/data/part_document/{{part.id}}", "#tabPane-{{elementTag}}-{{elementTagId}}-add-1");
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/data/part/detail.js' %}"></script>
+
+{% endblock javascript %}

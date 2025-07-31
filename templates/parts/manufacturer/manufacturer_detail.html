@@ -1,0 +1,160 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Manufacturer Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Sales' %}{% endblock %}
+{% block childDirectory %}{% trans 'Manufacturer Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:contact_person_data' %}{% endblock %}
+{% block mainRoute %}Data{% endblock %}
+{% block childRoute %}Manufacturer Detail{% endblock %}
+
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% url 'parts:manufacturer_edit' department.id as edit_url %}
+{% url 'parts:manufacturer_delete' department.id as delete_url %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/parts/maker/maker_detail.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-12">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                             alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Manufacturer Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Manufacturer</u> information.</li>
+                        </ul>
+                    </div>
+                    {% block buttoneditremove %}
+                        {% include "components/buttoneditremove.html" with edit_url=edit_url delete_url=delete_url %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                    <colgroup>
+                        <col span="1" style="width: 30%;">
+                        <col>
+                    </colgroup>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th class="text-muted">{% trans "Supplier" %}</th>
+                        {% if manufacturer.supplier_info %}
+                        <td class="p-0">
+                            <div class="w-100 exit">
+                                <a href="{% url 'information:company_detail' manufacturer.supplier_info.id %}"
+                                   target="_blank" class="font-weight-semibold letter-icon-title">
+                                    {{ manufacturer.supplier_info }}</a>
+                            </div>
+                        </td>
+                        {% else %}
+                        <td>-</td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Maker" %}</th>
+                        {% if manufacturer.maker_info %}
+                        <td class="p-0">
+                            <div class="w-100 exit">
+                                <a href="{% url 'parts:maker_detail' manufacturer.maker_info.id %}"
+                                   target="_blank" class="font-weight-semibold letter-icon-title">
+                                    {{ manufacturer.maker_info }}</a>
+                            </div>
+                        </td>
+                        {% else %}
+                        <td>-</td>
+                        {% endif %}
+                    </tr>
+
+                    <tr>
+                        <th class="text-muted">{% trans "Manufacturer Name" %}</th>
+                        <td>{{ manufacturer.name }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">
+                            {% trans 'Makers (Compatible)' %}
+                        </th>
+                        <td class="p-0">
+                            {% for maker in manufacturer.maker.all %}
+                            <div class="w-100 exit">
+                                <a href="{% url 'parts:maker_detail' maker.id %}" target="_blank"
+                                   class="font-weight-semibold letter-icon-title">
+                                    {{ maker }}</a>
+                            </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Categories" %}</th>
+                        <td class="p-0">
+                            {% for category in manufacturer.category.all %}
+                            <div class="w-100 exit">
+                                {{ category }}
+                            </div>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Website" %}</th>
+                        {% if manufacturer.website %}
+                        <td class="p-0">
+                            <div class="w-100 exit">
+                                <a href="{{ manufacturer.website }}"
+                                   target="_blank" class="font-weight-semibold letter-icon-title">
+                                    {{ manufacturer.website }}</a>
+                            </div>
+                        </td>
+                        {% else %}
+                        <td>-</td>
+                        {% endif %}
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /Manufacturer info -->
+</div>
+
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    let companyEditURL = "{% url 'parts:manufacturer_edit' manufacturer.id %}"
+    let companyDeleteURL = "{% url 'parts:manufacturer_delete' manufacturer.id %}"
+
+</script>
+<script type="module" src="{% static 'js/parts/manufacturer/manufacturer_detail/manufacturer_detail.js' %}"></script>
+{% endblock javascript %}

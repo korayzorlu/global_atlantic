@@ -1,0 +1,458 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Delivery' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Project' %}{% endblock %}
+{% block childDirectory %}{% trans 'Delivery' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:customer_data' %}{% endblock %}
+{% block mainRoute %}{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block right_aside %}
+{% include "./right_sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/company/company_add.css' %}">
+<!-- /StyleSheet End-->
+
+{% block modals %}
+{% include "./delivery_modals.html" %}
+{% endblock %}
+
+<!-- Content bloğu -->
+<div class="card">
+    <div class="card-header">
+        <div class="media flex-md-row mb-2">
+            <div class="media-body">
+                <div class="wizard-form steps-basic wizard clearfix" role="application">
+                    <div class="steps clearfix">
+                        <ul role="tablist">
+                            <li role="tab" class="done">
+                                <a href="{% url 'sales:project_request' project.id %}" class="">
+                                    <span class="number">1</span>
+                                    {% trans "Request" %}
+                                </a>
+                            </li>
+                            <li role="tab" class="done">
+                                <a href="{% url 'sales:project_inquiry' project.id %}" class="">
+                                    <span class="number">2</span>
+                                    {% trans "Inquiry" %}
+                                </a>
+                            </li>
+                            <li role="tab" class="done">
+                                <a href="{% url 'sales:project_quotation' project.id %}" class="">
+                                    <span class="number">3</span>
+                                    {% trans "Quotation" %}
+                                </a>
+                            </li>
+                            <li role="tab" class="done">
+                                <a href="{% url 'sales:project_purchase_order' project.id %}" class="">
+                                    <span class="number">4</span>
+                                    {% trans "Purchase Order" %}
+                                </a>
+                            </li>
+                            <li role="tab" class="last current">
+                                <a href="{% url 'sales:project_delivery' project.id %}" class="">
+                                    <span class="number">5</span>
+                                    {% trans "Delivery" %}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="header-elements">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <ul id="tabHeader" class="nav nav-pills nav-pills-bordered nav-justified">
+            {% for project_delivery_form in project_delivery_forms %}
+            <li class="nav-item align-items-center" style="position:relative;">
+                <span class="mx-2 h-100 d-flex align-items-center" style="position:absolute; z-index:9; right: 0">
+                    <button class="btn btn-outline-light rounded-circle border-0 m-0 p-0 deliveryDelete">
+                        <i class="icon-cross2 m-1" style="top:0px!important;"></i>
+                    </button>
+                </span>
+                <a href="#{{ project_delivery_form.instance.no }}" data-toggle="tab"
+                   class="nav-link {% if forloop.counter0 == 0 %} active{% endif %}">
+                    {{ project_delivery_form.instance.no }}
+                </a>
+            </li>
+            {% endfor %}
+            <li class="ml-2 add-tab-button">
+                <a class="nav-link text-success" type="button" data-toggle="modal"
+                   data-target="#modal_delivery_add">
+                    <i class="icon-new-tab"></i>
+                </a>
+            </li>
+        </ul>
+        <div id="tabBody" class="tab-content">
+            {% for project_delivery_form in project_delivery_forms %}
+            <div id="{{ project_delivery_form.instance.no }}" data-delivery-id="{{ project_delivery_form.instance.id }}"
+                 data-touch="false" data-interval="false"
+                 class="tab-pane fade show carousel slide {% if forloop.counter0 == 0 %} active{% endif %}">
+                <div class="form-wrapper justify-content-around">
+
+                    <!--inputs and tables below -->
+
+                    <div class="row justify-content-center">
+                        <div class="col-xl-6">
+                            <div class="card company-info">
+                                <div class="card-header">
+                                    <div class="media flex-md-row mb-2">
+                                        <a id="" class="align-self-md-start mr-3">
+                                            <img src="{% static 'images/icons/delivery.png' %}" class="rounded" width="44"
+                                                 height="44" alt="">
+                                        </a>
+                                        <div class="media-body" style="margin-left:-10px">
+                                            <h5 class="media-title font-weight-semibold" style="padding-top:10px">
+                                                Delivery Details</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body p-0">
+                                    <form>
+                                        <table class="table">
+                                            <thead>
+                                            </thead>
+                                            <colgroup>
+                                                <col span="1" style="width: 30%;">
+                                                <col>
+                                            </colgroup>
+
+                                            <tbody>
+                                            <tr>
+                                                <th class="text-muted">Request Number</th>
+                                                <td>{{ project_delivery_form.instance.project.request.no }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-muted">Purchase Order</th>
+                                                <td>{{ project_delivery_form.instance.purchase_order.no }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-muted">Supplier Name</th>
+                                                <td>{{ project_delivery_form.instance.purchase_order.inquiry.supplier.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-muted">Customer</th>
+                                                <td>{{ project_delivery_form.instance.project.request.customer.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-muted">Vessel Name</th>
+                                                <td>{{ project_delivery_form.instance.project.request.vessel.name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-muted">Supplier Location</th>
+                                                <td>{{ project_delivery_form.instance.purchase_order.inquiry.supplier.country }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-muted">Process Type</th>
+                                                <td>{{ project_delivery_form.instance.get_process_type_display }}</td>
+                                            </tr>
+                                            {% for field in project_delivery_form %}
+                                            {% if field.name != 'parts' %}
+                                            <tr>
+                                                <th class="text-muted">{{ field.label }}</th>
+                                                <td>{{ field }}</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Right Buttons below-->
+
+                        <div class="col-xl-5">
+                            <div class="card">
+                                <div class="card-header pb-0">
+                                    <div class="media flex-md-row mb-2">
+                                        <a id="" class="align-self-md-start mr-3">
+                                            <img src="{% static 'images/icons/costicon.png' %}" class="rounded" width="44"
+                                                 height="44" alt="">
+                                        </a>
+                                        <div class="media-body" style="margin-left:-10px">
+                                            <h5 class="media-title font-weight-semibold" style="padding-top:10px">
+                                                Costs</h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th class="w-100">Amount / <span class="text-muted">
+                                                        Currency</span></th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="tbodyList">
+
+                                            <tr id="1">
+                                                <td style="width:50%">
+                                                    <img src="{% static 'images/icons/transportationicon.png' %}" />
+                                                    <button type="button" class="btn transportation-btn"
+                                                            onmouseover="changeColor(this)"
+                                                            onmouseout="colorBack(this)">
+                                                        Transportation
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center costs">
+                                                        <div class="transportation">
+                                                            <div class="text-default font-weight-semibold letter-icon-title total-charged-amount">
+                                                                <i class="icon-spinner2 spinner"></i>
+                                                            </div>
+                                                            <p class="text-muted font-size-sm cost-currency"><i
+                                                                    class="icon-spinner2 spinner"></i></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr id="2">
+                                                <td><img src="{% static 'images/icons/taxicon.png' %}"/>
+                                                    <button type="button" class="btn tax-btn"
+                                                            onmouseover="changeColor(this)" onmouseout="colorBack(this)"
+                                                    >Tax
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center costs">
+                                                        <div class="tax">
+                                                            <div class="text-default font-weight-semibold letter-icon-title total-charged-amount">
+                                                                <i class="icon-spinner2 spinner"></i>
+                                                            </div>
+                                                            <p class="text-muted font-size-sm cost-currency"><i class="icon-spinner2 spinner"></i></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr id="3">
+                                                <td>
+                                                    <img src="{% static 'images/icons/insuranceicon.png' %}"/>
+                                                    <button type="button" class="btn insurance-btn"
+                                                            onmouseover="changeColor(this)"
+                                                            onmouseout="colorBack(this)">
+                                                        Insurance
+                                                    </button>
+                                                </td>
+
+                                                <td>
+                                                    <div class="d-flex align-items-center costs">
+                                                        <div class="insurance">
+                                                            <div class="text-default font-weight-semibold letter-icon-title total-charged-amount">
+                                                                <i class="icon-spinner2 spinner"></i>
+                                                            </div>
+                                                            <p class="text-muted font-size-sm cost-currency"><i class="icon-spinner2 spinner"></i></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr id="4">
+                                                <td><img src="{% static 'images/icons/customsicon.png' %}"/>
+                                                    <button type="button" class="btn customs-btn"
+                                                            onmouseover="changeColor(this)"
+                                                            onmouseout="colorBack(this)">
+                                                        Customs
+                                                    </button>
+                                                </td>
+
+                                                <td>
+                                                    <div class="d-flex align-items-center costs">
+                                                        <div class="customs">
+                                                            <div class="text-default font-weight-semibold letter-icon-title total-charged-amount">
+                                                                <i class="icon-spinner2 spinner"></i>
+                                                            </div>
+                                                            <p class="text-muted font-size-sm cost-currency"><i class="icon-spinner2 spinner"></i></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr id="5">
+                                                <td>
+                                                    <img src="{% static 'images/icons/packingicon.png' %}"/>
+                                                    <button type="button" class="btn packing-btn"
+                                                            onmouseover="changeColor(this)" onmouseout="colorBack(this)">
+                                                        Packing
+                                                    </button>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex align-items-center costs">
+                                                        <div class="packing">
+                                                            <div class="text-default font-weight-semibold letter-icon-title total-charged-amount">
+                                                                <i class="icon-spinner2 spinner"></i>
+                                                            </div>
+                                                            <p class="text-muted font-size-sm cost-currency"><i class="icon-spinner2 spinner"></i></p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-header pb-0">
+                                    <div class="media flex-md-row mb-2">
+                                        <a class="align-self-md-start mr-3">
+                                            <img src="{% static 'images/icons/partlisticon2.png' %}" class="rounded" width="44"
+                                                 height="44" alt="">
+                                        </a>
+                                        <div class="media-body">
+                                            <h5 class="media-title font-weight-semibold" style="padding-top:10px">Part
+                                                List Data</h5>
+
+                                        </div>
+                                        <div class="addbutton">
+                                            <button type="button" style="background: transparent;border: none;"
+                                                    class="button-add partButton">
+                                                <img class="plus" src="{% static 'images/icons/add.svg' %}" >
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--add part below-->
+                                <div class="partInput col-md-10 mx-auto py-2" hidden>
+                                    {{ project_delivery_form.parts }}
+                                </div>
+                                <!--add part above-->
+
+                                <div class="card-body p-0">
+                                    <div class="table-responsive table-scrollable" style="max-height: 20.2rem;">
+                                        <table class="table table-bordered part-list-table">
+                                            <thead>
+                                            <tr>
+                                                <th class="w-25 d-none">Part ID</th>
+                                                <th class="w-25">Part Code</th>
+                                                <th class="w-60">Part Name</th>
+                                                <th class="w-15">Delete</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /Company info -->
+                    </div>
+
+                    <!--inputs and tables above-->
+
+
+                    <!-- /Company info -->
+                    <fieldset class="card-body border-top w-100 text-center">
+                        <a href="{% url 'sales:project_'|add:previous_stage project.id %}"
+                           class="btn btn-sm btn-primary previous_stage">
+                            {% trans 'Previous' %}
+                        </a>
+                        <button type="button" class="btn btn-sm btn-success save_stage">{% trans 'Save' %}</button>
+                        
+                        
+                        
+                        
+                            
+                       <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#modal_claim_follow_up"{% if claim_continue %} disabled {% endif %}>
+                        {% if claim_continue %}
+                        {% trans 'Claimed' %}
+                        {% else %}
+                        {% trans 'Claims' %}
+                        {% endif %}
+                        </button>
+                           
+                        <button type="button" class="btn btn-sm btn-indigo deliver_stage"
+                                {% if project_delivery_form.instance.is_delivered %}disabled{% endif %}>
+                            {% trans 'Delivered' %}
+                        </button>
+                    </fieldset>
+
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <!-- /inner container -->
+    <button class="overViewBTN sidebar-control sidebar-right-toggle sidebar-mobile-right-toggle"><i class="far fa-eye"></i></button>
+</div>
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    const project_id = {{ project.id }};
+    const project_update_api_url = "{% url 'sales:project_update_api' 0 %}"
+
+    const purchase_order_parts_api_url = new URL(window.location.href)
+    purchase_order_parts_api_url.pathname = "{% url 'sales:purchase_order_parts_api' %}"
+
+    const part_detail_url = "{% url 'parts:part_detail' 0 %}"
+
+    const delivery_part_add_api_url = "{% url 'sales:delivery_part_add_api' %}"
+    const delivery_part_remove_api_url = "{% url 'sales:delivery_part_remove_api' 0 0 %}"
+    const delivery_api_url = "{% url 'sales:delivery_api' 0 %}"
+    const delivery_create_api_url = "{% url 'sales:delivery_create_api' %}"
+    const delivery_update_api_url = "{% url 'sales:delivery_update_api' 0 %}"
+    
+    const delivery_transportation_api_url  = "{% url 'sales:delivery_transportation_api' 0 %}"
+    const delivery_transportation_update_api_url = "{% url 'sales:delivery_transportation_update_api' 0 %}"
+    const delivery_tax_api_url = "{% url 'sales:delivery_tax_api' 0 %}"
+    const delivery_tax_update_api_url = "{% url 'sales:delivery_tax_update_api' 0 %}"
+    const delivery_insurance_api_url = "{% url 'sales:delivery_insurance_api' 0 %}"
+    const delivery_insurance_update_api_url = "{% url 'sales:delivery_insurance_update_api' 0 %}"
+    const delivery_customs_api_url = "{% url 'sales:delivery_customs_api' 0 %}"
+    const delivery_customs_update_api_url = "{% url 'sales:delivery_customs_update_api' 0 %}"
+    const delivery_packing_api_url = "{% url 'sales:delivery_packing_api' 0 %}"
+    const delivery_packing_update_api_url = "{% url 'sales:delivery_packing_update_api' 0 %}"
+    const claims_follow_up_create_api_url= "{% url 'sales:claims_follow_up_create_api' %}"
+    const claim_detail_url ="{% url 'sales:claims_follow_up_detail' 0 %}";
+function changeColor(x) {
+  x.style.color = "#7db9e4";
+}
+
+function colorBack(x) {
+  x.style.color = "";
+}
+
+
+$(".partButton").on("click", function() {
+    let input = $(this).closest('.card').find(".partInput");
+    input.attr('hidden') ? input.removeAttr('hidden') : input.attr('hidden', '');
+  });
+</script>
+<script src="{% static 'js/sales/project/delivery/delivery.js' %}"></script>
+<script>
+    const project_document_create_api_url = "{% url 'sales:project_document_create_api' %}"
+    const project_documents_api_url = "{% url 'sales:project_documents_api' %}?project="+project_id
+    const project_document_update_api_url = "{% url 'sales:project_document_update_api' 0 %}"
+</script>
+<script src="{% static 'js/sales/project/right_sidebar/right_sidebar.js' %}"></script>
+{% endblock javascript %}

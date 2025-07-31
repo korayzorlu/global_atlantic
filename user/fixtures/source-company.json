@@ -1,0 +1,13 @@
+[
+    {
+        "model": "source.company",
+        "pk": 1,
+        "fields": {
+            "name": "ESMS - Engineering Solutions & Marine Solutions",
+            "formalName": "ESMS DENİZCİLİK ENERJİ TAAHHÜT MÜHENDİSLİK SANAYİ VE TİC. A.Ş.",
+            "identificationCode": "SC",
+            "code": "ESMS",
+            "companyNo": "SC-ESMS"
+        }
+    }
+]

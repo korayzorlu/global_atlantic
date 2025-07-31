@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+{% load static %}
+
+
+<style>
+    {% comment %} .michoAppLogoGif {
+        width: 200px; /* Resmin boyutunu isteğe göre ayarla */
+        height: auto;
+        animation: spin 3s linear infinite; /* 3 saniyede bir tur, sürekli */
+    }
+    
+    /* Spin animasyonu tanımı */
+    @keyframes spin {
+        from {
+            transform: rotate(0deg); /* Başlangıç pozisyonu */
+        }
+        to {
+            transform: rotate(360deg); /* Tam bir dönüş */
+        }
+    } {% endcomment %}
+    
+</style>
+
+<html lang="en" data-mdb-theme="{{request.user.profile.theme}}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/landing/esms-logo-red-light.png' %}" sizes="32x32"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    
+    
+    <link rel="shortcut icon" type="image/jpg" href="/static/images/logo/romano-logo1.svg"/>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
+
+    <!--danger-->
+    <!-- Global stylesheets -->
+    {% comment %} <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+        type="text/css" /> {% endcomment %}
+    {% comment %} <link href="{% static 'lib/global_assets/css/icons/fontawesome/styles.min.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+    {% comment %} <link href="{% static 'lib/global_assets/css/extras/animate.min.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+    {% comment %} <link href="{% static 'lib/global_assets/css/extras/jquery-ui.min.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+    {% comment %} <link href="{% static 'lib/global_assets/css/icons/icomoon/styles.min.css' %}" rel="stylesheet" type="text/css" /> {% endcomment %}
+    <!-- /global stylesheets -->
+    
+ 
+    <!-- Core JS files -->
+    {% comment %} <script src="{% static 'lib/global_assets/js/main/jquery.min.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'lib/global_assets/js/main/jquery-ui.min.js' %}"></script> {% endcomment %}
+    {% comment %} <script src="{% static 'lib/global_assets/js/main/bootstrap.bundle.min.js' %}"></script> {% endcomment %}
+    <!-- /core JS files -->
+
+    <!--Plugins-->
+    {% comment %} <script src="{% static 'lib/global_assets/js/plugins/notifications/sweet_alert.min.js' %}"></script> {% endcomment %}
+    {% block plugins %}{% endblock %}
+    <!--/plugins-->
+
+    <!--Demo_pages-->
+    {% block demo_pages %}{% endblock %}
+    <!--/demo_pages-->
+
+    {% comment %} <script src="{% static 'lib/global_assets/js/plugins/notifications/sweet_alert.min.js' %}"></script> {% endcomment %}
+    <script>
+        const add_svg_src = "{% static 'images/icons/add.svg' %}";
+        const info_svg_src = "{% static 'images/icons/info.svg' %}";
+        const edit_svg_src = "{% static 'images/icons/edit.svg' %}";
+        const editing_svg_src = "{% static 'images/icons/editing.svg' %}";
+        const cancel_svg_src = "{% static 'images/icons/cancel.svg' %}";
+        {% comment %} const exit_svg_src = "{% static 'images/icons/exit.svg' %}"; {% endcomment %}
+        const list_svg_src = "{% static 'images/icons/list.svg' %}";
+        const list_v2_svg_src = "{% static 'images/icons/list_v2.svg' %}";
+    
+    </script>
+    <script src="{% static 'js/components/alert.js' %}"></script>
+    <script src="{% static 'js/components/buttons.js' %}"></script>
+    <script src="{% static 'js/actions/request.js' %}"></script>
+    <!--/danger-->
+
+    <title>{{ tag }} - MichoApp</title>
+
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/google-palette/1.1.0/palette.min.js" integrity="sha512-+rKeqfKuzCrzOolK5cPvYqzEHJTEPWG1MTvH02P+MYgmw7uMyNiewzvzlPj0wOgPd10jdNAtkf8tL1aQt7RsxQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js" integrity="sha256-eTyxS0rkjpLEo16uXTS0uVCS4815lc40K2iVpWDvdSY=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js" integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css" integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    {% comment %} <!-- Jquery -->
+    <script src="{% static 'lib/jquery/js/jquery-3.7.1.min.js' %}"></script>
+    <script src="{% static 'lib/jquery/js/jquery-ui.min.js' %}"></script>
+
+    <!-- Owl Carousel -->
+    <script src="{% static 'lib/owl-carousel/js/owl.carousel.min.js' %}"></script> 
+    <script src="{% static 'lib/owl-carousel/css/owl.theme.default.min.css' %}"></script>  {% endcomment %}
+
+    <!-- Chart.js -->
+    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" /> {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.umd.min.js" integrity="sha512-GCiwmzA0bNGVsp1otzTJ4LWQT2jjGJENLGyLlerlzckNI30moi2EQT0AfRI7fLYYYDKR+7hnuh35r3y1uJzugw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    
+
+    <!-- Font Awesome -->
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    rel="stylesheet"
+    />
+
+    <!-- Google Fonts -->
+    <link
+    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+    rel="stylesheet"
+    />
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    
+    <!-- MDB -->
+    {% comment %} <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.css"
+    rel="stylesheet"
+    /> {% endcomment %}
+    
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/calendar.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/drag-and-drop.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/table-editor.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/file-upload.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/treetable.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/organization-chart.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/css/treeview.min.css' %}" rel="stylesheet" type="text/css">
+    {% comment %} <link href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/css/ripple.min.css' %}" rel="stylesheet" type="text/css"> {% endcomment %}
+    {% block mdb_plugins %}{% endblock mdb_plugins %}
+
+    <!--DataTables-->
+    {% comment %} <link
+    href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css"
+    rel="stylesheet"
+    /> {% endcomment %}
+    <link
+    href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.datatables.net/searchpanes/2.2.0/css/searchPanes.dataTables.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.datatables.net/fixedheader/3.3.2/css/fixedHeader.dataTables.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.datatables.net/colreorder/1.7.0/css/colReorder.dataTables.min.css"
+    rel="stylesheet"
+    />
+    <link
+    href="https://cdn.datatables.net/scroller/2.2.0/css/scroller.dataTables.min.css"
+    rel="stylesheet"
+    />
+
+    <link
+    href="https://cdn.datatables.net/datetime/1.5.1/css/dataTables.dateTime.min.css"
+    rel="stylesheet"
+    />
+
+    <link
+    href="https://cdn.datatables.net/rowreorder/1.4.1/css/rowReorder.dataTables.min.css"
+    rel="stylesheet"
+    />
+
+    <link
+    href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.dataTables.css"
+    rel="stylesheet"
+    />
+
+    <link
+    href="{% static 'lib/Editor-2.2.2/css/editor.dataTables.min.css' %}"
+    rel="stylesheet"
+    />
+    <link
+    href="{% static 'lib/Editor-2.2.2/css/editor.bootstrap5.css' %}"
+    rel="stylesheet"
+    />
+
+    <!-- Select 2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    {% comment %} <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ttskch/select2-bootstrap4-theme@x.x.x/dist/select2-bootstrap4.min.css"> {% endcomment %}
+    
+    <!--HTMX-->
+    {% comment %} <script src="https://unpkg.com/htmx.org@1.8.5"></script> {% endcomment %}
+    <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
+    {% comment %} <script src="https://unpkg.com/htmx.org@2.0.3" integrity="sha384-0895/pl2MU10Hqc6jd4RvrthNlDiE9U1tWmX7WRESftEDRosgxNsQG/Ze9YMRzHq" crossorigin="anonymous"></script> {% endcomment %}
+    <!--danger-->
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="{% static 'css/layout/main/main.css' %}" />
+    <!-- /Main CSS file -->
+    <!--/danger-->
+
+    {% block modules %}{% endblock %}
+    <link href="https://cdn.jsdelivr.net/npm/busy-load/dist/app.min.css" rel="stylesheet">
+    {% if request.user.profile.theme == "light" %}
+        <link id="themeLinkMDB" rel="stylesheet" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/css/mdb-custom.min.css' %}">
+        <link id="themeLink" rel="stylesheet" href="{% static 'css/style.css' now 'U'%}">
+    {% elif request.user.profile.theme == "dark" %}
+        <link id="themeLinkMDB" rel="stylesheet" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/css/mdb-custom-dark.min.css' %}">
+        <link id="themeLink" rel="stylesheet" href="{% static 'css/style-dark.css' now 'U'%}">
+    {% else %}
+        <link id="themeLinkMDB" rel="stylesheet" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/css/mdb-custom.min.css' %}">
+        <link id="themeLink" rel="stylesheet" href="{% static 'css/style.css' now 'U'%}">
+    {% endif %}
+    
+    
+
+
+    
+    
+</head>
+<body>
+    <div class="" id="loadingBlock" style="width:100%;height:100vh;z-index:9999;position:relative;background-color:{{user.profile.cardColor}}">
+        <div class="row text-center">
+            <div class="col-md-12" style="height:100vh!important;align-content: center;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <img src="{% static 'images/landing/esms-logo-light.png' %}" style="width:auto;max-height:120px;" class="michoAppLogoGif text-center">
+                    </div>
+                </div>
+                {% comment %} <div class="row">
+                    <div class="col-md-12 text-white">
+                        <span>MichoApp</span>
+                    </div>
+                </div> {% endcomment %}
+                {% comment %} <div class="row w-100" style="position:absolute;bottom:2vh;">
+                    <div class="col-md-12">
+                        <img src="{% static 'images/landing/ntg-logo.png' %}" style="width:auto;max-height:40px;" class="text-center">
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="progress w-100 m-0" id="exportProgressBarPLBlock" style="height: 2px;background:#E0E0E0;">
+        <div id="exportProgressBarPL" class="progress-bar bg-red-esms" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    </div>
+
+    {% include "includes/modal.html" %}
+    {% include "includes/sidebarv3.html" %}
+    
+    
+    <section class="home-section" id="slim-content">
+        
+        {% if messages %}
+            
+            {% for message in messages %}
+
+                {% if message.tags == "info" %}
+                <!-- <div class="alert alert-danger align-middle text-center" style="max-height: 30px; padding: 0; border: 0px solid; background-color: #ff3800; color: #fff;">{{ message }}</div> -->
+                <!-- <div class='headerTop'>
+                    <div class='headerTopIn'>
+                        <div class='headerTopText'>{{ message }}</div>
+                    </div>
+                </div>
+                <style>
+                    .headerTop{width: 100%; height: 20px; background-color: #ff3800; color: #fff; text-align: center; font-size: 14px; font-weight: 500; display: table;}
+                    .headerTopIn{display: table-cell; vertical-align: middle;}
+                
+                    @media screen and (max-width:767px) {
+                    .headerTop{font-size: 12px;}
+                    }
+                
+                </style> -->
+                {% comment %} <div class='alert headerTop'>
+                    <div class='headerTopIn'>
+                        <div class='headerTopText'>{{ message }}</div>
+                    </div>
+                    <a href="#" class="close" data-bs-dismiss="alert" aria-label="close">&times;</a>
+                </div> {% endcomment %}
+
+                <div
+                    class="alert alert-dismissible fade mt-3 mainAlert"
+                    id="mainAlert"
+                    data-mdb-position="top-center"
+                    data-mdb-hidden="true"
+                    data-mdb-autohide="true"
+                    data-mdb-delay="2500"
+                    data-mdb-width="25%"
+                    role="alert"
+                    data-mdb-alert-init
+                    data-mdb-color="primary"
+                >
+
+                </div>
+                <style>
+                    .alert{height: 20px; padding: 0;}
+                    .headerTop{position: absolute; padding: 0 20px; width: 100%; height: 20px; background-color: #ff3800; color: #fff; text-align: center; font-size: 14px; font-weight: 500; display: table; z-index: 200;}
+                    .headerTopIn{display: table-cell; vertical-align: middle;}
+                    .headerTop a{color: #fff; font-size: 24px; background: none; border: none;line-height:20px;}
+                
+                    @media screen and (max-width:767px) {
+                    .headerTop{font-size: 12px;}
+                    }
+                
+                </style>
+                {% else %}
+                <!-- <div class="alert alert-{{ message.tags }} align-middle text-center" style="max-height: 30px; padding: 0; border: 0px solid; background-color: #ff3800; color: #fff;">{{ message }}</div> -->
+                <!-- <div class='headerTop'>
+                    <div class='headerTopIn'>
+                        <div class='headerTopText'>{{ message }}</div>
+                    </div>
+                </div>
+                <style>
+                    .headerTop{width: 100%; height: 20px; background-color: #ff3800; color: #fff; text-align: center; font-size: 14px; font-weight: 500; display: table;}
+                    .headerTopIn{display: table-cell; vertical-align: middle;}
+                
+                    @media screen and (max-width:767px) {
+                    .headerTop{font-size: 12px;}
+                    }
+                
+                </style> -->
+                {% comment %} <div class='alert headerTop'>
+                    <div class='headerTopIn'>
+                        <div class='headerTopText'>{{ message }}</div>
+                    </div>
+                    <a href="#" class="close" data-bs-dismiss="alert" aria-label="close">&times;</a>
+                </div> {% endcomment %}
+                <style>
+                    .alert{height: 20px; padding: 0;}
+                    .headerTop{position: absolute;padding: 0 20px; width: 100%; height: 20px; background-color: #ff3800; color: #fff; text-align: center; font-size: 14px; font-weight: 500; display: table; z-index: 200;}
+                    .headerTopIn{display: table-cell; vertical-align: middle;}
+                    .headerTop a{color: #fff; font-size: 24px; background: none; border: none;line-height:20px;}
+                
+                    @media screen and (max-width:767px) {
+                    .headerTop{font-size: 12px;}
+                    }
+                
+                </style>
+                {% endif %}
+
+            {% endfor %}
+    
+        {% endif %}
+
+        <div
+        class="alert alert-dismissible fade mt-4 mainAlert"
+        id="mainTopAlert"
+        data-mdb-position="top-center"
+        data-mdb-hidden="true"
+        data-mdb-autohide="true"
+        data-mdb-delay="2000"
+        data-mdb-width="25%"
+        role="alert"
+        data-mdb-alert-init
+        data-mdb-color="primary"
+        >
+
+        </div>
+
+        
+        {% include 'includes/navbar.html' %}
+        
+        <div class="home-content" id="homeContent">
+            
+            <!-- Tabs navs -->
+            <!-- <ul class="nav nav-pills mb-3 sortable-list d-flex" id="tabNav" data-mdb-sortable="sortable" role="tablist" style="margin-bottom: 0 !important;">
+                
+                
+            </ul> -->
+            <!-- Tabs navs -->
+
+            <!-- Tabs content -->
+            <div class="tab-content" id="tabCont" hx-target="this" style="background:#fff;">
+                
+                {% block body %}
+        
+                {% endblock  %}
+
+                
+
+            </div>
+            <!-- Tabs content -->
+
+        </div>
+        
+       {% comment %} {% include "includes/footer.html" %} {% endcomment %}
+
+    </section>
+
+    <script>
+        var version = "{{version}}";
+    </script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+
+    {% comment %} <!-- MDB -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"
+    ></script> {% endcomment %}
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/js/mdb.umd.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/calendar.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/drag-and-drop.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/table-editor.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/file-upload.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/treetable.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/color-picker.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/organization-chart.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/plugins/js/treeview.min.js' %}"></script>
+    {% comment %} <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/js/ripple.min.js' %}"></script> {% endcomment %}
+
+    <!-- DataTables -->
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/searchpanes/2.2.0/js/dataTables.searchPanes.min.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"
+    ></script>
+    <!-- DataTables Buttons-->
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"
+    ></script>
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"
+    ></script>
+    <!-- DataTables Header&Footer-->
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/fixedheader/3.3.2/js/dataTables.fixedHeader.min.js"
+    ></script>
+    <!-- DataTables Responsive-->
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"
+    ></script>
+    <!-- DataTables ColReorder-->
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/colreorder/1.7.0/js/dataTables.colReorder.min.js"
+    ></script>
+    <!-- DataTables Scroller-->
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/scroller/2.2.0/js/dataTables.scroller.min.js"
+    ></script>
+    <!-- DataTables Datetime -->
+    {% comment %} <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/plug-ins/1.13.6/dataRender/datetime.js"
+    ></script> {% endcomment %}
+    <!-- DataTables Datetime -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/datetime/1.5.1/js/dataTables.dateTime.min.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/rowreorder/1.4.1/js/dataTables.rowReorder.min.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/plug-ins/2.0.2/api/fnFindCellRowIndexes.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/searchpanes/2.3.3/js/dataTables.searchPanes.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/searchpanes/2.3.3/js/searchPanes.dataTables.js"
+    ></script>
+
+    <!-- DataTables Editor -->
+    <script
+    type="text/javascript"
+    src="{% static 'lib/Editor-2.2.2/js/dataTables.editor.min.js' %}"
+    ></script>
+    <script
+    type="text/javascript"
+    src="{% static 'lib/Editor-2.2.2/js/editor.dataTables.min.js' %}"
+    ></script>
+    <script
+    type="text/javascript"
+    src="{% static 'lib/Editor-2.2.2/js/editor.bootstrap5.min.js' %}"
+    ></script>
+
+    <!-- DataTables Ultimate -->
+    <script
+    type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"
+    ></script>
+
+    <script
+    type="text/javascript"
+    src="https://cdn.datatables.net/plug-ins/1.13.7/sorting/datetime-moment.js"
+    ></script>
+
+    <!-- Select 2 -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <!-- Moment -->
+    {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script> {% endcomment %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.30.1/moment.min.js"></script>
+    <script src="https://cdn.datatables.net/plug-ins/1.10.21/sorting/datetime-moment.js"></script>
+
+    <!--danger-->
+    <script>
+        const csrfToken = "{{ csrf_token }}"
+        const profile_theme_api_url = " {% url 'user:profile_theme_api' request.user.id %}"
+        const currentTheme = "{{request.user.profile.theme}}"
+
+        let lightIcon = "{% static 'images/landing/logo-light.png' %}"
+        let darkIcon = "{% static 'images/landing/logo-dark.png' %}";
+    </script>
+    <script src="{% static 'js/layout/functions.js' %}"></script>
+    <script type="module" src="{% static 'js/layout/all.js' %}"></script>
+    {% if messages %}
+    <!-- <script>
+    const messages = [
+    {% for message in messages %}
+        { "message":{"non_field_message":"{{message}}"} {% if message.tags %}, "icon":"{{ message.tags }}"{% endif %}
+        {% if message.tags == "warning" %}, "toast":true{% endif %}},
+    {% endfor %}
+    ]
+    fire_alert(messages)
+    </script>
+    {% endif %} -->
+    <!--/danger-->
+
+    <script src="https://cdn.jsdelivr.net/npm/busy-load/dist/app.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/toasts.js' %}"></script>
+
+    <script>
+        var michoAppVersion = "{{michoAppVersion}}";
+
+        document.body.addEventListener('htmx:configRequest', (event) => {
+          event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
+    </script>
+    
+    <script>
+        $(document).ready(function () {
+            document.getElementById("loadingBlock").remove();
+        });
+
+        var mainTopAlertBlock = document.getElementById('mainTopAlert');
+        var mainTopAlert = new mdb.Alert(mainTopAlertBlock);
+
+        
+
+        window.onload = function() {
+            {% comment %} const requests = [
+                {url: '/account/payment_data/', target: '#tabCont', swap: 'afterbegin'},
+                {url: '/account/send_invoice_data/', target: '#tabCont', swap: 'afterbegin'}
+                // İstediğiniz kadar isteği buraya ekleyin
+            ];
+
+            const executeRequests = async () => {
+                for (const request of requests) {
+                    await htmx.ajax("GET", request.url, {target: request.target, swap: request.swap});
+                }
+            };
+
+        
+
+            // İlk isteği başlat
+            executeRequests(); {% endcomment %}
+
+            //$("#loadingBlock").remove();
+            //document.getElementById("loadingBlock").remove();
+        };
+
+     
+        
+        htmx.onLoad(function(content) {
+            //Sidenav'ın çalışması için.
+            {% comment %} const slimInstance = mdb.Sidenav.getInstance(document.getElementById('sidenav-4'));
+            slimInstance.show();
+            document.getElementById('slim-toggler').addEventListener('click', () => {
+                slimInstance.toggleSlim();
+            }); {% endcomment %}
+
+            //MDB Select'lerin çalışması için
+            var selects = content.querySelectorAll(".select");
+            for (var i = 0; i < selects.length; i++) {
+              var select = selects[i];
+              new mdb.Select(select);
+            };
+
+            //üstteki mdb select kütüphanesine run edince calendar'da oluşan bug için uygulanan fix
+            {% comment %} if(calendarInstance._tools.lastChild.firstChild.children.length > 1){
+                calendarInstance._tools.lastChild.firstChild.lastChild.remove();
+            }; {% endcomment %}
+            //calendarInstance._tools.lastChild.firstChild.lastChild.remove();
+
+            //MDB Alert'lerin çalışması için
+            var alerts = content.querySelectorAll(".alert");
+            for (var i = 0; i < alerts.length; i++) {
+              var alert = alerts[i];
+              new mdb.Alert(alert);
+            };
+            //MDB Modal'ların çalışması için
+            var modals = content.querySelectorAll(".modal");
+            for (var i = 0; i < modals.length; i++) {
+              var modal = modals[i];
+              new mdb.Modal(modal);
+            };
+            //MDB Sortable'ların çalışması için
+            var sortables = content.querySelectorAll(".sortable-item");
+            for (var i = 0; i < sortables.length; i++) {
+              var sortable = sortables[i];
+              new DragAndDrop.Sortable(sortable);
+            };
+            //MDB Input'ların çalışması için
+            var inputs = content.querySelectorAll(".form-outline");
+            for (var i = 0; i < inputs.length; i++) {
+              var input = inputs[i];
+              new mdb.Input(input);
+            };
+            //MDB Datepicker'ların çalışması için
+            var datepickers = content.querySelectorAll(".datepicker");
+            for (var i = 0; i < datepickers.length; i++) {
+              var datepicker = datepickers[i];
+              new mdb.Datepicker(datepicker, {format : "dd/mm/yyyy"});
+            };
+            //MDB File Upload'ların çalışması için
+            var fileuploads = content.querySelectorAll(".file-upload-input");
+            for (var i = 0; i < fileuploads.length; i++) {
+              var fileupload = fileuploads[i];
+              new FileUpload(fileupload);
+            };
+            //MDB Treetable'ların çalışması için
+            var treetables = content.querySelectorAll(".treetable");
+            for (var i = 0; i < treetables.length; i++) {
+              var treetable = treetables[i];
+              new Treetable(treetable);
+            };
+            //MDB Organization Chart'ların çalışması için
+            var organizationcharts = content.querySelectorAll(".organization-chart");
+            for (var i = 0; i < organizationcharts.length; i++) {
+              var organizationchart = organizationcharts[i];
+              new OrganizationChart(organizationchart);
+            };
+            //MDB Treeviews'ların çalışması için
+            var treeviews = content.querySelectorAll(".treeview");
+            for (var i = 0; i < treeviews.length; i++) {
+              var treeview = treeviews[i];
+              new Treeview(treeview);
+            };
+            //MDB Dropdown'ların çalışması için
+            var dropdowns = content.querySelectorAll(".dropdown-toggle");
+            for (var i = 0; i < dropdowns.length; i++) {
+              var dropdown = dropdowns[i];
+              new mdb.Dropdown(dropdown);
+            };
+            //MDB Accordion'ların çalışması için
+            var accordions = content.querySelectorAll(".accordion");
+            for (var i = 0; i < accordions.length; i++) {
+              var accordion = accordions[i];
+              new mdb.Dropdown(accordion);
+            };
+            //MDB Sidenav'ların çalışması için
+            var sidenavs = content.querySelectorAll(".sidenav");
+            for (var i = 0; i < sidenavs.length; i++) {
+              var sidenav = sidenavs[i];
+              new mdb.Sidenav(sidenav);
+            };
+            //MDB Lightbox'ların çalışması için
+            var lightboxs = content.querySelectorAll(".lightbox");
+            for (var i = 0; i < lightboxs.length; i++) {
+              var lightbox = lightboxs[i];
+              new mdb.Lightbox(lightbox);
+            };
+        });
+
+        var mainAlertBlock = document.getElementById('mainAlert');
+        var mainAlert = new mdb.Alert(mainAlertBlock);
+        
+        var mainTopAlertBlock = document.getElementById('mainTopAlert');
+        var mainTopAlert = new mdb.Alert(mainTopAlertBlock);
+
+        
+        
+
+        
+
+        
+        
+    </script>
+    
+
+    {% block javascript %}
+    
+    {% endblock javascript %}
+
+
+
+</body>
+</html>

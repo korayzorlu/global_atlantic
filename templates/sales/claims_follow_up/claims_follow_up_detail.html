@@ -1,0 +1,233 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n %}
+{% load claim_reason_choice_filter %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Claims Follow Up Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Sales' %}{% endblock %}
+{% block childDirectory %}{% trans 'Claims Follow Up Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'sales:claims_follow_up' %}{% endblock %}
+{% block mainRoute %}Claims Follow Up{% endblock %}
+{% block childRoute %}Claims Follow Detail{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block right_aside %}
+{% include "sales/project/right_sidebar.html" %}
+<style>
+    .overViewBTN {
+        position: fixed;
+        bottom: 4rem;
+        right: 3rem;
+        z-index: 9999;
+        margin-left: 1rem;
+        border: 0;
+        color: #03a9f4;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background-color: transparent;
+        outline: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        background: linear-gradient(
+    141deg, #03a9f4 0%, transparent 80%);
+    }
+    
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/contact/contact_detail.css' %}">
+
+<!-- /StyleSheet End-->
+{% block modals %}
+{% include "./claims_follow_up_data_modal.html" %}
+{% endblock %}
+<!-- Content bloğu -->
+<div class="row">
+
+    <div class="col-xl-6">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Claim Process' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Claim</u> process.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0 ">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted w-50">{% trans "Project No" %}</th>
+                            <td>{{claim.delivery.project.no}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted w-50">{% trans "Claim No" %}</th>
+                            <td>{{claim.no}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted w-50">{% trans "How many days claim recived after delivery?" %}</th>
+                            <td>{{claim.delievery_delay}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted w-50">{% trans "Claim Follow Up Responsible" %}</th>
+                            <td>{{claim.get_claim_responsible_display}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted w-50">{% trans "Claim Follow Up Followed Action" %}</th>
+                            <td>{{claim.get_claim_action_display}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted w-50">{% trans "Claim Reason" %}</th>
+                            
+                            <td>
+                            {% for reason_choice in reason_choices %}
+                            {{ reason_choice.get_name_display}} </br>
+                            {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-6">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Claim Completion' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Claim</u> completion.</li>
+                        </ul>
+                    </div>
+                    <div class="align-self-md-center actionButtons">
+                        <a class="button-edit" id="update-claim"  type="button" value="{{claim.pk}}" data-toggle="modal" data-target="#modal_claim_follow_up_update_modal">
+                            <img src="{% static 'images/icons/edit.svg' %}">
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0 ">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted w-50">{% trans 'Has the claim been finalized?' %}</th>
+                            <td>{{claim.get_claim_status_display}}</td>
+                        </tr>
+                        
+                        <tr>
+                            <th class="text-muted w-50">{% trans 'Is The Customer Happy With Result?' %}</th>
+                            {% if claim.customer_happiness %}
+                            <td>{{claim.get_customer_happiness_display}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                        </tr>
+                        
+                        <tr>
+                            {% comment %} <th class="text-muted">{% trans 'As a result of claim which one/ones ' %}</th> {% endcomment %}
+                            
+                            <th class="text-muted w-50">{% trans 'Claim Results' %}</th>
+                            <td>
+                            {% if claim_results %}
+                            {% for claim_result in claim_results %}
+                            {{claim_result.get_name_display}}</br>
+                            {% endfor %}
+                            {% else %}
+                                -
+                            {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted w-50">{% trans 'Notes' %}</th>
+                            {% if claim.claim_notes %}
+                            <td>{{claim.claim_notes}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <button class="overViewBTN sidebar-control sidebar-right-toggle sidebar-mobile-right-toggle"><i class="far fa-eye"></i></button>
+
+</div>
+
+
+{% endblock %}
+{% block javascript %}
+<script>
+//THIS APIS WILL CHANGE AND NECESSARY APIS WILL ADD
+    project_id={{project.id}}
+    request_id = {{ project.request.pk }};
+    {% if claim %}
+      claim = true
+    {% endif %}
+    parts_api_url = new URL(window.location.href)
+    parts_api_url.pathname = "{% url 'parts:parts_api' %}"
+    request_parts_api_url = "{% url 'sales:request_parts_api' %}?format=datatables"
+
+    const claim_update_api_url = "{% url 'sales:claims_follow_up_update_api' 0 %}";
+    const project_documents_api_url = "{% url 'sales:project_documents_api' %}?project="+project_id
+
+</script>
+<script src="{% static 'js/sales/project/request/request.js' %}"></script>
+<script type="module" src="{% static 'js/sales/claims_follow_up/claims_follow_up.js' %}"></script>
+<script src="{% static 'js/sales/project/right_sidebar/right_sidebar.js' %}"></script>
+
+{% endblock javascript %}

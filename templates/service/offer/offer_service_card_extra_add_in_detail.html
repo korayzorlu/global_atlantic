@@ -1,0 +1,110 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row">
+        <div class="col-md-10 mb-3">
+          <div class="form-outline">
+            {{form.serviceCard}}
+            <label for="selectFormOutline" class="form-label select-label">Service Card</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline">
+                <input type="text" id="textFormOutlineUnit" class="form-control form-control-sm" value="-" readonly>
+              <label for="textFormOutlineUnit" class="form-label">Unit</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+      </div>
+      <div class="row border-bottom">
+        <div class="col-md-10 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutlineDescription" class="form-control form-control-sm" value="-" readonly>
+            <label for="textFormOutlineDescription" class="form-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{ form.quantity }}
+            <label for="textFormOutline" class="form-label">Quantity</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var offerServiceCardId = "{{offerServiceCard.id}}";
+    var offerId = "{{offerServiceCard.offer.id}}";
+    var pageUrl = "/service/offer_service_card_extra_add_in_detail/o_" + offerId + "/";
+    var addSubDataHxGet = "/service/offer_service_card_extra_add_in_detail/o_" + offerId + "/";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra").click(function() {
+        $("#form-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra").remove();
+        
+    });
+
+    $('#id_serviceCard').on('change', function() {
+        var serviceCardInformId = $(this).val();
+        $.ajax({
+            url: '/data/api/service_cards',
+            data: {'id': serviceCardInformId},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function(i, serviceCard) {
+                    $("#textFormOutlineDescription").val(serviceCard.about);
+                    $("#textFormOutlineUnit").val(serviceCard.unit);
+                });
+            }
+        });
+    });
+
+    $("#form-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra").submit(function (event) {
+      console.log("başarılı");
+      $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra .dataTables_scrollBody").busyLoad("show", {
+          animation: false,
+          spinner: "pulsar",
+          maxSize: "150px",
+          minSize: "150px",
+          text: "Loading ...",
+          background: "rgba(69, 83, 89, 0.6)",
+          color: "#455359",
+          textColor: "#fff"
+      });
+      console.log("başarılı");
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra").DataTable().ajax.reload()
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra").on( 'draw.dt', function () {
+          htmx.process("#table-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra");
+          $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra .dataTables_scrollBody").busyLoad("hide", {
+            animation: "fade"
+          });
+      });
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}-serviceCardExtra").DataTable().columns.adjust();
+      
+    });
+
+
+    
+</script>
+

@@ -1,0 +1,16 @@
+{% load static %}
+
+{% block buttonqreditremove %}
+<div class="align-self-md-center actionButtons">
+    <a class="qr-code" data-toggle="modal" data-target="#qr_code">
+        <img src="{% static 'images/icons/qr-code.svg' %}">
+    </a>
+    <a href="{{edit_url}}" class="button-edit">
+        <img src="{% static 'images/icons/edit.svg' %}">
+    </a>
+    <a href="{{delete_url}}" class="button-remove">
+        <img src="{% static 'images/icons/cancel.svg' %}">
+    </a>
+</div>
+
+{% endblock %}

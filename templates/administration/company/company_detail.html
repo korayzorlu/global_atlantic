@@ -1,0 +1,265 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      {{company.name}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form method="post" action="/access_authorization_update/{{accessAuthorization.id}}" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="deleteButton" hx-get="#" hx-target="#addUpdateDataDialog">
+        <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none; padding:0;">
+
+        <div class="row mb-3">
+          <div class="col-md-12">
+
+            <div class="row">
+              <div class="col-md-6 mb-2">
+                <div class="form-outline">
+                    {{form.name}}
+                    <label for="formOutline-{{elementTag}}-name" class="form-label">Name</label>
+                </div>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="form-outline">
+                    {{form.formalName}}
+                    <label for="formOutline-{{elementTag}}-code" class="form-label">Formal Name</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {{form.country}}
+                    <label for="formOutline-{{elementTag}}-name" class="form-label select-label">Country</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {{form.city}}
+                    <label for="formOutline-{{elementTag}}-code" class="form-label select-label">City</label>
+                </div>
+              </div>
+              <div class="col-md-6 mb-2">
+                <div class="form-outline">
+                  {{form.address}}
+                  <label for="formOutline-{{elementTag}}-address" class="form-label">Address</label>
+                  <div class="form-helper"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {{form.vatOffice}}
+                    <label for="formOutline-{{elementTag}}-vatOffice" class="form-label">Vat Office</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {{form.vatNo}}
+                    <label for="formOutline-{{elementTag}}-vatNo" class="form-label">Vat No</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {{form.phone1}}
+                    <label for="formOutline-{{elementTag}}-phone1" class="form-label">Phone</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {{form.fax}}
+                    <label for="formOutline-{{elementTag}}-fax" class="form-label">Fax</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                    {% if company.logo %}
+                      {% render_field form.logo data-mdb-default-file=company.logo.url data-mdb-height="180" data-mdb-accepted-extensions="image/*" %}
+                    {% else %}
+                      {% render_field form.logo data-mdb-height="180" data-mdb-accepted-extensions="image/*" %}
+                    {% endif %}
+                    <label for="formOutline-{{elementTag}}-logo" class="form-label">Logo</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.saleRequestCode}}
+                    <label for="formOutline-{{elementTag}}-saleRequestCode" class="form-label">Sale Request Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.saleInquiryCode}}
+                    <label for="formOutline-{{elementTag}}-saleInquiryCode" class="form-label">Sale Inquiry Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.saleQuotationCode}}
+                    <label for="formOutline-{{elementTag}}-saleQuotationCode" class="form-label">Sale Quotation Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.saleOrderConfirmationCode}}
+                    <label for="formOutline-{{elementTag}}-saleOrderConfirmationCode" class="form-label">Sale OC Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.saleOrderNotConfirmationCode}}
+                    <label for="formOutline-{{elementTag}}-saleOrderNotConfirmationCode" class="form-label">Sale ONC Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.salePurchaseOrderCode}}
+                    <label for="formOutline-{{elementTag}}-salePurchaseOrderCode" class="form-label">Sale PO Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.saleDispatchOrderCode}}
+                    <label for="formOutline-{{elementTag}}-saleDispatchOrderCode" class="form-label">Sale DO Code</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.serviceAcceptaneCode}}
+                    <label for="formOutline-{{elementTag}}-serviceAcceptaneCode" class="form-label">Service Acceptance Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.serviceOfferCode}}
+                    <label for="formOutline-{{elementTag}}-serviceOfferCode" class="form-label">Service Offer Code</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.purchasingProjectCode}}
+                    <label for="formOutline-{{elementTag}}-purchasingProjectCode" class="form-label">Purchasing Project Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.purchasingInquiryCode}}
+                    <label for="formOutline-{{elementTag}}-purchasingInquiryCode" class="form-label">Purchasing Inquiry Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.purchasingPurchaseOrderCode}}
+                    <label for="formOutline-{{elementTag}}-purchasingPurchaseOrderCode" class="form-label">Purchasing Purchase Order Code</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-3">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.accountIncomingInvoiceCode}}
+                    <label for="formOutline-{{elementTag}}-accountIncomingInvoiceCode" class="form-label">Account Incoming Invoice Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.accountSendInvoiceCode}}
+                    <label for="formOutline-{{elementTag}}-accountSendInvoiceCode" class="form-label">Account Send Invoice Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.accountProformaInvoiceCode}}
+                    <label for="formOutline-{{elementTag}}-accountProformaInvoiceCode" class="form-label">Account Proforma Invoice Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.accountCommercialInvoiceCode}}
+                    <label for="formOutline-{{elementTag}}-accountCommercialInvoiceCode" class="form-label">Account Commercial Invoice Code</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.accountPaymentCode}}
+                    <label for="formOutline-{{elementTag}}-accountPaymentCode" class="form-label">Account Payment Code</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                    {{form.mikroDBName}}
+                    <label for="formOutline-{{elementTag}}-mikroDBName" class="form-label">Mikro DB Name</label>
+                </div>
+              </div>
+            </div>
+              
+          </div>
+
+      </div>
+
+      </div>
+      
+  </form>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var companyId = "{{company.id}}";
+  var pageUrl = "/administration/company_update/{{elementTagId}}/"
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/administration/company/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

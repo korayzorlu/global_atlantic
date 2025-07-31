@@ -1,0 +1,177 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+{% if sendInvoices %}
+
+    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+        <div class="col-md-12 overflow-auto" style="max-height:60vh">
+            <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover dataTable no-footer" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Action</th>
+                        <th>Project No</th>
+                        <th>Invoice No</th>
+                        <th>Invoice Date</th>
+                        <th>Due Date</th>
+                        <th>Invoice Total</th>
+                        <th>Amount To Be Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in sendInvoicesList %}
+                        {% if item.type == "sale" %}
+                            <tr>
+                                <td><input class="form-check-input checkInvoice" id="{{item.total}}" data-total="{{item.total}}" data-remaining="{{item.remainingPrice}}" type="checkbox" value="{{item.sendInvoice.id}}" name="sendInvoices" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                <td><i class="fa-solid fa-hand-holding-dollar fs-5 text-blue-900"></i> Sale</td>
+                                <td>{{item.sendInvoice.theRequest.requestNo}}</td>
+                                <td>{{item.sendInvoice.sendInvoiceNo}}</td>
+                                <td>{{item.sendInvoice.sendInvoiceDate}}</td>
+                                <td>{{item.sendInvoice.paymentDate}}</td>
+                                <td class="fw-bold">{{item.sendInvoice.currency.symbol}} {{item.total|floatformat:2}}</td>
+                                <td class="fw-bold">{{item.sendInvoice.currency.symbol}} {{item.remainingPrice|floatformat:2}}</td>
+                            </tr>
+                        {% elif item.type == "service" %}
+                            <tr>
+                                <td><input class="form-check-input checkInvoice" id="{{item.total}}" data-total="{{item.total}}" data-remaining="{{item.remainingPrice}}" type="checkbox" value="{{item.sendInvoice.id}}" name="sendInvoices" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                <td><i class="fa-solid fa-screwdriver-wrench fs-5 text-cyan-900"></i> Service</td>
+                                <td>{{item.sendInvoice.offer.offerNo}}</td>
+                                <td>{{item.sendInvoice.sendInvoiceNo}}</td>
+                                <td>{{item.sendInvoice.sendInvoiceDate}}</td>
+                                <td>{{item.sendInvoice.paymentDate}}</td>
+                                <td class="fw-bold">{{item.sendInvoice.currency.symbol}} {{item.total|floatformat:2}}</td>
+                                <td class="fw-bold">{{item.sendInvoice.currency.symbol}} {{item.remainingPrice|floatformat:2}}</td>
+                            </tr>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row" style="display: flex;justify-content: end;">
+        <div class="col-md-4">
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text w-50" id="inputGroup-sizing-sm" id="totalUnitPrice-{{elementTagSub}}-{{elementTagId}}">Invoices Total</label>
+                <input type="text" class="form-control fw-bold" id="invoicesTotal" aria-label="Sizing example input" aria-describedby="totalUnitPrice-{{elementTagSub}}-{{elementTagId}}" value="{{sendInvoicesList.0.sendInvoice.currency.symbol}} 0.00" readonly/>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display: flex;justify-content: end;">
+        <div class="col-md-4">
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text w-50" id="inputGroup-sizing-sm" id="totalUnitPrice-{{elementTagSub}}-{{elementTagId}}">Amount To Be Paid Total</label>
+                <input type="text" class="form-control fw-bold" id="remainingTotal" aria-label="Sizing example input" aria-describedby="totalUnitPrice-{{elementTagSub}}-{{elementTagId}}" value="{{sendInvoicesList.0.sendInvoice.currency.symbol}} 0.00" readonly/>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="display: flex;justify-content: end;">
+        <div class="col-md-4">
+            <div class="input-group input-group-sm mb-1">
+                <label class="input-group-text w-50" id="inputGroup-sizing-sm" id="totalUnitPrice-{{elementTagSub}}-{{elementTagId}}">Current Credit Limit</label>
+                <input type="text" class="form-control fw-bold text-blue-900" id="creditTotal" aria-label="Sizing example input" aria-describedby="totalUnitPrice-{{elementTagSub}}-{{elementTagId}}" value="{{sendInvoicesList.0.sendInvoice.customer.currency.symbol}} {{sendInvoicesList.0.sendInvoice.customer.creditLimit|floatformat:2}}" readonly/>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/js/treetable.min.js' %}"></script>
+
+    <script>
+        $('.checkInvoice').on('change', function() {
+            var checkboxes = document.querySelectorAll('.checkInvoice');
+            let invoicesTotal = 0
+            let remainingTotal = 0
+            checkboxes.forEach(function (checkbox) {
+                if(checkbox.checked == true){
+                    invoicesTotal = invoicesTotal + parseFloat($(checkbox).attr("data-total"));
+                    remainingTotal = remainingTotal + parseFloat($(checkbox).attr("data-remaining"));
+                };
+            });
+            $("#invoicesTotal").val("{{sendInvoicesList.0.sendInvoice.currency.symbol}}" + " " + invoicesTotal.toFixed(2));
+            $("#remainingTotal").val("{{sendInvoicesList.0.sendInvoice.currency.symbol}}" + " " + remainingTotal.toFixed(2));
+        
+        });
+    </script>
+
+{% elif incomingInvoices %}
+    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+        <div class="col-md-12 overflow-auto" style="max-height:60vh">
+            <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover dataTable no-footer" style="width:100%">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Action</th>
+                        <th>Project No</th>
+                        <th>Invoice No</th>
+                        <th>Invoice Date</th>
+                        <th>Due Date</th>
+                        <th>Invoice Total</th>
+                        <th>Amount To Be Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in incomingInvoicesList %}
+                        <tr>
+                            <td><input class="form-check-input checkInvoice" id="{{item.total}}" data-total="{{item.total}}" data-remaining="{{item.remainingPrice}}" type="checkbox" value="{{item.incomingInvoice.id}}" name="incomingInvoices" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                            <td><i class="fa-solid fa-hand-holding-dollar fs-5 text-blue-900"></i> Sale</td>
+                            <td>{{item.incomingInvoice.theRequest.requestNo}}</td>
+                            <td>{{item.incomingInvoice.incomingInvoiceNo}}</td>
+                            <td>{{item.incomingInvoice.incomingInvoiceDate}}</td>
+                            <td>{{item.incomingInvoice.paymentDate}}</td>
+                            <td class="fw-bold">{{item.incomingInvoice.currency.symbol}} {{item.total|floatformat:2}}</td>
+                            <td class="fw-bold">{{item.incomingInvoice.currency.symbol}} {{item.remainingPrice|floatformat:2}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row mb-1">
+        <div class="col-md-7 mb-3">
+
+        </div>
+        <div class="col-md-5 mb-3">
+            <div class="input-group input-group-sm mb-3">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Invoices Total</span>
+                <input type="text" id="invoicesTotal" class="form-control fw-bold" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{incomingInvoicesList.0.incomingInvoice.currency.symbol}} 0.00" style="height:calc(1.66rem + 2px);">
+                <span class="input-group-text" id="inputGroup-sizing-sm">Amount To Be Paid Total</span>
+                <input type="text" id="remainingTotal" class="form-control fw-bold" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{incomingInvoicesList.0.incomingInvoice.currency.symbol}} 0.00" style="height:calc(1.66rem + 2px);">
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/js/treetable.min.js' %}"></script>
+
+    <script>
+        $('.checkInvoice').on('change', function() {
+            var checkboxes = document.querySelectorAll('.checkInvoice');
+            let invoicesTotal = 0
+            let remainingTotal = 0
+            checkboxes.forEach(function (checkbox) {
+                if(checkbox.checked == true){
+                    invoicesTotal = invoicesTotal + parseFloat($(checkbox).attr("data-total"));
+                    remainingTotal = remainingTotal + parseFloat($(checkbox).attr("data-remaining"));
+                };
+            });
+            $("#invoicesTotal").val("{{incomingInvoicesList.0.incomingInvoice.currency.symbol}}" + " " + invoicesTotal.toFixed(2));
+            $("#remainingTotal").val("{{incomingInvoicesList.0.incomingInvoice.currency.symbol}}" + " " + remainingTotal.toFixed(2));
+        
+        });
+    </script>
+
+{% else %}
+    <div class="row mb-1">
+        <div class="col-md-12 mb-3 text-center">
+            <i class="fa-solid fa-file-invoice" style="font-size:5rem;"></i>
+        </div>
+    </div>
+    <div class="row mb-1">
+        <div class="col-md-12 mb-3 text-center">
+            <h4>NO DATA</h4>
+        </div>
+    </div>
+{% endif %}
+
+

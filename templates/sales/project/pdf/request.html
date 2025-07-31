@@ -1,0 +1,381 @@
+{% load static %}
+{% load payment_choice_filter%}
+{%load availability_choice_filter%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Request PDF</title>
+    <style>
+        @page {
+            size: a4 portrait;
+
+            @frame header_frame {
+                /* Static frame */
+                -pdf-frame-content: header_content;
+                left: 25pt;
+                right: 25pt;
+                top: 25pt;
+            }
+
+            @frame content_frame {
+                /* Content Frame */
+                left: 25pt;
+                top: 225pt;
+            }
+        }
+
+        /* Normal */
+        @font-face {
+            font-family: "Arial";
+            src: url('arial.ttf');
+        }
+
+
+        /* Bold */
+        @font-face {
+            font-family: "Arial Bold";
+            src: url('arial-bold.ttf');
+        }
+
+        body {
+            font-family: "Arial";
+        }
+
+
+        .table1 h1 {
+          margin-right:0;
+          padding-right: 0;
+          font-size: 3em;
+          font-weight: 400;
+          letter-spacing: 5px;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+
+        .table1 h5{
+            color: gray;
+            padding-top: 0;
+            margin-top: 0;
+            font-weight: 400;
+            letter-spacing: 4.5px;
+        }
+
+
+        .date{
+            margin-right: 0;
+            margin-top: 0;
+            padding-top: 0;
+            width: 25%;
+          
+        }
+
+        .stageheadline{
+            text-align: center;
+            font-weight: 400;
+            color: #7db9e4;
+            font-size: 2em;
+        }
+ 
+        .table3data1{
+            vertical-align: middle;
+            border:gray 1px solid;
+        }
+
+        .table3data2{
+           vertical-align: middle;
+           padding-left: 1em;
+        }
+
+        .table4{
+            border:gray 1px solid;
+            vertical-align: middle;
+        }
+       
+        .table3row{
+            padding-top: 3px;
+        }
+
+        .table5row{
+            padding-top: 3px;
+            padding-left: 3px;
+        }
+
+        .table3row1{
+            padding-left: 5px;
+        }
+
+       
+       
+        .table3dt{
+            background-color: #D3D3D3;
+        }
+
+        .table5dt{
+          background-color: #D3D3D3;
+        }
+        
+        .table7{
+            margin-top: 15px;
+            border: gray 1px solid;
+        }
+
+        .table7row1{
+            padding-top: 3px;
+            text-align: center;
+        }
+        
+        .table7row2{
+            padding-top: 3px;
+            text-align: center;
+        }
+
+        .table7row3{
+            padding-top: 3px;
+            text-align: center;
+        }
+
+        .table8tdright{
+            
+            padding-left: -140px;
+        }
+
+       
+        .table9{
+            border:#7db9e4 2px solid;
+            margin-top: 15px;
+        }
+        
+      
+
+        .table10tdleft{
+            padding-left: -65px;
+        }
+
+        .table10tdright{
+            padding-left: -55px;
+            
+        }
+       
+        .table13tdright{
+            text-align: right;
+        }
+
+        .table10row{
+        padding-top: 0;
+
+        }
+
+        .table10headline{
+         padding-bottom: -20px;
+        }
+        
+        .certificate{
+            display:flex;
+            justify-content:flex-end;
+            height:50px;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div id="header_content">
+        <table class="table1">
+         <tr>
+            <td class="logo">
+                 <img height="100px" src="{% static 'images/landing/entech-semar-logo.png' %}"></img>
+            </td>
+
+            <td class="date">
+                <table class="table2">
+                  
+                    <tr>
+                        <td>
+                            <span><b>PAGES:</b> </span>
+                        </td>
+                        <td>
+                            <pdf:pagenumber />
+                            /
+                            <pdf:pagecount />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+          </tr>
+        </table>
+
+
+        <h1 class="stageheadline" >REQUEST</h1>
+
+        <table class="table5">
+            <tr class="table5row1">
+                <td style="border:gray 1px solid;">
+                    <table style="border:gray 1px solid; ">
+                        <tr class="table5row">
+                            <td class="table5dt">Customer</td>
+                            <td>{{request.customer}}</td>
+                        </tr>
+                        <tr class="table5row">
+                            <td class="table5dt">Person In Contact</td>
+                            <td>{{request.person_in_contact}}</td>
+                        </tr>
+                        <tr class="table5row">
+                            <td class="table5dt">Our Ref</td>
+                            <td>{{request.no}}</td>
+                        </tr>
+                        
+                        {% if request.customer_ref %}                                                             
+                        <tr class="table5row">
+                            <td class="table5dt">Customer Ref</td>
+                            <td>{{request.customer_ref}}</td>
+                        </tr>
+                        {% endif %}
+                        <tr class="table5row">
+                            <td class="table5dt">Request Date</td>
+                            <td>{{request.request_date}}</td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td style="padding-left: 1em;">
+                    <table class="table6" style="border:gray 1px solid;">
+                        <tr class="table3row">
+                            <td class="table5dt">VESSEL</td>
+                            <td>{{request.vessel.name}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table5dt">Maker</td>
+                            <td>{{request.maker}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table5dt">Maker Type</td>
+                            <td>{{request.maker_type}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table5dt">SERIAL/CYL</td>
+                            <td>0 / 0</td>
+                        </tr>
+                        
+                        {% if request.currency %}                  
+                        <tr class="table3row">
+                            <td class="table5dt">Currency</td>
+                            <td>{{request.currency}}</td>
+                        </tr>
+                        {% endif %}
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+        
+        {% if requestParts %}        
+        <table class="table7">
+            <tbody>
+                <tr class="table7row1" style="background-color: #D3D3D3;">
+                    <th>No</th>
+                    <th>Part No</th>
+                    <th>Description of Goods</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                </tr>
+                {% for requestPart in requestParts %}
+                <tr class="table7row2">
+                    <td>1</td>
+                    <td>{{requestPart.part.code}}</td>
+                    <td>{{requestPart.part.name}}</td>
+                    <td>{{requestPart.quantity}}</td>
+                    <td>{{requestPart.part.unit.name}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+
+        </table>
+        {% endif %}
+
+        <table class="table10" style="margin-top: 20px;">
+            <h3 class="table10headline">{{company.name }}</h3>
+            <tr class="table10row">
+                <td>
+                    <table>
+                        <tr>
+                            <td><b>Office:</b> </td>
+                            <td class="table10tdleft">{{company.address}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Tel:</b> </td>
+                            <td class="table10tdleft">{{company.phone_number}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Fax:</b></td>
+                            <td class="table10tdleft">{{company.fax_number}}</td>
+                        </tr>
+
+
+                    </table>
+
+                </td>
+
+
+
+
+                <td >
+                    <table class="table11">
+                        <tr>
+                            <td><b>Workshop:</b></td>
+                            <td class="table10tdright">{{company.address_2}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Tel:</b></td>
+                            <td class="table10tdright">{{company.phone_number_2}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Fax:</b></td>
+                            <td class="table10tdright">{{company.fax_number_2}}</td>
+                        </tr>
+                    </table>
+                </td>
+
+            </tr>
+        </table>
+    
+    
+     
+    <table style="text-align: right;" class="table12">
+    <tr>
+        <td>
+              <img  class="certificate" src="{% static 'images/pdfcert/certificate.jpeg' %}" ></img>
+          
+        </td>
+    </tr>
+    </table>
+
+
+
+
+
+
+        <hr>
+
+        <table class="table13">
+            <tr>
+                <td>
+                    <h5>{{responsible.first_name}} {{responsible.last_name}}/ {{responsible.profile.employee_type}}</h5>
+                </td>
+                <td class="table13tdright">
+                    <h5>{{date}} - {{time}}</h5>
+                </td>
+
+            </tr>
+        </table>
+
+
+
+
+    </div>
+</body>
+
+</html>

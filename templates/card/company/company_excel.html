@@ -1,0 +1,142 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+<form hx-post="{{request.path}}" class="modal-content form-container border" id="form-{{elementTag}}-" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Export Company List</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="row p-2 pt-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        Filter Role
+                    </div>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="cSwitchCompany" checked />
+                    <label for="cSwitchCompany" class="form-check-label me-4" name="cSwitchCompany-name">Customer</label>
+                </div>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox" role="switch" id="sSwitchCompany" checked />
+                    <label for="sSwitchCompany" class="form-check-label me-4" name="sSwitchCompany-name">Supplier</label>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <div class="row p-2 pt-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        Filter Location
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-md-6 p-2">
+                        <div class="form-outline">
+                            <select class="form-control form-control-sm form-select select" id="coSelectCompany" data-mdb-size="sm">
+                                <option value="0">-----</option>
+                                {% for country in countries %}
+                                    <option value="{{ country.id }}">{{ country.international_formal_name }}</option>
+                                {% endfor %}
+                            </select>
+                            <label for="coSelectCompany" class="form-label select-label">Country</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6 p-2">
+                        <div class="form-outline">
+                            <select class="form-control form-control-sm form-select select" id="ciSelectCompany" data-mdb-size="sm">
+                                <option value="0">-----</option>
+                            </select>
+                            <label for="ciSelectCompany" class="form-label select-label">City</label>
+                        </div>
+                    </div>
+                    <span class="p-2">Note: If any country or city is not selected, all will be exported.</span>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <div class="col-md-8 me-auto">
+            <div class="row">
+                <div class="col-md-10 d-flex" style="align-items:center;">
+                    <div class="progress w-100 m-0 d-none" id="exportProgressBarCompanyBlock">
+                        <div id="exportProgressBarCompany" class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 d-flex" style="align-items:center;">
+                    <span class="d-none" id="percentCountCompany">0%</span>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-danger bg-blue-esms me-auto d-none" type="button" id="downloadCompanyExcel">Download</button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-secondary bg-red-esms text-white" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger bg-blue-esms" type="button" id="exportCompanyExcel">Export</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/card/company_excel/";
+    var user = "{{user.id}}";
+
+    //new mdb.Select($("#coSelectCompany"));
+
+    //$("#table-purchaseOrderCompanyExcel").DataTable().columns.adjust();
+
+    $('#coSelectCompany').on('change', function() {
+        var countryInformId = $(this).val();
+        $.ajax({
+            url: '/card/api/cities',
+            data: {'country': countryInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#ciSelectCompany').empty();
+                $('#ciSelectCompany').append($('<option>').val(0).text("-----"));
+                $.each(data, function(i, city) {
+                    $('#ciSelectCompany').append($('<option>').val(city.id).text(city.name));
+                });
+                $("#ciSelectCompany").trigger("change");
+            }
+        });
+    });
+
+    $("#exportCompanyExcel").on("click", function(){
+        $(this).prop("disabled",true);
+
+        $("#exportProgressBarCompanyBlock").removeClass("d-none");
+        $("#percentCountCompany").removeClass("d-none");
+
+        var cSwitchCompany = $("#cSwitchCompany").is(':checked');
+        var sSwitchCompany = $("#sSwitchCompany").is(':checked');
+        
+        let selectedCountry = $("#coSelectCompany").val();
+        let selectedCity = $("#ciSelectCompany").val();
+
+        //window.location.href = "/sale/purchase_order_download_excel?po=" + orderConfirmationSwitchCompany + "&ot=" + orderTrackingSwitchCompany + "&i=" + invoicedSwitchCompany + "&start=" + $('#startDate').val() + "&end=" + $('#endDate').val() + "&c=" + selectedCompanies;
+        //addUpdateDataModalXl.hide();
+
+        htmx.ajax("POST", "/card/company_export_excel?c=" + cSwitchCompany +
+                                                    "&s=" + sSwitchCompany +
+                                                    "&co=" + selectedCountry +
+                                                    "&ci=" + selectedCity
+        );
+
+        
+
+    });
+
+</script>
+
+{% block javascript %}
+<script src="{% static 'js/card/company/filter.js' %}"></script>
+{% endblock javascript %}

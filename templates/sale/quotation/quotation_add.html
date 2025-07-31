@@ -1,0 +1,548 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2" style="display:none;">
+  <a class="nav-link mainNavLinkSubDetail-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+    Create Quotation
+    <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}-add-2" style="margin-left: 15%;">
+      <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+    </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+  <form method="post" action="/quotation_add/i_{{theInquiry.id}}/" class="modal-content form-container" id="form-{{elementTag}}-{{elementTagId}}-add-2" enctype="multipart/form-data" style="box-shadow:none;">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="row mb-4" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;padding-top:15px;">
+        <div class="row mb-4">
+          <div class="col-md-2 d-flex flex-column">
+            <button class="btn btn-dark" type="submit">Create Quotation</button>
+          </div>
+          <div class="col-md-2">
+            <div class="form-outline">
+              <select name="quotationCurrencyForm" id = "quotationCurrencyBlock" class="form-control form-control-sm form-select select" data-mdb-size="sm" data-mdb-select-init data-mdb-filter="true">
+                <option value="106">USD $</option>
+                <option value="102">TRY ₺</option>
+                <option value="85">RUB ₽</option>
+                <option value="83">QAR ﷼</option>
+                <option value="52">JPY ¥</option>
+                <option value="105">GBP £</option>
+                <option value="33">EUR €</option>
+              </select>
+              <label for="selectFormOutline" class="form-label select-label">Quotation Currency</label>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}-add-2"></div>
+          </div>
+        </div>
+
+        <div class="row mb-1">
+
+          <div class="col-md-12 mb-1 overflow-auto" style="white-space: nowrap;max-height:600px;">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th><strong>Part</strong></th>
+                  <th><strong>Description</strong></th>
+                  <th><strong>Quantity</strong></th>
+                  <th><strong>Unit</strong></th>
+                  {% for inquiry in inquiries %}
+                    <th class="p-0">
+                      <table class="table table-borderless mb-0">
+                        <tr>
+                          <th class="text-center" colspan="4"><strong>{{inquiry.inquiryNo}}</strong></th>
+                        </tr>
+                        <tr>
+                          <th class="text-center" colspan="4"><strong>{{inquiry.supplier}}</strong></th>
+                        </tr>
+                        <tr>
+                          <th><input class="form-check-input inquiry-{{inquiry.id}}" onclick="selectAll(this);" type="checkbox" value="" id="select-all-{{inquiry.inquiryNo}}" name="{{inquiry.inquiryNo}}" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th>
+                          <th class="d-none"><strong>Alternative</strong></th>
+                          <th><strong>Unit Price ({{inquiry.currency.code}})</strong></th>
+                          <th><strong>Total Price ({{inquiry.currency.code}})</strong></th>
+                          <th><strong>Availability</strong></th>
+                        </tr>
+                      </table>
+                    </th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+                {% for key,value in projectParts.items %}
+                  <tr>
+                    <td>{{value.sequency}}</td>
+                    <td>{{value.partNo}}</td>
+                    <td>{{value.description}}</td>
+                    <td>{{value.quantity}}</td>
+                    <td>{{value.unit}}</td>
+                    {% for inquiry in inquiries %}
+                      <td class="p-0">
+                        <table class="table table-borderless mb-0">
+                          {% for inquiryPart in inquiryParts %}
+                            {% if inquiryPart.parts.0.inquiry == inquiry %}
+                              {% for inquiryPartIn in inquiryPart.parts %}
+                                {% if inquiryPartIn.requestPart == value.requestPart %}
+                                  {% for key2,value2 in thePartsTotals.items %}
+                                    {% if inquiryPartIn.requestPart == key2 and inquiryPartIn.totalPrice == value2 %}
+                                      <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                        <td class="pr-0" style="width:5%">
+                                          <div class="form-check">
+                                            <input class="form-check-input inquiry-{{inquiry.id}}" type="checkbox" value="{{inquiryPartIn.requestPart}}" id="mainCheckPart" name="name-{{inquiryPartIn.id}}-{{value.requestPart}}">
+                                          </div>
+                                        </td>
+                                        <td class="pr-0" style="width:3%">
+                                          <div class="form-check">
+                                            <input class="form-check-input inquiry-{{inquiry.id}} d-none" type="checkbox" value="{{inquiryPartIn.requestPart}}" id="alternativeCheckPart" name="name-{{inquiryPartIn.id}}-{{value.requestPart}}-alternative">
+                                          </div>
+                                        </td>
+                                        <td class="pl-0 text-end" style="width:30%">{{inquiry.currency.symbol}} {{inquiryPartIn.unitPriceOriginal|floatformat:2}}</td>
+                                        <td class="pl-0 text-end" style="width:30%">{{inquiry.currency.symbol}} {{inquiryPartIn.totalPriceOriginal|floatformat:2}}</td>
+                                        {% for key3,value3 in thePartsAvailabilities.items %}
+                                          {% if inquiryPartIn.requestPart == key3 and inquiryPartIn.availability == value3 %}
+                                            <td class="pl-0 text-end text-blue-600" style="width:35%;padding-right:50px;">
+                                              {% if inquiryPartIn.availability > 0 %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                              {% else %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                              {% endif %}
+                                            </td>
+                                          {% elif inquiryPartIn.requestPart == key3 and inquiryPartIn.availability != value3 %}
+                                            <td class="pl-0 text-end" style="width:35%;padding-right:50px;">
+                                              {% if inquiryPartIn.availability > 0 %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                              {% else %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                              {% endif %}
+                                            </td>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </tr>
+                                    {% elif inquiryPartIn.requestPart == key2 and inquiryPartIn.totalPrice != value2 %}
+                                      <tr class="p-1" style="background-color:transparent;">
+                                        <td class="pr-0" style="width:5%">
+                                          <div class="form-check">
+                                            <input class="form-check-input inquiry-{{inquiry.id}}" type="checkbox" value="{{inquiryPartIn.requestPart}}" id="mainCheckPart" name="name-{{inquiryPartIn.id}}-{{value.requestPart}}">
+                                          </div>
+                                        </td>
+                                        <td class="pr-0" style="width:3%">
+                                          <div class="form-check">
+                                            <input class="form-check-input inquiry-{{inquiry.id}} d-none" type="checkbox" value="{{inquiryPartIn.requestPart}}" id="alternativeCheckPart" name="name-{{inquiryPartIn.id}}-{{value.requestPart}}-alternative">
+                                          </div>
+                                        </td>
+                                        <td class="pl-0 text-end" style="width:30%">{{inquiry.currency.symbol}} {{inquiryPartIn.unitPriceOriginal|floatformat:2}}</td>
+                                        <td class="pl-0 text-end" style="width:30%">{{inquiry.currency.symbol}} {{inquiryPartIn.totalPriceOriginal|floatformat:2}}</td>
+                                        {% for key3,value3 in thePartsAvailabilities.items %}
+                                          {% if inquiryPartIn.requestPart == key3 and inquiryPartIn.availability == value3 %}
+                                            <td class="pl-0 text-end text-blue-600" style="width:35%;padding-right:50px;">
+                                              {% if inquiryPartIn.availability > 0 %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                              {% else %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                              {% endif %}
+                                            </td>
+                                          {% elif inquiryPartIn.requestPart == key3 and inquiryPartIn.availability != value3 %}
+                                            <td class="pl-0 text-end" style="width:35%;padding-right:50px;">
+                                              {% if inquiryPartIn.availability > 0 %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                              {% else %}
+                                                {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                              {% endif %}
+                                            </td>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </tr>
+                                    {% endif %}
+                                  {% endfor %}
+                                  
+                                {% endif %}
+                              {% endfor %}
+                            {% endif %}
+                          {% endfor %}
+                        </table>
+                      </td>
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  {% for inquiry in inquiries %}
+                    {% for inquiryPart in inquiryParts %}
+                      {% if inquiryPart.parts.0.inquiry == inquiry %}
+                        <td class="p-0">
+                          <table class="table table-borderless mb-0">
+                            {% if inquiryPart.min == True %}
+                              <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                <td class="p-3"></td>
+                                <td class="text-start pl-0">Total</td>
+                                  <td class="text-start"><strong>{{inquiry.currency.symbol}} {{inquiry.totalTotalPrice|floatformat:2}}</strong></td>
+                                <td></td>
+                              </tr>
+                            {% else %}
+                              <tr class="p-1" style="background-color:transparent;">
+                                <td class="p-3"></td>
+                                <td class="text-start pl-0"><strong>Total</strong></td>
+                                  <td class="text-start"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                <td></td>
+                              </tr>
+                            {% endif %}
+                            
+                          </table>
+                        </td>
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+            
+          </div>
+
+        </div>
+
+
+
+        {% comment %} <div class="row mb-1">
+
+          <div class="col-md-12 mb-1" style="overflow-x:auto;white-space: nowrap;">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th><strong>Part</strong></th>
+                  <th><strong>Description</strong></th>
+                  <th><strong>Quantity</strong></th>
+                  <th><strong>Unit</strong></th>
+                  {% for item in tjInquiries %}
+                    <th class="p-0">
+                      <table class="table table-borderless mb-0">
+                        <tr>
+                          <th class="text-center" colspan="4"><strong>{{item.inquiry.inquiryNo}}</strong></th>
+                        </tr>
+                        <tr>
+                          <th class="text-center" colspan="4"><strong>{{item.inquiry.supplier}}</strong></th>
+                        </tr>
+                        <tr>
+                          <th><strong>#</strong></th>
+                          <th><strong>Unit Price ({{item.inquiry.currency.code}})</strong></th>
+                          <th><strong>Total Price ({{item.inquiry.currency.code}})</strong></th>
+                          <th><strong>Availability</strong></th>
+                        </tr>
+                      </table>
+                    </th>
+                  {% endfor %}
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for item in tjInquiries %}
+                  {% for partItem in item.parts %}
+                    <tr>
+                      <td>{{partItem.part.requestPart.part.partNo}}</td>
+                      <td>{{partItem.part.requestPart.part.description}}</td>
+                      <td>{{partItem.part.quantity}}</td>
+                      <td>{{partItem.part.requestPart.part.unit}}</td>
+                      <td>wewefwef</td>
+                    </tr>
+                  {% endfor %}
+                {% endfor %}
+                
+            
+
+                <tr>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  <td></td>
+                  {% for inquiry in inquiries %}
+                    {% for inquiryPart in inquiryParts %}
+                      {% if inquiryPart.parts.0.inquiry == inquiry %}
+                        <td class="p-0">
+                          <table class="table table-borderless mb-0">
+                            {% if inquiryPart.min == True %}
+                              <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                <td class="p-3"></td>
+                                <td class="text-start pl-0">Total</td>
+                                  <td class="text-start"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                <td></td>
+                              </tr>
+                            {% else %}
+                              <tr class="p-1" style="background-color:transparent;">
+                                <td class="p-3"></td>
+                                <td class="text-start pl-0"><strong>Total</strong></td>
+                                  <td class="text-start"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                <td></td>
+                              </tr>
+                            {% endif %}
+                            
+                          </table>
+                        </td>
+                      {% endif %}
+                    {% endfor %}
+                  {% endfor %}
+                </tr>
+              </tbody>
+            </table>
+            
+          </div>
+
+        </div>
+        {% endcomment %}
+
+
+
+
+
+
+        <div class="row mb-1 d-none">
+          <div class="col-md-12 mb-10 scroll-section" style="max-height: 600px;overflow-y:auto;">
+            
+            {% for inquiry in inquiries %}
+                <div class="row mb-3 border-bottom">
+                    <div class="col-md-12">
+
+                        <div class="row mb-3">
+                            <div class="col-md-6 ">
+                              {% if inquiry == theInquiry %}
+                                Inquiry No: <span class="bg-green-200 text-wrap p-1 rounded-2">{{inquiry.inquiryNo}}</span>
+                              {% else %}
+                                Inquiry No: <span>{{inquiry.inquiryNo}}</span>
+                              {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                Supplier: {{inquiry.supplier}}
+                            </div>
+                        </div>
+
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-striped">
+                                      <thead>
+                                        <tr>
+                                          <th>#</strong></th>
+                                          <th><strong>Part</strong></th>
+                                          <th><strong>Quantity</strong></th>
+                                          <th><strong>Unit</strong></th>
+                                          <th><strong>Unit Price</strong></th>
+                                          <th><strong>Total Price</strong></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        {% for inquiryPart in inquiryParts %}
+                                          {% if inquiryPart.parts.0.inquiry == inquiry %}
+                                            {% for inquiryPartIn in inquiryPart.parts %}
+                                              {% if inquiryPartIn in theInquiryParts %}
+                                                <tr class="bg-green-200 text-wrap p-1 rounded-2">
+                                              {% else %}
+                                                <tr>
+                                              {% endif %}
+                                                  <td><input class="form-check-input" type="checkbox" value="{{inquiryPartIn.id}}" id="flexCheckDefault" name="parts" style="position:relative;margin-top:.19em;margin-left:0;"></td>
+                                                  <td>{{inquiryPartIn.requestPart.part.partNo}}</td>
+                                                  <td>{{inquiryPartIn.quantity}}</td>
+                                                  <td>{{inquiryPartIn.requestPart.part.unit}}</td>
+                                                  <td>{{theInquiry.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                                  <td>{{theInquiry.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                                </tr>
+                                            {% endfor %}
+                                            <tr>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td></td>
+                                              <td><strong>{{theInquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                            </tr>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="tab-pane fade" id="tabPane-{{elementTag}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-add-2">
+          
+
+      </div>
+  </form>
+</div>
+
+<script>
+  
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var inquiryId = "{{inquiry.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/sale/quotation_add/i_{{elementTagId}}/";
+    var user = "{{user.id}}";
+    
+    //ilgili inquiry'nin para birimini default seçer
+    $("#quotationCurrencyBlock option[value='{{theInquiry.currency.id}}']").attr("selected", true);
+  
+    $(".addClose-{{elementTag}}").click(function() {
+      document.getElementById("addFormBlock-left-inquiry").innerHTML = "";
+      $(".tableBox-inquiry").eq(0).removeClass("d-none");
+      $(".addForm-left-inquiry").eq(0).removeClass("col-md-4");
+      $(".addForm-left-inquiry").eq(0).addClass("d-none");
+      $("#table-inquiry").DataTable().ajax.reload(function(){
+        htmx.process('#table-inquiry');
+      },false);
+    });
+
+    //select all işlemi event'i
+    {% comment %} $('#select-all-' + es).on( "click", function(e) {
+      if ($(this).is( ":checked" )) {
+          table.DataTable().rows().select();        
+      } else {
+          table.DataTable().rows().deselect(); 
+      }
+    }); {% endcomment %}
+
+    function selectAll(clickedCheckbox){
+      var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      //var radioBoxes = document.querySelectorAll('input[type="radio"]');
+      var radioBoxes = document.querySelectorAll('#mainCheckPart');
+      
+      checkboxes.forEach(function (checkbox) {
+        if (checkbox !== clickedCheckbox) {
+          checkbox.checked = false;
+        }
+      });
+
+      radioBoxes.forEach(function (raidoBox) {
+        if (raidoBox.className == clickedCheckbox.className && clickedCheckbox.checked == true) {
+          raidoBox.checked = true;
+        }
+      });
+
+      console.log(clickedCheckbox.id);
+
+
+    };
+
+    $("#form-{{elementTag}}-{{elementTagId}}-add-2").submit(function (event) {
+      //spinner başlatır
+      $("body").busyLoad("show", {
+          animation: false,
+          spinner: "pulsar",
+          maxSize: "150px",
+          minSize: "150px",
+          text: "Loading ...",
+          background: "rgba(69, 83, 89, 0.6)",
+          color: "#455359",
+          textColor: "#fff"
+      });
+      event.preventDefault();
+
+      var formData = $(this).serializeArray();
+
+      $.ajax({
+        type: "POST",
+        url: "/sale/quotation_add/i_{{elementTagId}}/",  // Formunuzun işleneceği view'ın URL'si
+        data: formData,
+        success: function (response, status, xhr) {
+            // Başarılı yanıt geldiğinde mesajı görüntüleyin
+            if (xhr.status === 204) {
+                setTimeout(function() {
+            
+                  let navTagSub = $("#navTag-{{elementTag}}-{{elementTagId}}");
+                  let tabPaneSub = $("#tabPane-{{elementTag}}-{{elementTagId}}");
+            
+                  navTagSub.prev().children("a").addClass("active");
+                  $("#tabPane-inquiry-{{elementTag}}-add-1").addClass("show active");
+                  
+                  navTagSub.prev().children("a").children("button").show();
+                  $("#table-{{elementTag}}").DataTable().columns.adjust();
+                  
+                  navTagSub.remove();
+                  tabPaneSub.remove();
+
+                  $("#createQuotationButton").removeClass("d-none");
+
+                  $("#table-quotation").DataTable().ajax.reload(function() {
+                    htmx.process("#table-quotation");
+                  }, false);
+  
+
+                    if($("#navTag-quotation").length > 0){
+                        $("#navTagLink-inquiry").removeClass("active");
+                        $("#tabPane-inquiry").removeClass("active show");
+                        $("#navTagLink-quotation").addClass("active");
+                        $("#tabPane-quotation").addClass("active show");
+
+                        fetch('/sale/api/quotations?ordering=-id&sessionKey={{sessionKey}}&user={{user.id}}&project__id={{theInquiry.project.id}}&format=datatables', {method : "GET"})
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            htmx.ajax("GET", "/sale/quotation_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                            window.history.pushState({}, '', "/sale/quotation_update/" + data["data"][0]["id"] + "/");
+                        });
+                    }else{
+                        htmx.ajax("GET", "/sale/quotation_data", {target:"#tabCont", swap:"afterbegin"});
+                        setNavTabQuotation();
+                        fetch('/sale/api/quotations?ordering=-id&sessionKey={{sessionKey}}&user={{user.id}}&project__id={{theInquiry.project.id}}&format=datatables', {method : "GET"})
+                        .then((response) => {
+                            return response.json();
+                        })
+                        .then((data) => {
+                            htmx.ajax("GET", "/sale/quotation_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                            window.history.pushState({}, '', "/sale/quotation_update/" + data["data"][0]["id"] + "/");
+                        });
+                    };
+            
+                  setTimeout(function() {
+                    $("body").busyLoad("hide", {
+                      animation: "fade"
+                    });
+                  }, 500);
+            
+                }, 500);
+                $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+                // Mesajı belirli bir süre sonra gizle
+                setTimeout(function() {
+                  $("#message-container-inside-{{elementTag}}-{{elementTagId}}-add-2").fadeOut("slow");
+                }, 500); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+            }
+        },
+        error: function (xhr, status, error) {
+            //spinner durdurur
+            $("body").busyLoad("hide", {
+                animation: "fade"
+              });
+            // Hata durumunda mesajı görüntüleyin
+            $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+        }
+      });
+      
+
+      
+
+    });
+  
+  
+  </script>
+
+
+
+{% block javascript %}
+
+
+<script src="{% static 'js/sale/quotation/add.js' %}"></script>
+
+{% endblock javascript %}
+

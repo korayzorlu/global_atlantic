@@ -1,0 +1,6 @@
+html.dark div.DTED_Lightbox_Close:after {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+html.dark div.DTED_Lightbox_Close:hover:after {
+  color: white !important;
+}/*# sourceMappingURL=mixins.css.map */

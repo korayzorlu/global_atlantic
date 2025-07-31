@@ -1,0 +1,68 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-3 mb-3">
+          <div class="form-outline">
+            {{form.school}}
+            <label for="textFormOutline" class="form-label">School</label>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="form-outline">
+              {{form.department}}
+              <label for="textFormOutline" class="form-label">Department</label>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-outline">
+              {{form.education_status}}
+              <label for="textFormOutline" class="form-label select-label">Education Status</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline datepicker">
+              {{form.startDate}}
+              <label for="textFormOutline" class="form-label">Start Date</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline datepicker">
+              {{form.finishDate}}
+              <label for="textFormOutline" class="form-label">Finish Date</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Save</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+  var detailRefererPathSub = "{{refererPath}}";
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  
+  $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+      console.log("{{elementTagSub}}-{{elementTagId}}");
+      console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+      $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+      
+  });
+
+  
+</script>
+

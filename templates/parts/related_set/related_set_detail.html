@@ -1,0 +1,140 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n qr_code %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Related Set Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Sales' %}{% endblock %}
+{% block childDirectory %}{% trans 'Related Set Detail' %}{% endblock childDirectory %}
+{% block mainRoute %}Data{% endblock %}
+{% block childRoute %}Related Set Detail{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% url 'parts:relate_set_edit' related_set.id as edit_url %}
+{% url 'parts:related_set_delete' related_set.id as delete_url %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/parts/maker/maker_detail.css' %}">
+<!-- /StyleSheet End-->
+
+<!-- Navbar Starts -->
+{% block related_set_detail_modals %}
+{% include "./related_set_detail_modals.html" %}
+{% endblock %}
+<!-- Navbar Ends -->
+<div id="qr_code" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content">
+            <div class="modal-body d-flex justify-content-center align-content-center p-4 pb-4">
+                <a href="{{ related_set_client_full_url }}" target="_blank">
+                    {% qr_from_text related_set_client_full_url options=qr_options %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content bloğu -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-12">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Related Set Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Related Set</u> information.</li>
+                        </ul>
+                    </div>
+                    {% block buttonqreditremove %}
+                        {% include "components/buttonqreditremove.html" with edit_url=edit_url delete_url=delete_url %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted">{% trans "Related Set Name" %}</th>
+                            <td>{{ related_set.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Related Set Code" %}</th>
+                            <td>{{ related_set.code }}</td>
+                        </tr>
+
+                        <tr>
+                            <th class="text-muted">{% trans "Description" %}</th>
+                            <td>{{ related_set.description }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">
+                                {% trans 'Parts' %}
+                            </th>
+                            <td class="p-0">
+                                {% for part in related_set.parts.all %}
+                                <div class="w-100 exit">
+                                    <a href="{% url 'parts:part_detail' part.id %}" target="_blank"
+                                        class="font-weight-semibold letter-icon-title">
+                                        {{ part }}</a>
+                                </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">
+                                {% trans 'Documents' %}
+                            </th>
+                            <td class="p-0">
+                                <a class="cursor-pointer pl-3" data-toggle="modal" data-target="#modal_documents">
+                                    <img height="38" src="{% static 'images/icons/file.svg' %}">
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    let companyEditURL = "{% url 'parts:related_set_edit' related_set.id %}"
+    let companyDeleteURL = "{% url 'parts:related_set_delete' related_set.id %}"
+
+</script>
+<script type="module" src="{% static 'js/parts/related_set/related_set_detail/related_set_detail.js' %}"></script>
+{% endblock javascript %}

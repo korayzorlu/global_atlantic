@@ -1,0 +1,50 @@
+<form hx-post="{{ request.path }}" class="modal-content form-container border" enctype="multipart/form-data" style="box-shadow:inset 0 0 0 9999px rgba(0, 0, 0, 0.05);border-radius:0;">
+    {% csrf_token %}
+    <div class="modal-header shadow-4" style="padding: 10px;box-shadow:none!important;">
+      <h5></h5>
+      <button type="button" class="btn-close addClose-{{elementTagSub}}" aria-label="Close"></button>
+    </div>
+
+    <div class="modal-body">
+      <div class="row mb-1 switchConnect">
+        <div class="col-md-6 switchConnect">
+          <label for="exampleFormControlTextarea1" class="form-label">Name</label>
+          {{ form.name }}
+        </div>
+        <div class="col-md-6 switchConnect">
+          <label for="exampleFormControlTextarea1" class="form-label">Type</label>
+          {{ form.type }}
+        </div>
+      </div>
+
+      <div class="row mb-2 switchConnect">
+        <div class="col-md-12 switchConnect">
+          <label for="exampleFormControlTextarea1" class="form-label">Note</label>
+          {{ form.note }}
+        </div>
+      </div>
+
+      <div class="row mb-1 switchConnect">
+        <div class="d-grid gap-2">
+          <button class="btn btn-dark btn-rounded" type="submit">Save</button>
+        </div>
+      </div>
+      
+    </div>
+</form>
+
+<script>
+  var detailRefererPathSub = "{{refererPath}}";
+  var elementTagSub = "{{elementTagSub}}";
+
+  $(".addClose-{{elementTagSub}}").click(function() {
+    document.getElementById("addFormBlock-inform-" + elementTagSub).innerHTML = "";
+      $(".tableBox-inform-" + elementTagSub).eq(0).removeClass("col-md-6");
+      $(".addForm-inform-" + elementTagSub).eq(0).removeClass("col-md-6");
+      $("#table-" + elementTagSub).DataTable().ajax.reload(function(){
+          htmx.process("#table-" + elementTagSub);
+      },false);
+      $("#table-" + elementTagSub + "_filter").show();
+      history.pushState({}, null, "{{refererPath}}");
+  });
+</script>

@@ -1,0 +1,95 @@
+{% comment %} <div class="row mb-1 noteRow">
+    / <a class="btn btn-dark" hx-get="{% url 'note:note_add' %}" hx-target="#addUpdateDataDialog">+</a> /
+    <a class="btn btn-dark" hx-get="{% url 'note:note_add' %}" hx-target="#addNoteFormBlock">+</a>
+</div> {% endcomment %}
+<div id="addNoteFormBlock" hx-target="this" class="box addNoteForm" style="box-shadow:none;transition: all 1s ease;">
+
+</div>
+{% comment %} {% for note in notes %}
+     /<div class="col-md-4">
+        <div class="row mb-1 p-1">
+            <a hx-get="{% url 'note:note_update' note.id %}" hx-target="#addUpdateDataDialog" class="card text-white bg-dark mb-3 col-md-12" style="border:none;max-height:5rem;cursor:pointer;">
+                <div class="card-header p-1">{{note.created_date}}</div>
+                <div class="card-body">
+                    <h6 class="card-title">{{note.title}}</h6>
+                </div>
+            </a>
+        </div>
+    </div>/ 
+    <div class="row mb-1 noteRow">
+        <a class="btn btn-dark text-left" hx-get="{% url 'note:note_update' note.id %}" hx-target="#addUpdateDataDialog">
+            {{note.created_date}} - {{note.title}}
+        </a>
+    </div>
+{% endfor %} {% endcomment %}
+
+<div class="accordion row mb-1" id="accordionFlushExampleX">
+    <div class="col-md-12">
+        <div class="row mb-1 noteRow">
+            <div class="accordion-item p-0">
+                <h2 class="accordion-header" id="flush-headingTwoX-add">
+                    <button class="accordion-button collapsed btn-sm btn-dark p-1" data-mdb-collapse-init hx-get="{% url 'note:note_add' %}" hx-target="#addNoteTarget" type="button" data-mdb-toggle="collapse" data-mdb-target="#flush-collapseTwoX-add" aria-expanded="false" aria-controls="flush-collapseTwoX-add">
+                        +
+                    </button>
+                </h2>
+                <div id="flush-collapseTwoX-add" class="accordion-collapse collapse" aria-labelledby="flush-headingTwoX-add" data-mdb-parent="#accordionFlushExampleX">
+                <div class="accordion-body" id="addNoteTarget">
+                    
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-1 noteRow">
+            <div class="accordion-item p-0">
+                <h2 class="accordion-header" id="flush-headingTwoX">
+                    <button class="accordion-button collapsed btn-sm btn-info p-1" data-mdb-collapse-init hx-get="{% url 'note:note_add' %}" hx-target="#addNoteTarget" type="button" data-mdb-toggle="collapse" data-mdb-target="#flush-collapseTwoX" aria-expanded="false" aria-controls="flush-collapseTwoX">
+                        {{notes.0.created_date}} - {{notes.0.title}}
+                    </button>
+                </h2>
+                <div id="flush-collapseTwoX" class="accordion-collapse collapse" aria-labelledby="flush-headingTwoX" data-mdb-parent="#accordionFlushExampleX">
+                <div class="accordion-body" id="addNoteTarget">
+                    {{notes.0.text}}
+                </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row mb-1 noteRow">
+            <div class="accordion-item p-0">
+                <h2 class="accordion-header" id="flush-headingOneX">
+                    <button class="accordion-button collapsed btn-sm btn-info p-1" data-mdb-collapse-init type="button" data-mdb-toggle="collapse" data-mdb-target="#flush-collapseOneX" aria-expanded="false" aria-controls="flush-collapseOneX">
+                        {{notes.1.created_date}} - {{notes.1.title}}
+                    </button>
+                </h2>
+                <div id="flush-collapseOneX" class="accordion-collapse collapse" aria-labelledby="flush-headingOneX" data-mdb-parent="#accordionFlushExampleX">
+                    <div class="accordion-body">
+                        {{notes.1.text}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="row mb-1 noteRow">
+            <div class="accordion-item p-0">
+                <h2 class="accordion-header" id="flush-headingThreeX">
+                    <button class="accordion-button collapsed btn-sm btn-info p-1" data-mdb-collapse-init type="button" data-mdb-toggle="collapse" data-mdb-target="#flush-collapseThreeX" aria-expanded="false" aria-controls="flush-collapseThreeX">
+                        {{notes.2.created_date}} - {{notes.2.title}}
+                    </button>
+                </h2>
+                <div id="flush-collapseThreeX" class="accordion-collapse collapse" aria-labelledby="flush-headingThreeX" data-mdb-parent="#accordionFlushExampleX">
+                    <div class="accordion-body">
+                        {{notes.2.text}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+<div class="rowBlock"><a class="seeAllButton" href="">See All</a></div>
+
+<script>
+    $("#addNoteFormBlock").hide();
+</script>

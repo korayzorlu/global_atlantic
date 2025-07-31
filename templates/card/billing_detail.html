@@ -1,0 +1,224 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+
+      {{billing.name}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 15%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{ request.path }}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="deleteButton" hx-get="{% url 'card:billing_delete' billing.id %}" hx-target="#addUpdateDataDialog">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+            <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="dropdown">
+            <button class="tableTopButtons inTableButtons dropdown-toggle" type="button" data-mdb-dropdown-init aria-expanded="false" name="pdfButton">
+              <img src="/static/images/icons/flaticon/{{user.profile.theme}}/setting.svg" alt="" style="height: 18px;">
+            </button>
+            <ul class="dropdown-menu">
+              {% if not billing.mikroGuid %}
+                <li>
+                  <a class="dropdown-item" hx-get="/card/billing_create_mikro/c_{{billing.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create new current card in Mikro</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" hx-get="/card/billing_match_with_mikro/b_{{billing.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Match with Mikro</a>
+                </li>
+                <li>
+                  <a class="dropdown-item disabled" hx-get="/card/get_updates_from_mikro/c_{{billing.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Get updates from Mikro</a>
+                </li>
+                <li>
+                  <a class="dropdown-item disabled" hx-get="/card/send_updates_to_mikro/c_{{billing.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Send updates to Mikro</a>
+                </li>
+              {% else %}
+                <li>
+                  <a class="dropdown-item disabled" hx-get="#" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create new current card in Mikro</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" hx-get="/card/billing_unmatch_with_mikro/b_{{billing.id}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Unmatch with Mikro</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" hx-get="/card/billing_get_updates_from_mikro/c_{{billing.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Get updates from Mikro</a>
+                </li>
+                <li>
+                  <a class="dropdown-item" hx-get="/card/billing_send_updates_to_mikro/c_{{billing.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Send updates to Mikro</a>
+                </li>
+              {% endif %}
+            </ul>
+        </div>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        {% if billing.mikroGuid %}
+            <div id="mikroStatuss" class="">
+            <div class="p-1 mb-0 me-5 text-blue-900"><i class="fas fa-circle-check me-3"></i>Matched with Mikro</div>
+            </div>
+        {% else %}
+            <div id="mikroStatuss" class="">
+            <div class="p-1 mb-0 me-5 text-red-900"><i class="fas fa-circle-xmark me-3"></i>Not Matched with Mikro</div>
+            </div>
+        {% endif %}
+      
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none;">
+      <div class="row mb-1">
+
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                      {{form.name}}
+                      <label for="{{form.name.field.widget.attrs.id}}" class="form-label">Billing Name</label>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                        {% if billing.mikroGuid %}
+                            {{form.hesapKodu|append_attr:"readonly"}}
+                        {% else %}
+                            {{form.hesapKodu}}
+                        {% endif %}
+                      <label for="{{form.hesapKodu.field.widget.attrs.id}}" class="form-label">Hesap Kodu</label>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                      {{form.vessel}}
+                      <label for="{{form.vessel.field.widget.attrs.id}}" class="form-label select-label">Vessel</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-4">
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.email}}
+                      <label for="{{form.email.field.widget.attrs.id}}" class="form-label">Email</label>
+                  </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.vatNo}}
+                      <label for="{{form.vatNo.field.widget.attrs.id}}" class="form-label">Vat No</label>
+                    </div>
+                  </div>
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.vatOffice}}
+                      <label for="{{form.vatOffice.field.widget.attrs.id}}" class="form-label">Vat Office</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-8">
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <div class="form-outline">
+                      {{form.country}}
+                      <label for="{{form.country.field.widget.attrs.id}}" class="form-label select-label">Country</label>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <div class="form-outline">
+                      {{form.city}}
+                      <label for="{{form.city.field.widget.attrs.id}}" class="form-label select-label">City</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.address}}
+                      <label for="{{form.address.field.widget.attrs.id}}" class="form-label">Address</label>
+                      <div class="form-helper"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                          {{form.currency}}
+                          <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                      </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                          {{form.currency2}}
+                          <label for="{{form.currency2.field.widget.attrs.id}}" class="form-label select-label">Currency 2</label>
+                      </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                          {{form.currency3}}
+                          <label for="{{form.currency3.field.widget.attrs.id}}" class="form-label select-label">Currency 3</label>
+                      </div>
+                  </div>
+              </div>
+              </div>
+            </div>
+
+            
+
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var billingId = "{{billing.id}}";
+  var pageUrl = "/card/billing_update/{{elementTagId}}/"
+  var cariKod = "{{cariKod}}";
+
+  $('#{{form.country.field.widget.attrs.id}}').on('change', function() {
+    var countryInformId = $(this).val();
+    $.ajax({
+        url: '/card/api/cities',
+        data: {'country': countryInformId},
+        dataType: 'json',
+        success: function(data) {
+            $('#{{form.city.field.widget.attrs.id}}').empty();
+            $.each(data, function(i, city) {
+                console.log(city.id)
+                $('#{{form.city.field.widget.attrs.id}}').append($('<option>').val(city.id).text(city.name));
+            });
+            $("#{{form.city.field.widget.attrs.id}}").trigger("change");
+        }
+    });
+  });
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/card/billing/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

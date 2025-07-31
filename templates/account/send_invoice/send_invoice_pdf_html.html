@@ -1,0 +1,51 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<form hx-post="{{request.path}}" class="modal-content form-container border" id="form-{{elementTag}}-" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    {{ form.media }}
+    <div class="modal-header">
+        <h5 class="modal-title">Pdf Source</h5>
+    </div>
+    <div class="modal-body">
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        {{form.sendInvoicePdfHtml|safe}}
+                      {% comment %} <div class="form-outline">
+                        {{form.sendInvoicePdfHtml}}
+                        <label for="{{form.sendInvoicePdfHtml.field.widget.attrs.id}}" class="form-label select-label">Pdf</label>
+                      </div> {% endcomment %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary bg-red-esms text-white" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger bg-blue-esms" type="submit">Save</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/account/send_invoice_pdf_html/{{user.profile.sourceCompany.id}}";
+    var user = "{{user.id}}";
+
+
+
+    
+
+</script>
+
+{% block javascript %}
+
+{% endblock javascript %}

@@ -1,0 +1,826 @@
+{% load static %}
+
+<div class="sidebarContainer">
+    <div class="sidebarv3">
+        <i class='fa-solid fa-xmark btnmenu' style="position: absolute;top: 26px;right: 26px;font-size: 20px;cursor:pointer;display:none;"></i>
+        <div class="logo_content">
+            <a class="logo" href="/" style="cursor:pointer;pointer-events:unset;">
+                <!-- <i class='bx bxl-c-plus-plus'></i> -->
+                {% with logo_path="images/landing/logo/"|add:user.profile.theme|add:"/esms-logo.png" %}
+                    <img id="logo-navbar" src="{% static logo_path %}" style="width: 40px;">
+                {% endwith %}
+                
+                <!-- <div class="logo_name">
+                    Maxima
+                </div> -->
+            </a>
+            
+            
+            
+        </div>
+        <ul class="nav_list" style="list-style-type: none; padding-left: 0px;height:85%;overflow:auto;overflow-x:hidden;">
+            <div class="tooltipv3 d-none">Dashboard</div>
+            <li>
+                <a href="{% url 'user:dashboard' %}" class="dashboard">
+                    <!-- <i class="fa-solid fa-grip"></i> -->
+                    {% comment %} <img src="/static/images/icons/sidebar/menu.svg" alt="" class="sidebaricon"> {% endcomment %}
+                    <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/dashboard.svg" class="sidebaricon" alt="">
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltipv2">Dashboard</span>
+            </li>
+            <!-- <li>
+                <a href="" class="company">
+                    <i class="fa-solid fa-clipboard"></i>
+                    <span class="links_name">company</span>
+                </a>
+                <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                    <li class="nav-item"><a href="" class="nav-link"></a></li>
+                    <li class="nav-item"><a href="" class="nav-link"></a></li>
+                    <li class="nav-item"><a href="" class="nav-link"></a></li>
+                    <li class="nav-item"><a href="" class="nav-link"></a></li>
+                </ul>
+                <span class="tooltipv2">company</span>
+            </li> -->
+
+            {% if "card" in userAccessesList %}
+                <div class="tooltipv3 d-none">Card</div>
+                <li class="li-submenu">
+                    <a href="#" class="company-up upMenu">
+                        <!-- <i class="fa-solid fa-clipboard"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/clipboard.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/badge.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Cards</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Companies</div>
+                        <li>
+                            <a hx-get="{% url 'card:card_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink company">
+                                <!-- <i class="fa-solid fa-building"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/skyline.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/apartment.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Companies</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Vessels</div>
+                        <li>
+                            <a hx-get="{% url 'card:vessel_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink vessel">
+                                <!-- <i class="fa-solid fa-ship"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/ship(1).svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/boat.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Vessels</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Vessel Billing</div>
+                        <li>
+                            <a hx-get="{% url 'card:billing_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink billing">
+                                <!-- <i class="fa-solid fa-ship"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/evaluating.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/apartment.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Vessel Billing</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">company</span>
+                </li>
+            {% endif %}
+            
+            {% if "data" in userAccessesList %}
+                <div class="tooltipv3 d-none">Data</div>
+                <li class="li-submenu">
+                    <a href="#" class="data-up upMenu">
+                        <!-- <i class="fa-solid fa-database"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/big-data.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/database.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Data</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Makers</div>
+                        <li>
+                            <a hx-get="{% url 'data:maker_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink maker">
+                                <!-- <i class="fa-solid fa-folder"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/folder.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/summarize.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Makers</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Parts</div>
+                        <li>
+                            <a hx-get="{% url 'data:part_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink part">
+                                <!-- <i class="fa-solid fa-screwdriver-wrench"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/service.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/inventory.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Parts</span>
+                            </a>
+                        </li>
+                        {% comment %} <li>
+                            <a hx-get="{% url 'data:part_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="partSet">
+                                <!-- <i class="fa-solid fa-screwdriver-wrench"></i> -->
+                                <img src="/static/images/icons/sidebar/service.svg" class="sidebaricon" alt="">
+                                <span class="links_name">SET</span>
+                            </a>
+                        </li> {% endcomment %}
+                        <div class="tooltipv3 tooltipv3-sub d-none">Service Cards</div>
+                        <li>
+                            <a hx-get="{% url 'data:service_card_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink serviceCard">
+                                <!-- <i class="fa-solid fa-paste"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/service(1).svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/assigment.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Service Cards</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Expenses</div>
+                        <li>
+                            <a hx-get="{% url 'data:expense_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink expense">
+                                <!-- <i class="fa-solid fa-file-lines"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/expenses.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/receipt.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Expenses</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Data</span>
+                </li>
+            {% endif %}
+
+            {% if "warehouse" in userAccessesList %}
+                <div class="tooltipv3 d-none">Warehouse</div>
+                <li class="li-submenu">
+                    <a href="#" class="company-up upMenu">
+                        <!-- <i class="fa-solid fa-clipboard"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/warehouse.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/warehouse.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Warehosue</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Warehouses</div>
+                        <li>
+                            <a hx-get="{% url 'warehouse:warehouse_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink warehouse">
+                                <!-- <i class="fa-solid fa-building"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/warehouse.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/warehouse.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Warehouses</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Part Inventory</div>
+                        <li>
+                            <a hx-get="{% url 'warehouse:part_item_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink partItem">
+                                <!-- <i class="fa-solid fa-building"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/trolley.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/shelves.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Part Inventory</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub">Dispatch</div>
+                        <li>
+                            <a hx-get="{% url 'warehouse:dispatch_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink dispatch">
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/box.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Dispatch</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Warehouse</span>
+                </li>
+            {% endif %}
+            
+            {% if "purchasing" in userAccessesList %}
+                <div class="tooltipv3 d-none">Purchasing</div>
+                <li class="li-submenu">
+                    <a href="#" class="company-up upMenu">
+                        <!-- <i class="fa-solid fa-clipboard"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/purchasing.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/store.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Purchasing</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Projects</div>
+                        <li>
+                            <a hx-get="{% url 'purchasing:project_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink project">
+                                <!-- <i class="fa-solid fa-building"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/project-2.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/work.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Projects</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Inquiry</div>
+                        <li>
+                            <a hx-get="{% url 'purchasing:inquiry_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink purchaseInquiry">
+                                <!-- <i class="fa-solid fa-magnifying-glass-dollar"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/research.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/plagiarism.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Inquiry</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Purchase Order</div>
+                        <li>
+                            <a hx-get="{% url 'purchasing:purchase_order_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink purchasePurchaseOrder">
+                                <!-- <i class="fa-solid fa-magnifying-glass-dollar"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/research.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/trolley.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Purchase Order</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Project</span>
+                </li>
+            {% endif %}
+            
+            {% if "sale" in userAccessesList %}
+                <div class="tooltipv3 d-none">Sale</div>
+                <li class="li-submenu">
+                    <a href="#" class="sales-up upMenu">
+                        <!-- <i class="fa-solid fa-hand-holding-dollar"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/sales.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/monitoring.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Sales</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Projects</div>
+                        <li>
+                            <a hx-get="{% url 'sale:request_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink request">
+                                {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+                                <!-- <i class="fa-solid fa-sheet-plastic"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/project.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/work.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Projects</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Inqiry</div>
+                        <li>
+                            <a hx-get="{% url 'sale:inquiry_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink inquiry">
+                                <!-- <i class="fa-solid fa-magnifying-glass-dollar"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/research.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/plagiarism.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Inquiry</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Quotation</div>
+                        <li>
+                            <a hx-get="{% url 'sale:quotation_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink quotation">
+                                <!-- <i class="fa-solid fa-file-invoice-dollar"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/payment.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/request.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Quotation</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Order Process</div>
+                        <li>
+                            <a hx-get="{% url 'sale:order_in_process_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink orderInProcess">
+                                <!-- <i class="fa-solid fa-retweet"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/automation.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/rebase.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Order Process</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Order Confirmation</div>
+                        <li>
+                            <a hx-get="{% url 'sale:order_confirmation_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink orderConfirmation">
+                                <!-- <i class="fa-solid fa-circle-check"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/check-mark.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/check.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Order Confirm...</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Not Confirmed Quotations</div>
+                        <li>
+                            <a hx-get="{% url 'sale:order_not_confirmation_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink orderNotConfirmation">
+                                <!-- <i class="fa-solid fa-circle-question"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/false.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/cancel.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Not Confirmed Q...</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Purchase Order</div>
+                        <li>
+                            <a hx-get="{% url 'sale:purchase_order_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink purchaseOrder">
+                                <!-- <i class="fa-solid fa-money-bill-1"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/procurement.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/trolley.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Purchase Order</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Order Tracking</div>
+                        <li>
+                            <a hx-get="{% url 'sale:order_tracking_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink orderTracking">
+                                <!-- <i class="fa-solid fa-plane-departure"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/order-tracking.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/delivery.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Order Tracking</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub">Dispatch Order</div>
+                        <li>
+                            <a hx-get="{% url 'sale:dispatch_order_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink dispatchOrder">
+                                <!-- <i class="fa-solid fa-plane-departure"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/order-tracking.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/box.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Dispatch Order</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Sales</span>
+                </li>
+            {% endif %}
+            
+            {% if "service" in userAccessesList %}
+                <div class="tooltipv3 d-none">Service</div>
+                <li class="li-submenu">
+                    <a href="#" class="account-up upMenu">
+                        <!-- <i class="fa-solid fa-screwdriver-wrench"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/web-management.svg" alt="" class="sidebaricon"> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/home_repair_service.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Projects</span>
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Workshop Acceptances</div>
+                        <li>
+                            <a hx-get="{% url 'service:acceptance_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink acceptance">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/form.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/work.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Workshop Acceptances</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Offers</div>
+                        <li>
+                            <a hx-get="{% url 'service:offer_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink offer">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/offer.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/request.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Offers</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Active Projects</div>
+                        <li>
+                            <a hx-get="{% url 'service:active_project_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink active_project">
+                                <!-- <i class="fa-solid fa-file-export"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/contract.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/hourglass.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Active Projects</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Finished Projects</div>
+                        <li>
+                            <a hx-get="{% url 'service:finish_project_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink finish_project">
+                                <!-- <i class="fa-solid fa-retweet"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/briefing.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/inventory_check.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Finished Projects</span>
+                            </a>
+                        </li>
+                        {% comment %} <li>
+                            <a>
+                                <!-- <i class="fa-solid fa-money-check-dollar"></i> -->
+                                <img src="/static/images/icons/sidebar/calendar.svg" alt="" class="sidebaricon">
+                                <span class="links_name">Workshop Calendar</span>
+                            </a>
+                        </li> {% endcomment %}
+                    </ul>
+                    <span class="tooltipv2">Projects</span>
+                </li>
+            {% endif %}
+            
+            {% if "account" in userAccessesList %}
+                <div class="tooltipv3 d-none">Account</div>
+                <li class="li-submenu">
+                    <a href="#" class="account-up upMenu">
+                        <!-- <i class="fa-solid fa-book"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/auditing.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/account_balance.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Account</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Incoming Invoice</div>
+                        <li>
+                            <a hx-get="{% url 'account:incoming_invoice_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" hx-refresh="true" class="sidebarLink incomingInvoice">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/invoice.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/file_save.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Incoming Invoice</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Send Invoice</div>
+                        <li>
+                            <a hx-get="{% url 'account:send_invoice_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink sendInvoice">
+                                <!-- <i class="fa-solid fa-file-export"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/receipt.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/file_export.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Send Invoice</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Proforma Invoice</div>
+                        <li>
+                            <a hx-get="{% url 'account:proforma_invoice_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink proformaInvoice">
+                                <!-- <i class="fa-solid fa-file-export"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/receipt.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/file_open.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Proforma Invoice</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Commercial Invoice</div>
+                        <li>
+                            <a hx-get="{% url 'account:commerical_invoice_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink commericalInvoice">
+                                <!-- <i class="fa-solid fa-file-export"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/receipt.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/file_open.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Commercial Invoice</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a hx-get="{% url 'account:order_in_process_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink orderInProcessAC">
+                                <!-- <i class="fa-solid fa-retweet"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/iteration.svg" alt="" class="sidebaricon">  {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/rebase.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Process Status</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Payment</div>
+                        <li>
+                            <a hx-get="{% url 'account:payment_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink payment">
+                                <!-- <i class="fa-solid fa-money-check-dollar"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/paying.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/payment.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Payment</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Bank</div>
+                        <li>
+                            <a hx-get="{% url 'source:bank_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink bank">
+                                <!-- <i class="fa-solid fa-building-columns"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/bank.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/account_workload.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Bank</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">SOA</div>
+                        <li>
+                            <a hx-get="{% url 'account:soa_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink soa">
+                                <!-- <i class="fa-solid fa-building-columns"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/auditing.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/paid.svg" class="sidebaricon" alt="">
+                                <span class="links_name">SOA</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Account</span>
+                </li>
+            {% endif %}
+            
+            {% if "report" in userAccessesList %}
+                <div class="tooltipv3 d-none">Report</div>
+                <li class="li-submenu">
+                    <a href="#" class="account-up upMenu">
+                        <!-- <i class="fa-solid fa-book"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/statistics.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/finance_mode.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Report</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Report</div>
+                        <li>
+                            <a hx-get="{% url 'report:financial_report_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink financialReport">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/analysis.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/bar_chart.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Financial Report</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Report</span>
+                </li>
+            {% endif %}
+            
+            {% if "mikro" in userAccessesList %}
+                <div class="tooltipv3 d-none">Mikro</div>
+                <li class="li-submenu">
+                    <a href="#" class="account-up upMenu">
+                        <!-- <i class="fa-solid fa-book"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/representative.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/router.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Mikro</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Kullanıcılar</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:kullanicilar_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink kullanicilar">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/team.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/person.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Kullanıcılar</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Stok Birimleri</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:stok_birimleri_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink stokBirimleri">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/contract.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/info.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Stok Birimleri</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Kur İsimleri</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:kur_isimleri_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink kurIsimleri">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/contract.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/currency_exchange.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Kur İsimleri</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Stoklar</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:stoklar_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink stoklar">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/in-stock.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/shelves.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Stoklar</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Cari Hesaplar</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:cari_hesaplar_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink cariHesaplar">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/skyline.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/apartment.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Cari Hesaplar</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Cari Hesap Adresleri</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:cari_hesap_adresleri_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink cariHesapAdresleri">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/skyline.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/location_on.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Cari Hesap Adresleri</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Cari Hesap Hareketleri</div>
+                        <li>
+                            <a hx-get="{% url 'mikro:cari_hesap_hareketleri_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink cariHesapHareketleri">
+                                <!-- <i class="fa-solid fa-file-import"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/fee.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/receipt_long.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Cari Hesap Hareketleri</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Mikro</span>
+                </li>
+            {% endif %}
+            
+            {% if "hr" in userAccessesList %}
+                <div class="tooltipv3 d-none">HR</div>
+                <li class="li-submenu">
+                    <a href="#" class="hr-up upMenu">
+                        <!-- <i class="fa-solid fa-address-card"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/hr.svg" alt="" class="sidebaricon"> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/group.svg" class="sidebaricon" alt="">
+                        <span class="links_name">HR</span>
+                        <!--  -->
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Departments</div>
+                        <li>
+                            <a hx-get="{% url 'hr:department_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink department">
+                                <!-- <i class="fa-solid fa-diagram-project"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/structure.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/apartment_city.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Departments</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Teams</div>
+                        <li>
+                            <a hx-get="{% url 'hr:team_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink teams">
+                                <!-- <i class="fa-solid fa-users"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/team.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/team.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Teams</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Employees</div>
+                        <li>
+                            <a hx-get="{% url 'hr:user_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink employees">
+                                <!-- <i class="fa-solid fa-user"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/take-care.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/person.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Employees</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Organization Chart</div>
+                        <li>
+                            {% comment %} <a hx-get="{% url 'hr:organization_chart_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="organizationChart"> {% endcomment %}
+                            <a href="#" class="organizationChart">
+                                <!-- <i class="fa-solid fa-user"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/structure.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/account_tree.svg" class="sidebarLink sidebaricon" alt="">
+                                <span class="links_name">Organization Chart</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">HR</span>
+                </li>
+            {% endif %}
+            
+            {% if "manager" in userAccessesList %}
+                <div class="tooltipv3 d-none">Manager</div>
+                <li class="li-submenu">
+                    <a href="#" class="hr-up upMenu">
+                        {% comment %} <img src="/static/images/icons/sidebar/briefcase.svg" alt="" class="sidebaricon"> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/task.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Manager</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Pending Approval</div>
+                        <li>
+                            <a hx-get="{% url 'sale:manager_approval_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink managerApproval">
+                                <span class="badge rounded-pill badge-notification bg-danger" style="top:5px;left:15px;">{{approvalQuotations|length}}</span>
+                                {% comment %} <img src="/static/images/icons/sidebar/check-mark.svg" alt="" class="sidebaricon"> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/assigment_turned.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Pending Approval</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Manager</span>
+                </li>
+            {% endif %}
+            
+            {% if "calendar" in userAccessesList %}
+                <div class="tooltipv3 d-none">Calendar</div>
+                <li class="d-none">
+                    <a hx-get="{% url 'event:calendar_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink event">
+                        <!-- <i class="fa-solid fa-anchor"></i> -->
+                        <img src="/static/images/icons/sidebar/calendar.png" alt="" class="sidebaricon">
+                        <span class="links_name">Calendar</span>
+                    </a>
+                    <span class="tooltipv2">Calendar</span>
+                </li>
+            {% endif %}
+            
+            {% if "vessel_api" in userAccessesList %}
+                <div class="tooltipv3 d-none">Vessel Api</div>
+                <li class="d-none">
+                    <a hx-get="{% url 'scan:vessel_api' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink vesselapi">
+                        <!-- <i class="fa-solid fa-anchor"></i> -->
+                        <img src="/static/images/icons/sidebar/anchor.svg" alt="" class="sidebaricon">
+                        <span class="links_name">Vessel API</span>
+                    </a>
+                    <span class="tooltipv2">Vessel API</span>
+                </li>
+            {% endif %}
+
+            {% comment %} <li>
+                <a hx-get="{% url 'chat:chat_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="chat">
+                    <!-- <i class="fa-solid fa-anchor"></i> -->
+                    <img src="/static/images/icons/sidebar/speech-bubble.svg" alt="" class="sidebaricon">
+                    <span class="links_name">Chat</span>
+                </a>
+                <span class="tooltipv2">Chat</span>
+            </li> {% endcomment %}
+
+            {% if user.is_superuser %}
+                <li class="d-none">
+                    <a hx-get="{% url 'library:library_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink library">
+                        <!-- <i class="fa-solid fa-anchor"></i> -->
+                        <img src="/static/images/icons/sidebar/folder(1).svg" alt="" class="sidebaricon">
+                        <span class="links_name">Library</span>
+                    </a>
+                    <span class="tooltipv2">Library</span>
+                </li>
+
+                <div class="tooltipv3 d-none">Administration</div>
+                <li class="li-submenu">
+                    <a href="#" class="sales-up upMenu">
+                        <!-- <i class="fa-solid fa-hand-holding-dollar"></i> -->
+                        {% comment %} <img src="/static/images/icons/sidebar/settings.svg" class="sidebaricon" alt=""> {% endcomment %}
+                        <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/admin_panel.svg" class="sidebaricon" alt="">
+                        <span class="links_name">Administration</span>
+                        
+                    </a>
+                    <ul class="nav-list sub-menu">
+                        <div class="tooltipv3 tooltipv3-sub d-none">Access Authorization</div>
+                        <li>
+                            <a hx-get="{% url 'administration:access_authorization_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink accessAuthorization">
+                                {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+                                <!-- <i class="fa-solid fa-sheet-plastic"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/access-control.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/lock.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Access Authorization</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Data Authorization</div>
+                        <li>
+                            <a hx-get="{% url 'administration:data_authorization_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink dataAuthorization">
+                                {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+                                <!-- <i class="fa-solid fa-sheet-plastic"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/access-control-2.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/lock.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Data Authorization</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">User Authorization</div>
+                        <li>
+                            <a hx-get="{% url 'administration:user_authorization_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink userAuthorization">
+                                {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+                                <!-- <i class="fa-solid fa-sheet-plastic"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/access-card.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/key.svg" class="sidebaricon" alt="">
+                                <span class="links_name">User Authorization</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Users</div>
+                        <li>
+                            <a hx-get="{% url 'administration:user_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink user">
+                                {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+                                <!-- <i class="fa-solid fa-sheet-plastic"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/group.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/person.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Users</span>
+                            </a>
+                        </li>
+                        <div class="tooltipv3 tooltipv3-sub d-none">Companies</div>
+                        <li>
+                            <a hx-get="{% url 'administration:company_data' %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" class="sidebarLink sourceCompany">
+                                {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+                                <!-- <i class="fa-solid fa-sheet-plastic"></i> -->
+                                {% comment %} <img src="/static/images/icons/sidebar/tower.svg" class="sidebaricon" alt=""> {% endcomment %}
+                                <img src="/static/images/icons/sidebar/google_icons/{{user.profile.theme}}/source_environment.svg" class="sidebaricon" alt="">
+                                <span class="links_name">Companies</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <span class="tooltipv2">Administration</span>
+                </li>
+            {% endif %}
+            
+            
+            {% comment %} <li>
+                <a href="#" class="settings">
+                    <i class="fa-solid fa-lock" style="color:red;float:right;position:absolute;padding:0;height:auto;min-width:auto;line-height:normal;left:10px;top:5px;"></i>
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="links_name">Settings</span>
+                </a>
+                <span class="tooltipv2">Settings</span>
+            </li> {% endcomment %}
+        </ul>
+
+        
+
+        <!-- <div class="profile_content">
+            <div class="profile">
+                <div class="profile_details">
+                    {% if request.user.profile.image %}
+                    <img src="{{ request.user.profile.image.url }}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image" height="34">
+                    {% else %}
+                    <img src="{% static 'images/icons/user-default.png' %}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image" height="34">
+                    {% endif %}
+                    <div class="name_job">
+                        <div class="name">{{request.user}}</div>
+                        <div class="job">
+                            {{ request.user.employee.user_category }}
+                        </div>
+                    </div>
+                </div>
+                <a class="logoutButton" title="Çıkış Yap" data-bs-toggle="modal" data-bs-target="#logoutModalCenter">
+                    <i class='bx bx-log-out' id="log_out"></i>
+                </a>
+            </div>
+        </div> -->
+    </div>
+</div>
+
+<script>
+
+    $(".sidebarv3 ul li > a").hover(
+        function() {
+            // Hover başladığında önceki tooltip'i göster
+            $(this).parent().prev(".tooltipv3").removeClass("d-none");
+        },
+        function() {
+            // Hover bittiğinde önceki tooltip'i gizle
+            $(this).parent().prev(".tooltipv3").addClass("d-none");
+        }
+    );
+
+    $(".sidebarv3 ul li ul > li").hover(
+        function() {
+            // Hover başladığında önceki tooltip'i göster
+            $(this).prev(".tooltipv3-sub").removeClass("d-none");
+        },
+        function() {
+            // Hover bittiğinde önceki tooltip'i gizle
+            $(this).prev(".tooltipv3-sub").addClass("d-none");
+        }
+    );
+    
+</script>

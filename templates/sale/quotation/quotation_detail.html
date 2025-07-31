@@ -1,0 +1,888 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      {{quotation.quotationNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form method="post" hx-post="{{request.path}}" action="/sale/quotation_update/{{quotation.id}}/" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        {% if quotation.revised == False %}
+          <button class="tableTopButtons inTableButtons" type="submit" name="saveButton"
+          data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+          </button>
+        {% endif %}
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton" hx-get="{% url 'sale:quotation_delete' quotation.id %}" hx-target="#addUpdateDataDialog"
+        data-mdb-toggle="tooltip" data-mdb-placement="right" title="Delete">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="pdfButton" hx-get="/sale/quotation_pdf/{{elementTagId}}_s_q/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true"
+        data-mdb-toggle="tooltip" data-mdb-placement="right" title="PDF">
+          <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+        </button>
+        <a class="tableTopButtons inTableButtons" href="/sale/quotation_excel/{{elementTagId}}/"
+        data-mdb-toggle="tooltip" data-mdb-placement="right" title="Excel">
+          <img src="/static/images/icons/datatable/xls.svg" alt="" style="height: 18px;">
+        </a>
+        {% if quotation.revised == False and quotation.project.stage != "order_tracking" and quotation.project.stage != "invoiced" %}
+          <button class="tableTopButtons inTableButtons" type="button" name="revisionButton" hx-get="/sale/quotation_revision/{{elementTagId}}/" hx-target="#addUpdateDataDialog"
+          data-mdb-toggle="tooltip" data-mdb-placement="right" title="Revision">
+            <img src="/static/images/icons/datatable/copy.svg" alt="" style="height: 18px;">
+          </button>
+        {% endif %}
+        <!-- <button class="tableTopButtons inTableButtons" type="submit" name="saveButton"><i class="fa-solid fa-floppy-disk" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save"></i></button>
+        <a class="tableTopButtons inTableButtons" hx-get="{% url 'sale:quotation_delete' quotation.id %}" hx-target="#addUpdateDataDialog"><i class="fa-solid fa-trash" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Remove"></i></a>
+        <a class="tableTopButtons inTableButtons" hx-get="/sale/quotation_pdf/{{elementTagId}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true"><i class="fa-solid fa-print" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Print"></i></a> -->
+        
+        {% if quotation.revised %}
+          <div class="text-red-900 p-1 mb-0 ms-auto"><i class="fas fa-triangle-exclamation me-3"></i>REVISED</div>
+        {% endif %}
+
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        {% if quotation.approval == "notSent" and quotation.revised == False %}
+          <button class="tableTopButtons inTableButtons ms-auto" type="submit" name="approvalButton"><i class="fa-solid fa-paper-plane" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Send to manager approval"></i></button>
+          <div class=" p-1 mb-0" data-mdb-color="info"><i class="fas fa-info-circle me-3"></i>Send to manager approval</div>
+        {% elif quotation.approval == "sent" and quotation.revised == False %}
+          <div class=" p-1 mb-0" data-mdb-color="info"><i class="fas fa-clock me-3"></i>Waiting for manager approval</div>
+        {% elif quotation.approval == "approved" and quotation.revised == False %}
+          <a class="tableTopButtons inTableButtons ms-auto" hx-get="/sale/order_confirmation_add/q_{{quotation.id}}" hx-target="#addUpdateDataDialog" hx-push-url="true"><i class="fa-solid fa-circle-check" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Confirmed"></i></a>
+          <button class="tableTopButtons inTableButtons" type="button" name="ocButton"><i class="fa-solid fa-circle-xmark" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Rejected"></i></button>
+          <div class=" p-1 mb-0" data-mdb-color="warning"><i class="fas fa-circle-exclamation me-3"></i>Send to confirmed or rejected</div>
+        {% elif quotation.approval == "notified" %}
+          <div class=" p-1 mb-0" data-mdb-color="success"><i class="fas fa-check-circle me-3"></i>Order Confirmed</div>
+        {% elif quotation.approval == "notNotified" %}
+          <div class=" p-1 mb-0" data-mdb-color="danger"><i class="fas fa-xmark-circle me-3"></i>Rejected by customer</div>
+        {% endif %}
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none;">
+
+        <div class="row mb-1">
+          <div class="col-md-12">
+            <div class="row">
+              <div class="col-md-4 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-customer" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.customer}}" readonly>
+                  <label for="formOutline-{{elementTag}}-customer" class="form-label">Customer</label>
+                </div>
+              </div>
+              <div class="col-md-4 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-vessel" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.vessel}}" readonly>
+                  <label for="formOutline-{{elementTag}}-vessel" class="form-label">Vessel</label>
+                </div>
+              </div>
+              <div class="col-md-4 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-customerRef" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.customerRef}}" readonly>
+                  <label for="formOutline-{{elementTag}}-customerRef" class="form-label">Customer Ref</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-maker" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.maker}}" readonly>
+                  <label for="formOutline-{{elementTag}}-maker" class="form-label">Maker</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-makerType" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.makerType}}" readonly>
+                  <label for="formOutline-{{elementTag}}-makerType" class="form-label">Type</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-person" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.person}}" readonly>
+                  <label for="formOutline-{{elementTag}}-person" class="form-label">Person</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-phone" class="form-control form-control-sm" value="{{quotation.inquiry.theRequest.person.phone}}" readonly>
+                  <label for="formOutline-{{elementTag}}-phone" class="form-label">Person Contact</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  <input type="text" id="formOutline-{{elementTag}}-quotationNo" class="form-control form-control-sm" value="{{quotation.quotationNo}}" readonly>
+                  <label for="formOutline-{{elementTag}}-quotationNo" class="form-label">Quotation No</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline datepicker">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-quotationDate" class="form-control form-control-sm" value="{{quotation.quotationDate}}" readonly>
+                  {% else %}
+                    {{form.quotationDate}}
+                  {% endif %}
+                  <label for="{{form.quotationDate.field.widget.attrs.id}}" class="form-label">Date</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-payment" class="form-control form-control-sm" value="{{quotation.payment}}" readonly>
+                  {% else %}
+                    {{form.payment}}
+                  {% endif %}
+                  <label for="{{form.payment.field.widget.attrs.id}}" class="form-label select-label">Payment</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                   <input type="text" id="formOutline-{{elementTag}}-delivery" class="form-control form-control-sm" value="{{quotation.delivery}}" readonly>
+                  {% else %}
+                    {{form.delivery}}
+                  {% endif %}
+                  <label for="{{form.delivery.field.widget.attrs.id}}" class="form-label">Delivery</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-currency" class="form-control form-control-sm" value="{{quotation.currency.code}}" readonly>
+                  {% else %}
+                    {{form.currency}}
+                  {% endif %}
+                  <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-validity" class="form-control form-control-sm" value="{{quotation.validity}}" readonly>
+                  {% else %}
+                    {{form.validity}}
+                  {% endif %}
+                  <label for="{{form.validity.field.widget.attrs.id}}" class="form-label">Validity</label>
+                </div>
+              </div>
+              <div class="col-md-2 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-remark" class="form-control form-control-sm" value="{{quotation.remark}}" readonly>
+                  {% else %}
+                    {{form.remark}}
+                  {% endif %}
+                  <label for="{{form.remark.field.widget.attrs.id}}" class="form-label">Remark</label>
+                </div>
+              </div>
+              <div class="col-md-1 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-manuelDiscount" class="form-control form-control-sm" value="{{quotation.manuelDiscount}}" readonly>
+                  {% else %}
+                    {{form.manuelDiscount}}
+                  {% endif %}
+                  <label for="{{form.manuelDiscount.field.widget.attrs.id}}" class="form-label">Discount(%)</label>
+                </div>
+              </div>
+              <div class="col-md-1 mb-2">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <input type="text" id="formOutline-{{elementTag}}-manuelDiscountAmount" class="form-control form-control-sm" value="{{quotation.manuelDiscountAmount}}" readonly>
+                  {% else %}
+                    {{form.manuelDiscountAmount}}
+                  {% endif %}
+                  <label for="{{form.manuelDiscountAmount.field.widget.attrs.id}}" class="form-label">Discount({{quotation.currency.symbol}})</label>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-outline">
+                  {% if quotation.revised %}
+                    <textarea type="text" id="formOutline-{{elementTag}}-note" class="form-control form-control-sm" rows="2" readonly>
+                      {{quotation.note}}
+                    </textarea>
+                  {% else %}
+                    {{form.note}}
+                  {% endif %}
+                  <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          
+        <div class="row mb-3">
+          <div class="col-md-12 mb-3">
+            <ul class="nav nav-pills" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle active" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                    Items
+                </a>
+              </li>
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                  Extras
+                </a>
+              </li>
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-3">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-3" aria-selected="true">
+                  Inquiry Comparison
+                </a>
+              </li>
+              <!-- <div class="row">
+                <div class="col-md-12 alert alert-dismissible fade show p-2 ms-3" role="alert" data-mdb-alert-init data-mdb-color="warning">
+                  <span class="text-red-esms fw-bold">Güncelleme: </span>
+                  <span class="text-blue-esms fw-bold">Source sütununda hücrelere tıklayıp ilgili parça için tedarikçi değiştirebilirsiniz.</span>
+                  <button type="button" class="btn-close p-1 m-0" data-mdb-dismiss="alert" aria-label="Close"></button>
+                </div>
+              </div> -->
+            </ul>
+
+            
+          
+            <!-- Tabs Content -->
+            <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+              <div class="tab-pane fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+
+                <div class="row">
+
+                  <div class="col-md-10"  id="partTableMainBlock-{{elementTagSub}}-{{elementTagId}}">
+                    <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                    
+                    </div>
+                    
+                    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                      <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Select</th>
+                                <th>Line</th>
+                                <th>Line</th>
+                                <th>Alternative</th>
+                                <th>ID</th>
+                                <th>Part</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Unit Price 1</th>
+                                <th>Total Price 1</th>
+                                <th>
+                                  % P
+                                  {% if quotation.revised == False %}
+                                    <button class="inTableButtons p-0 duplicateSelectedProfitQuotation" type="button" data-pk="" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Copy selected to all rows">
+                                      <i class="fa-solid fa-clone" style="font-size:.875rem;"></i>
+                                    </button>
+                                  {% endif %}
+                                </th>
+                                <th>Unit Price 2</th>
+                                <th>Total Price 2</th>
+                                <th>
+                                  % D
+                                  {% if quotation.revised == False %}
+                                    <button class="inTableButtons p-0 duplicateSelectedDiscountQuotation" type="button" data-pk="" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Copy selected to all rows">
+                                      <i class="fa-solid fa-clone" style="font-size:.875rem;"></i>
+                                    </button>
+                                  {% endif %}
+                                </th>
+                                <th>Unit Price 3</th>
+                                <th>Total Price 3</th>
+                                <th>
+                                  Availability
+                                  {% if quotation.revised == False %}
+                                    <button class="inTableButtons p-0 duplicateSelectedAvailabilityQuotation" type="button" data-pk="" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Copy selected to all rows">
+                                      <i class="fa-solid fa-clone" style="font-size:.875rem;"></i>
+                                    </button>
+                                  {% endif %}
+                                </th>
+                                <th>
+                                  Note
+                                  {% if quotation.revised == False %}
+                                    <button class="inTableButtons p-0 duplicateSelectedNoteQuotation" type="button" data-pk="" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Copy selected to all rows">
+                                      <i class="fa-solid fa-clone" style="font-size:.875rem;"></i>
+                                    </button>
+                                  {% endif %}
+                                </th>
+                                <th>
+                                 Remark
+                                  {% if quotation.revised == False %}
+                                    <button class="inTableButtons p-0 duplicateSelectedRemarkQuotation" type="button" data-pk="" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Copy selected to all rows">
+                                      <i class="fa-solid fa-clone" style="font-size:.875rem;"></i>
+                                    </button>
+                                  {% endif %}
+                                </th>
+                                <th>A. Type</th>
+                                <th>Currency</th>
+                                <th>requestPart</th>
+                                <th>Source</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                          
+                        </tbody>
+                      </table>
+                    </div>
+
+                    
+
+                  </div>
+
+                  <div class="col-md-2 ps-0" id="partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}">
+                    <div class="row" style="height:40px;">
+                      <div class="col-md-1">
+
+                      </div>
+                    </div>
+ 
+                    <div class="row">
+
+                      <div class="col-md-1 p-0 d-flex align-items-center justify-content-center" id="partDetailButtonBlock-{{elementTagSub}}-{{elementTagId}}">
+                        <button class="bg-white border-0 shadow-0 fs-4" id="partDetailButton-{{elementTagSub}}-{{elementTagId}}" type="button"><i class="fa-solid fa-caret-right"></i></button>
+                      </div>
+
+                      <div class="col-md-1 p-0 d-flex align-items-center justify-content-center d-none" id="partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}">
+                        <button class="bg-white border-0 shadow-0 fs-4" id="partDetailCloseButton-{{elementTagSub}}-{{elementTagId}}" type="button"><i class="fa-solid fa-caret-left"></i></button>
+                      </div>
+
+                      <div class="col-md-11 p-0" id="partDetailBlock-{{elementTagSub}}-{{elementTagId}}">
+                        <table id="table-{{elementTagSub}}-{{elementTagId}}-partDetail" class="table table-striped table-hover table-bordered dataTable no-footer mt-0" style="width:100%">
+                          <thead>
+                            <tr>
+                                <th class="text-center bg-red-esms text-white p1">Item Detail</th>
+                            </tr>
+                          </thead>
+                          <tbody id="tbody">
+                            <tr>
+                              <td class="text-center bg-blue-esms text-white p-1">Group</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partGroupInfoInput-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="text-center bg-blue-esms text-white p-1">Manufacturer</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partManufacturerInfoInput-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="text-center bg-blue-esms text-white p-1">Cross Ref.</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partCrossRefInfoInput-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="text-center bg-blue-esms text-white p-1">Our Ref.</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partOurRefInfoInput-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="text-center bg-blue-esms text-white p-1">Total Stock</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partQuantityInfoInput-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="text-center bg-blue-esms text-white p-1">Last 3 Sale</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partlast3SalesInfoInput-1-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partlast3SalesInfoInput-2-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                            <tr>
+                              <td class="p-1" id="partlast3SalesInfoInput-3-{{elementTagSub}}-{{elementTagId}}">-</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+              
+              <div class="tab-pane fade overflow-auto" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" style="max-width: 100%;">
+                <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-extra" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-extra">
+                                  
+                </div>
+                <div class="row mb-4 switchConnect">
+                    <div class="col-md-12">
+                    
+                    <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-extra" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-extra">
+            
+                    </div>
+        
+                    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}-extra">
+                        <table id="table-{{elementTagSub}}-{{elementTagId}}-extra" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}-extras" name="extras" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th>
+                                <th></th>
+                                <th>ID</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Unit Price</th>
+                                <th>Total Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                                
+                        </tbody>
+                        </table>
+                    </div>
+                    
+                    </div>
+                    
+                </div>
+              </div>
+              
+              <div class="tab-pane fade overflow-auto" id="tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" style="max-width: 100%;">
+                <div class="row mb-1">
+    
+                  <div class="row mb-1">
+    
+                    <div class="col-md-12 mb-1" style="overflow-x:auto;white-space: nowrap;">
+                      <table class="table table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th><strong>Part</strong></th>
+                            <th><strong>Description</strong></th>
+                            <th><strong>Quantity</strong></th>
+                            <th><strong>Unit</strong></th>
+                            {% for inquiry in inquiries %}
+                              <th class="p-0">
+                                <table class="table table-borderless mb-0">
+                                  <tr>
+                                    <th class="text-center" colspan="4"><strong>{{inquiry.inquiryNo}}</strong></th>
+                                  </tr>
+                                  <tr>
+                                    <th class="text-center" colspan="4"><strong>{{inquiry.supplier}}</strong></th>
+                                  </tr>
+                                  <tr>
+                                    <th><strong>Unit Price ({{inquiry.currency.code}})</strong></th>
+                                    <th><strong>Total Price ({{inquiry.currency.code}})</strong></th>
+                                    <th><strong>Availability</strong></th>
+                                  </tr>
+                                </table>
+                              </th>
+                            {% endfor %}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {% for key,value in projectParts.items %}
+                            <tr>
+                              <td>{{value.requestPart.part.partNo}}</td>
+                              <td>{{value.requestPart.part.description}}</td>
+                              <td>{{value.quantity}}</td>
+                              <td>{{value.requestPart.part.unit}}</td>
+                              {% for inquiry in inquiries %}
+                                <td class="p-0">
+                                  <table class="table table-borderless mb-0">
+                                    {% for inquiryPart in inquiryParts %}
+                                      {% if inquiryPart.parts.0.inquiry == inquiry %}
+                                        {% for inquiryPartIn in inquiryPart.parts %}
+                                          {% if inquiryPartIn.requestPart.part.partNo == value.requestPart.part.partNo %}
+                                            {% for key2,value2 in thePartsTotals.items %}
+                                              {% if inquiryPartIn.requestPart.part.partNo == key2 and inquiryPartIn.totalPrice == value2 %}
+                                                <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                                  <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                                  <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                                  {% for key3,value3 in thePartsAvailabilities.items %}
+                                                    {% if inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability == value3 %}
+                                                      <td class=" text-blue-600">
+                                                        {% if inquiryPartIn.availability > 0 %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                        {% else %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                        {% endif %}
+                                                      </td>
+                                                    {% elif inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability != value3 %}
+                                                      <td class="">
+                                                        {% if inquiryPartIn.availability > 0 %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                        {% else %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                        {% endif %}
+                                                      </td>
+                                                    {% endif %}
+                                                  {% endfor %}
+                                                </tr>
+                                              {% elif inquiryPartIn.requestPart.part.partNo == key2 and inquiryPartIn.totalPrice != value2 %}
+                                                <tr class="p-1" style="background-color:transparent;">
+                                                  <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                                  <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                                  {% for key3,value3 in thePartsAvailabilities.items %}
+                                                    {% if inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability == value3 %}
+                                                      <td class=" text-blue-600">
+                                                        {% if inquiryPartIn.availability > 0 %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                        {% else %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                        {% endif %}
+                                                      </td>
+                                                    {% elif inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability != value3 %}
+                                                      <td class="">
+                                                        {% if inquiryPartIn.availability > 0 %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                        {% else %}
+                                                          {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                        {% endif %}
+                                                      </td>
+                                                    {% endif %}
+                                                  {% endfor %}
+                                                </tr>
+                                              {% endif %}
+                                            {% endfor %}
+                                            
+                                          {% endif %}
+                                        {% endfor %}
+                                      {% endif %}
+                                    {% endfor %}
+                                  </table>
+                                </td>
+                              {% endfor %}
+                            </tr>
+                          {% endfor %}
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            {% for inquiry in inquiries %}
+                              {% for inquiryPart in inquiryParts %}
+                                {% if inquiryPart.parts.0.inquiry == inquiry %}
+                                  <td class="p-0">
+                                    <table class="table table-borderless mb-0">
+                                      {% if inquiryPart.min == True %}
+                                        <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                          <td class="text-start pr-0">Total</td>
+                                            <td class="text-start pl-0"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                          <td></td>
+                                        </tr>
+                                      {% else %}
+                                        <tr class="p-1" style="background-color:transparent;">
+                                          <td class="text-start pr-0"><strong>Total</strong></td>
+                                            <td class="text-start pl-0"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                          <td></td>
+                                        </tr>
+                                      {% endif %}
+                                      
+                                    </table>
+                                  </td>
+                                {% endif %}
+                              {% endfor %}
+                            {% endfor %}
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+                    </div>
+          
+                  </div>
+    
+                  <div class="row mb-1 d-none">
+                    <div class="col-md-12 mb-10 scroll-section" style="max-height: 600px;overflow-y:auto;">
+                      
+                      {% for inquiry in inquiries %}
+                          <div class="row mb-3 border-bottom">
+                              <div class="col-md-12">
+    
+                                  <div class="row mb-3">
+                                      <div class="col-md-6 ">
+                                        {% if inquiry == quotation.inquiry %}
+                                          Inquiry No: <span class="bg-green-200 text-wrap p-1 rounded-2">{{inquiry.inquiryNo}}</span>
+                                        {% else %}
+                                          Inquiry No: <span>{{inquiry.inquiryNo}}</span>
+                                        {% endif %}
+                                      </div>
+                                      <div class="col-md-6">
+                                          Supplier: {{inquiry.supplier}}
+                                      </div>
+                                  </div>
+    
+                                  <div class="row mb-3">
+                                      <div class="col-md-12">
+                                          <div class="table-responsive">
+                                              <table class="table table-bordered table-striped">
+                                                <thead>
+                                                  <tr>
+                                                    <th><strong>Part</strong></th>
+                                                    <th><strong>Quantity</strong></th>
+                                                    <th><strong>Unit</strong></th>
+                                                    <th><strong>Unit Price</strong></th>
+                                                    <th><strong>Total Price</strong></th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {% for inquiryPart in inquiryParts %}
+                                                      {% if inquiryPart.parts.0.inquiry == inquiry %}
+                                                          {% for inquiryPartIn in inquiryPart.parts %}
+                                                            {% if inquiryPartIn in quotationInquiryParts %}
+                                                              <tr class="bg-green-200 text-wrap p-1 rounded-2">
+                                                            {% else %}
+                                                              <tr>
+                                                            {% endif %}
+                                                                <td>{{inquiryPartIn.requestPart.part.partNo}}</td>
+                                                                <td>{{inquiryPartIn.quantity}}</td>
+                                                                <td>{{inquiryPartIn.requestPart.part.unit}}</td>
+                                                                <td>{{quotation.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                                                <td>{{quotation.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                                              </tr>
+                                                          {% endfor %}
+                                                          <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td><strong>{{quotation.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                                          </tr>
+                                                      {% endif %}
+                                                  {% endfor %}
+                                                </tbody>
+                                              </table>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      {% endfor %}
+    
+                    </div>
+                  </div>
+    
+                </div>
+              </div>
+            </div>
+            <!-- Tabs Content -->
+          </div>
+        </div>
+
+        <div class="row" style="display: flex;justify-content: end;">
+          <div class="col-md-3">
+            <div class="input-group input-group-sm mb-1">
+              <label class="input-group-text w-50 rounded-0 bg-red-esms text-white" id="inputGroup-sizing-sm">
+                Buying Total (
+                <a hx-get="/sale/quotation_buying_total?q={{quotation.id}}" hx-target="#addUpdateDataDialogXl" style="cursor: pointer;">Detail <i class="fa-solid fa-arrow-up-right-from-square"></i></a> 
+                )
+              </label>
+              <input type="text" class="form-control rounded-0 text-end bg-red-esms text-white" style="opacity: 0.9;" id="quotationTotalBuyingPrice-{{quotation.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{quotation.currency.symbol}} {{totalBuyingPriceFixed}}" readonly/>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-sm mb-1">
+              <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="inputGroup-sizing-sm">Gross Total</label>
+              <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="quotationTotalGrossPrice-{{quotation.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{quotation.currency.symbol}} {{totalGrossPriceFixed}}" readonly/>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group input-group-sm mb-1">
+              <label class="input-group-text w-50 rounded-0 bg-red-esms text-white" id="inputGroup-sizing-sm">Discount Total</label>
+              <input type="text" class="form-control rounded-0 text-end bg-red-esms text-white" style="opacity: 0.9;" id="quotationTotalDiscountPrice-{{quotation.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{quotation.currency.symbol}} {{totalDiscountPriceFixed}}" readonly/>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="input-group input-group-sm">
+                  <label class="input-group-text w-50 rounded-0 fw-bold bg-blue-esms text-white" id="inputGroup-sizing-sm">TOTAL</label>
+                  <input type="text" class="form-control rounded-0 text-end fw-bold bg-blue-esms text-white" style="opacity: 0.9;" id="quotationTotalSellingPrice-{{quotation.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{quotation.currency.symbol}} {{totalSellingPriceFixed}}" readonly/>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="input-group input-group-sm">
+                  <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="quotationTotalProfitPrice-{{quotation.id}}">Profit (% {{totalProfitPrice}})</label>
+                  <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="quotationTotalProfitAmountPrice-{{quotation.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{quotation.currency.symbol}} {{totalProfitAmountPriceFixed}}" readonly/>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+      
+  </form>
+</div>
+
+<!-- Add/Update Data Modal-->
+<div id="addUpdateDataModal-{{elementTag}}-{{elementTagId}}" class="modal fade smallModal smallModal-{{elementTag}}-{{elementTagId}}" tabindex="-1">
+  <div id="addUpdateDataDialog-{{elementTag}}-{{elementTagId}}" class="modal-dialog smallDialog-{{elementTag}}-{{elementTagId}}" hx-target="this"></div>
+</div>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var quotationId = "{{quotation.id}}";
+  var pageUrl = "/sale/quotation_update/{{elementTagId}}/";
+  var orderConfirmation = "{{orderConfirmation}}";
+  var revised = "{{quotation.revised}}";
+  var rev = "{{quotation.rev}}";
+  var userId = "{{user.id}}"
+
+  $("#partDetailButton-{{elementTagSub}}-{{elementTagId}}").on("click", function(){
+    $("#partDetailButtonBlock-{{elementTagSub}}-{{elementTagId}}").addClass("d-none");
+    $("#partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("d-none");
+
+    var tableHeight = $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").height();
+
+    $("#table-{{elementTagSub}}-{{elementTagId}}-partDetail").addClass("d-none");
+
+    $("#partDetailBlock-{{elementTagSub}}-{{elementTagId}}").height(tableHeight);
+    $("#partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}").height(tableHeight);
+
+    $("#partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}").addClass("ms-3");
+
+    $("#partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}").width("1%");
+    $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").width("96%");
+    
+    $("#partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("col-md-2");
+    $("#partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}").addClass("col-md-1");
+
+    $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("col-md-10");
+    $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").addClass("col-md-11");
+
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  $("#partDetailCloseButton-{{elementTagSub}}-{{elementTagId}}").on("click", function(){
+    $("#partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}").addClass("d-none");
+    $("#partDetailButtonBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("d-none");
+
+    var tableHeight = $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").height();
+
+    $("#table-{{elementTagSub}}-{{elementTagId}}-partDetail").removeClass("d-none");
+
+    $("#partDetailBlock-{{elementTagSub}}-{{elementTagId}}").height("");
+    $("#partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}").height("");
+
+    $("#partDetailCloseButtonBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("ms-3");
+
+    $("#partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}").width("");
+    $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").width("");
+    
+    $("#partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("col-md-1");
+    $("#partDetailMainBlock-{{elementTagSub}}-{{elementTagId}}").addClass("col-md-2");
+
+    $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").removeClass("col-md-11");
+    $("#partTableMainBlock-{{elementTagSub}}-{{elementTagId}}").addClass("col-md-10");
+
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-1").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}-extra").DataTable().columns.adjust();
+  });
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-3").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  // Currency seçildiğinde AJAX isteği yaparak Part'lardaki fiyatları günceller
+  $('#formOutline-quotation-currency').on('change', function() {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+      animation: false,
+      spinner: "pulsar",
+      maxSize: "150px",
+      minSize: "150px",
+      text: "Loading ...",
+      background: "rgba(69, 83, 89, 0.6)",
+      color: "#455359",
+      textColor: "#fff"
+    });
+
+    //quotaiton part'ları güncelleyen istek
+    var currencyInformId = $(this).val();
+    console.log(currencyInformId);
+    htmx.ajax("POST", "/sale/quotation_part_bulk_update/qp_{{quotationPartList}}_c_" + currencyInformId + "/");
+    htmx.on("htmx:beforeSwap", (e) => {
+      if(e.detail.xhr.status == 204){
+        $("#message-container-{{elementTag}}-{{elementTagId}}").html('<div id="message-container-inside--{{elementTag}}-{{elementTagId}}"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+      };
+      //Tabloyu yeniler
+      $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}} .dataTables_scrollBody").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+      });
+      $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().ajax.reload();
+      $("#table-{{elementTagSub}}-{{elementTagId}}").on( 'draw.dt', function () {
+        htmx.process("#table-{{elementTagSub}}-{{elementTagId}}");
+        $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}} .dataTables_scrollBody").busyLoad("hide", {
+          animation: "fade"
+        });
+        //spinner durdurur
+        $("body").busyLoad("hide", {
+          animation: "fade"
+        });
+      });
+    });
+    // Mesajı belirli bir süre sonra gizle
+    setTimeout(function() {
+      $("#message-container-inside--{{elementTag}}-{{elementTagId}}").fadeOut("slow");
+    }, 2000); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+  });
+
+  $("#form-{{elementTag}}-{{elementTagId}}").submit(function (event) {
+    event.preventDefault();
+
+    $.ajax({
+      type: "POST",
+      url: "/sale/quotation_update/{{elementTagId}}/",  // Formunuzun işleneceği view'ın URL'si
+      data: $(this).serialize(),
+      success: function (response, status, xhr) {
+          // Başarılı yanıt geldiğinde mesajı görüntüleyin
+          if (xhr.status === 204) {
+            console.log("#message-container-{{elementTag}}-{{elementTagId}}");
+              $("#message-container-{{elementTag}}-{{elementTagId}}").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+              // Mesajı belirli bir süre sonra gizle
+              console.log("eburasıu");
+              setTimeout(function() {
+                $("#message-container-inside-{{elementTag}}-{{elementTagId}}").fadeOut("slow");
+              }, 2000); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+          };
+      },
+      error: function (xhr, status, error) {
+          // Hata durumunda mesajı görüntüleyin
+          $("#message-container-{{elementTag}}-{{elementTagId}}").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}"><i class="fas fa-xmark-circle me-1"></i>' + error + '</div>');
+      }
+    });
+    
+  });
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/quotation/detail.js' %}"></script>
+
+{% endblock javascript %}
+

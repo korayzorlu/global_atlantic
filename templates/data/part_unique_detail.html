@@ -1,0 +1,133 @@
+{% extends 'layout/dashboard_layout.html' %}
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    body{margin-bottom:0!important;}
+    .modal-content{box-shadow:unset;}
+    .shadow-5-strong{box-shadow:unset!important;}
+</style>
+
+<div class="globalBoxes">
+    <div class="box" style="margin-bottom:10px;">
+        <div class="topButtonBox" style="display:flex;align-items:center;">
+            <a class="tableTopButtons" href="#" style=""><i class="fa-solid fa-pencil"></i></a>
+            <a class="tableTopButtons" href="#" style=""><i class="fa-solid fa-file-arrow-down"></i></a>
+            <div class="companyDetailImgBlock" style="float:right;margin-left:auto;">
+                <span>{{partUnique.code}}</span>
+            </div>
+        </div>
+    </div>
+    
+    <!--FORM-->
+    <form method="post" class="container-fluid form-container" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+    
+        <!--bootstrap switch
+        <div class="mb-3">
+        <div class="form-check form-switch">
+            <label class="form-check-label" for="flexSwitchCheckDefaultCustomer">Customer</label>
+            {{ form.customerCheck }}
+        </div>
+        </div>
+        /bootstrap switch-->
+        <div class="box" style="margin-bottom:10px;">
+            <span style="font-weight:600;">Part Unique Info</span>
+            <div class="row mb-4 switchConnect" style="margin:2px;">
+                <div class="row mb-3">
+                    <div class="col-md-12 switchConnect">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        {{ form.description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box" style="margin-bottom:10px;">
+            <span style="font-weight:600;">Parts</span>
+            <div class="row mb-4 switchConnect" style="margin:2px;">
+                <div class="row mb-3 switchConnect">
+                    <div class="col-md-6 switchConnect">
+                        <label for="exampleFormControlTextarea1" class="form-label">
+                            Add New Part
+                            <a class="addAttributeButton" hx-get="{% url 'data:part_add' %}" hx-target="#addUpdateDataDialogXl"><i class="fa-solid fa-plus"></i></a>
+                            <a class="deleteData addAttributeButton" href="#" style=""><i class="fa-solid fa-trash"></i></a>
+                            <a class="addAttributeButton" href="#" style=""><i class="fa-solid fa-file-arrow-down"></i></a>
+                            <a class="addAttributeButton" href="#" style=""><i class="fa-solid fa-file-arrow-up"></i></a>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-4 switchConnect" style="margin:2px;">
+                <table id="partsTable" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>Part Unique Code</th>
+                            <th>Part No</th>
+                            <th>Unit</th>
+                            <th>Maker</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                            
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th>Part Unique Code</th>
+                            <th>Part No</th>
+                            <th>Unit</th>
+                            <th>Maker</th>
+                            <th>Type</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+
+        
+    
+        
+    
+        <div class="box" style="margin-bottom:10px;">
+            <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-danger" type="submit">Save</button>
+            </div>
+        </div>
+    
+        
+    </form>
+    <!--/FORM-->
+    
+</div>
+
+{% endblock body %}
+
+{% block javascript %}
+<script>
+    var partDataTable = $("#partsTable")
+    var partApiSource = '{% url "data:parts_api" %}?partUnique={{partUnique.id}}&format=datatables';
+    var partColumns = [
+                    {"data" : "partUniqueCode", render: function (data, type, row, meta){
+                        return String(data).padStart(3,0)
+                    }
+                    },
+                    {"data" : "partNo", render: function (data, type, row, meta){
+                        return '<a href="/data/part_update/' + row.id + '/"  style="cursor: pointer;text-decoration:underline;">' + data + '</a>';}
+                    },
+                    {"data" : "unit"},
+                    {"data" : "maker.name"},
+                    {"data" : "type.type"}
+    ];
+</script>
+<script src="{% static 'js/data/part/datatable.js' %}"></script>
+{% endblock javascript %}
+
+
+

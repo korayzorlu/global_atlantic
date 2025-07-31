@@ -1,0 +1,427 @@
+[
+    {
+        "model": "user.position",
+        "pk": 12,
+        "fields": {
+            "department": 5,
+            "parent": null,
+            "position_level": "1",
+            "name": "Managing Director",
+            "about": "",
+            "created_at": "2023-11-13T00:17:47.189Z",
+            "updated_at": "2023-11-13T00:17:47.189Z",
+            "lft": 1,
+            "rght": 50,
+            "tree_id": 1,
+            "level": 0
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 13,
+        "fields": {
+            "department": 2,
+            "parent": 12,
+            "position_level": "2",
+            "name": "Finance Director",
+            "about": "",
+            "created_at": "2023-11-13T00:18:18.236Z",
+            "updated_at": "2023-11-13T00:18:18.236Z",
+            "lft": 2,
+            "rght": 7,
+            "tree_id": 1,
+            "level": 1
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 17,
+        "fields": {
+            "department": 2,
+            "parent": 13,
+            "position_level": "2",
+            "name": "Accounting Director",
+            "about": "",
+            "created_at": "2023-11-13T00:20:18.090Z",
+            "updated_at": "2023-11-13T00:20:18.090Z",
+            "lft": 3,
+            "rght": 6,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 18,
+        "fields": {
+            "department": 2,
+            "parent": 17,
+            "position_level": "3",
+            "name": "Accounting Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:20:50.292Z",
+            "updated_at": "2023-11-13T00:20:50.292Z",
+            "lft": 4,
+            "rght": 5,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 16,
+        "fields": {
+            "department": 6,
+            "parent": 12,
+            "position_level": "2",
+            "name": "Marketing Director",
+            "about": "",
+            "created_at": "2023-11-13T00:19:34.291Z",
+            "updated_at": "2023-11-13T00:19:34.291Z",
+            "lft": 8,
+            "rght": 11,
+            "tree_id": 1,
+            "level": 1
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 36,
+        "fields": {
+            "department": 6,
+            "parent": 16,
+            "position_level": "3",
+            "name": "Marketing Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:32:28.088Z",
+            "updated_at": "2023-11-13T00:32:28.088Z",
+            "lft": 9,
+            "rght": 10,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 15,
+        "fields": {
+            "department": 7,
+            "parent": 12,
+            "position_level": "2",
+            "name": "Sales Director",
+            "about": "",
+            "created_at": "2023-11-13T00:19:16.338Z",
+            "updated_at": "2023-11-13T00:19:16.338Z",
+            "lft": 12,
+            "rght": 31,
+            "tree_id": 1,
+            "level": 1
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 27,
+        "fields": {
+            "department": 7,
+            "parent": 15,
+            "position_level": "3",
+            "name": "Branch Manager",
+            "about": "",
+            "created_at": "2023-11-13T00:27:34.598Z",
+            "updated_at": "2023-11-13T00:27:34.598Z",
+            "lft": 13,
+            "rght": 18,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 30,
+        "fields": {
+            "department": 7,
+            "parent": 27,
+            "position_level": "4",
+            "name": "Sales Assistant Specialist(Branch)",
+            "about": "",
+            "created_at": "2023-11-13T00:28:41.638Z",
+            "updated_at": "2023-11-13T00:30:23.777Z",
+            "lft": 14,
+            "rght": 17,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 31,
+        "fields": {
+            "department": 7,
+            "parent": 30,
+            "position_level": "5",
+            "name": "Operations Assistant",
+            "about": "",
+            "created_at": "2023-11-13T00:29:08.990Z",
+            "updated_at": "2023-11-13T00:29:08.990Z",
+            "lft": 15,
+            "rght": 16,
+            "tree_id": 1,
+            "level": 4
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 29,
+        "fields": {
+            "department": 7,
+            "parent": 15,
+            "position_level": "3",
+            "name": "Logistic Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:28:15.547Z",
+            "updated_at": "2023-11-13T00:28:15.547Z",
+            "lft": 19,
+            "rght": 22,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 35,
+        "fields": {
+            "department": 7,
+            "parent": 29,
+            "position_level": "4",
+            "name": "Logistic Assistant Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:32:08.089Z",
+            "updated_at": "2023-11-13T00:32:08.089Z",
+            "lft": 20,
+            "rght": 21,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 28,
+        "fields": {
+            "department": 7,
+            "parent": 15,
+            "position_level": "3",
+            "name": "Sales Executive",
+            "about": "",
+            "created_at": "2023-11-13T00:27:57.493Z",
+            "updated_at": "2023-11-13T00:27:57.493Z",
+            "lft": 23,
+            "rght": 30,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 33,
+        "fields": {
+            "department": 7,
+            "parent": 28,
+            "position_level": "4",
+            "name": "Sales Assistant Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:30:46.967Z",
+            "updated_at": "2023-11-13T00:30:46.967Z",
+            "lft": 24,
+            "rght": 27,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 34,
+        "fields": {
+            "department": 7,
+            "parent": 33,
+            "position_level": "5",
+            "name": "Sales Assistant",
+            "about": "",
+            "created_at": "2023-11-13T00:31:25.800Z",
+            "updated_at": "2023-11-13T00:31:25.800Z",
+            "lft": 25,
+            "rght": 26,
+            "tree_id": 1,
+            "level": 4
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 32,
+        "fields": {
+            "department": 7,
+            "parent": 28,
+            "position_level": "4",
+            "name": "Sales Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:29:35.442Z",
+            "updated_at": "2023-11-13T00:29:35.442Z",
+            "lft": 28,
+            "rght": 29,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 14,
+        "fields": {
+            "department": 8,
+            "parent": 12,
+            "position_level": "2",
+            "name": "Technical Director",
+            "about": "",
+            "created_at": "2023-11-13T00:18:57.362Z",
+            "updated_at": "2023-11-13T00:18:57.362Z",
+            "lft": 32,
+            "rght": 49,
+            "tree_id": 1,
+            "level": 1
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 26,
+        "fields": {
+            "department": 8,
+            "parent": 14,
+            "position_level": "4",
+            "name": "Occupational Health&Safety Specialist",
+            "about": "",
+            "created_at": "2023-11-13T00:27:06.724Z",
+            "updated_at": "2023-11-13T00:27:06.724Z",
+            "lft": 33,
+            "rght": 34,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 20,
+        "fields": {
+            "department": 8,
+            "parent": 14,
+            "position_level": "3",
+            "name": "Service Engineer",
+            "about": "",
+            "created_at": "2023-11-13T00:21:54.175Z",
+            "updated_at": "2023-11-13T00:21:54.175Z",
+            "lft": 35,
+            "rght": 40,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 24,
+        "fields": {
+            "department": 8,
+            "parent": 20,
+            "position_level": "4",
+            "name": "On-Site Team",
+            "about": "",
+            "created_at": "2023-11-13T00:26:02.205Z",
+            "updated_at": "2023-11-13T00:26:02.205Z",
+            "lft": 36,
+            "rght": 37,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 23,
+        "fields": {
+            "department": 8,
+            "parent": 20,
+            "position_level": "4",
+            "name": "On-Site Team(Fuel)",
+            "about": "",
+            "created_at": "2023-11-13T00:24:01.749Z",
+            "updated_at": "2023-11-13T00:24:01.749Z",
+            "lft": 38,
+            "rght": 39,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 19,
+        "fields": {
+            "department": 8,
+            "parent": 14,
+            "position_level": "3",
+            "name": "Technical Coordinator",
+            "about": "",
+            "created_at": "2023-11-13T00:21:33.723Z",
+            "updated_at": "2023-11-13T00:21:33.723Z",
+            "lft": 41,
+            "rght": 44,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 22,
+        "fields": {
+            "department": 8,
+            "parent": 19,
+            "position_level": "4",
+            "name": "Facilities Staff",
+            "about": "",
+            "created_at": "2023-11-13T00:22:57.796Z",
+            "updated_at": "2023-11-13T00:22:57.796Z",
+            "lft": 42,
+            "rght": 43,
+            "tree_id": 1,
+            "level": 3
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 21,
+        "fields": {
+            "department": 8,
+            "parent": 14,
+            "position_level": "3",
+            "name": "Workshop Foreman",
+            "about": "",
+            "created_at": "2023-11-13T00:22:34.807Z",
+            "updated_at": "2023-11-13T00:22:34.807Z",
+            "lft": 45,
+            "rght": 48,
+            "tree_id": 1,
+            "level": 2
+        }
+    },
+    {
+        "model": "user.position",
+        "pk": 25,
+        "fields": {
+            "department": 8,
+            "parent": 21,
+            "position_level": "4",
+            "name": "In-Site Team",
+            "about": "",
+            "created_at": "2023-11-13T00:26:22.174Z",
+            "updated_at": "2023-11-13T00:26:22.174Z",
+            "lft": 46,
+            "rght": 47,
+            "tree_id": 1,
+            "level": 3
+        }
+    }
+]

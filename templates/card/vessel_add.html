@@ -1,0 +1,352 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      New Vessel
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+  <form action="/card/company_add/" method="post" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+      <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+        <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+      </button>
+      <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+      <div id="test-full"></div>
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none;">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="row">
+            <div class="col-md-3">
+              <div class="form-outline">
+                {{form.name}}
+                <label for="{{form.name.field.widget.attrs.id}}" class="form-label">Name</label>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="form-outline">
+                <div class="input-group input-group-sm">
+                  <button class="input-group-text" id="inputGroup-sizing-sm" disabled>Get Data With IMO</button>
+                  <label for="textFormOutline" class="form-label border border-1 w-100 rounded-2" aria-describedby="inputGroup-sizing-sm">{{ form.imo }}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-outline">
+                {{form.company}}
+                <label for="{{form.company.field.widget.attrs.id}}" class="form-label select-label">Company</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12 mb-2">
+              <div class="row">
+                <div class="col-md-3 mb-2">
+                  <div class="form-outline">
+                    {{form.loa}}
+                    <label for="{{form.loa.field.widget.attrs.id}}" class="form-label">LOA</label>
+                  </div>
+                </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.mmsi}}
+                  <label for="{{form.mmsi.field.widget.attrs.id}}" class="form-label">MMSI</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.beam}}
+                  <label for="{{form.beam.field.widget.attrs.id}}" class="form-label">Beam</label>
+                </div>
+              </div>
+              <div class="col-md-3 mb-2">
+                <div class="form-outline">
+                  {{form.draught}}
+                  <label for="{{form.draught.field.widget.attrs.id}}" class="form-label">Draught</label>
+                </div>
+              </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3 mb-2">
+                  <div class="form-outline">
+                    {{form.callSign}}
+                    <label for="{{form.callSign.field.widget.attrs.id}}" class="form-label">Call Sign</label>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <div class="form-outline">
+                    {{form.flag}}
+                    <label for="{{form.flag.field.widget.attrs.id}}" class="form-label">Flag</label>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <div class="form-outline">
+                    {{form.shipyard}}
+                    <label for="{{form.shipyard.field.widget.attrs.id}}" class="form-label">Builder</label>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-2">
+                  <div class="form-outline">
+                    {{form.hallNo}}
+                    <label for="{{form.hallNo.field.widget.attrs.id}}" class="form-label">Hull No</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-3 mb-2">
+                  <div class="form-outline">
+                    {{form.type}}
+                    <label for="{{form.type.field.widget.attrs.id}}" class="form-label select-label">Type</label>
+                  </div>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <div class="form-outline">
+                    {{form.building}}
+                    <label for="{{form.building.field.widget.attrs.id}}" class="form-label">Build Year</label>
+                  </div>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <div class="form-outline">
+                    {{form.grosston}}
+                    <label for="{{form.grosston.field.widget.attrs.id}}" class="form-label">Gross Ton</label>
+                  </div>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <div class="form-outline">
+                    {{form.deadWeight}}
+                    <label for="{{form.deadWeight.field.widget.attrs.id}}" class="form-label">Dead Weight</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.classificationSociety}}
+                    <label for="{{form.classificationSociety.field.widget.attrs.id}}" class="form-label">Classification Society</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> 
+
+          <div class="row">
+            
+            <ul class="nav nav-pills ms-3" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} active m-0" data-mdb-pill-init id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                  Owner
+                </a>
+              </li>
+              <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+                <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} m-0" data-mdb-pill-init id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                  P.I.C
+                </a>
+              </li>
+            </ul>
+
+            <!-- Tabs Content -->
+            <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+
+              <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+
+                <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-owner" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-owner">
+                  
+                </div>
+                
+                <div class="col-md-12">
+                  <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}-owner">
+                    <table id="table-{{elementTagSub}}-{{elementTagId}}-owner" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                      <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Owner</th>
+                            <th>Country</th>
+                            <th>City</th>
+                          </tr>
+                      </thead>
+                      <tbody id="tbody">
+                        
+                      </tbody>
+                      <tfoot>
+                          <tr>
+                            <th>ID</th>
+                            <th>Owner</th>
+                            <th>Country</th>
+                            <th>City</th>
+                          </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+                
+              </div>
+
+              <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+
+                <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                  
+                </div>
+                
+                <div class="col-md-12">
+                  <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                    <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                      <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>P.I.C. Name</th>
+                            <th>Title</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                          </tr>
+                      </thead>
+                      <tbody id="tbody">
+                        
+                      </tbody>
+                      <tfoot>
+                          <tr>
+                              <th>ID</th>
+                              <th>P.I.C. Name</th>
+                              <th>Title</th>
+                              <th>Email</th>
+                              <th>Phone</th>
+                          </tr>
+                      </tfoot>
+                    </table>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+            <!-- Tabs Content-end -->
+          </div>
+        </div>
+      </div>
+          
+    </div>
+
+  </form>
+</div>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var pageUrl = "/card/vessel_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-1").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  $("#removeNav-{{elementTag}}-new").click(function() {
+    var user = "{{user.id}}";
+    var sessionPersons = [];
+
+    fetch('/card/api/persons?company__isnull=true&sessionKey=' + sessionKey + '&user=' + user + '&sourceCompany=' + sourceCompanyId + '&format=datatables', {method : "GET"})
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        for(let i = 0; i < data["data"].length; i++){
+          sessionPersons.push(data["data"][i]["id"])
+        };
+        htmx.ajax("POST", "/card/person_delete/" + sessionPersons, {target : "#addUpdateDataDialog-inform", headers : "{'X-CSRFToken': '{{ csrf_token }}'}"});
+      });
+  });
+
+  $("#form-{{elementTag}}-new").submit(function (event) {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+    event.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    $.ajax({
+      type: "POST",
+      url: "/card/vessel_add/",  // Formunuzun işleneceği view'ın URL'si
+      data: formData,
+      success: function (response, status, xhr) {
+          // Başarılı yanıt geldiğinde mesajı görüntüleyin
+          if (xhr.status === 204) {
+              setTimeout(function() {
+          
+                let navTagSub = $("#navTag-{{elementTag}}-new");
+                let tabPaneSub = $("#tabPane-{{elementTag}}-new");
+            
+                navTagSub.prev().children("a").addClass("active");
+                
+                navTagSub.prev().children("a").children("button").show();
+                
+                $("#table-{{elementTag}}").DataTable().columns.adjust();
+
+                navTagSub.remove();
+                tabPaneSub.remove();
+
+                $("#table-vessel").DataTable().ajax.reload(function() {
+                  htmx.process("#table-vessel");
+                }, false);
+
+
+                fetch('/card/api/vessels?ordering=-id&sessionKey={{sessionKey}}&project__user={{user.id}}&format=datatables', {method : "GET"})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data["data"]);
+                    htmx.ajax("GET", "/card/vessel_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                    window.history.pushState({}, '', "/card/vessel_update/" + data["data"][0]["id"] + "/");
+                });
+          
+                setTimeout(function() {
+                  $("body").busyLoad("hide", {
+                    animation: "fade"
+                  });
+                }, 500);
+          
+              }, 500);
+          }
+      },
+      error: function (xhr, status, error) {
+        //spinner durdurur
+        $("body").busyLoad("hide", {
+            animation: "fade"
+        });
+      }
+    });
+    
+
+    
+
+  });
+
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/card/vessel/add.js' %}"></script>
+
+{% endblock javascript %}
+

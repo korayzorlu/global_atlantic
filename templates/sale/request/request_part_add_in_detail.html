@@ -1,0 +1,106 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-8 mb-3">
+         
+            {{form.part}}
+            {% comment %} <label for="textFormSearchPart" class="form-label select-label">Search Part No</label> {% endcomment %}
+         
+        </div>
+        {% comment %} <div class="col-md-5 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{requestPart.part.description}}" readonly>
+            <label for="textFormOutline" class="form-label">Description</label>
+          </div>
+        </div> {% endcomment %}
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            {{ form.quantity }}
+            <label for="formOutline-{{elementTagSub}}-quantity" class="form-label">Quantity</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+  var detailRefererPathSub = "{{refererPath}}";
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var requestPartId = "{{requestPart.id}}";
+  var theRequestId = "{{requestPart.theRequest.id}}";
+  var projectId = "{{theRequest.project.id}}";
+  var pageUrl = "/sale/request_part_add_in_detail/r_" + theRequestId + "/";
+  var addSubDataHxGet = "/sale/request_part_add_in_detail/r_" + theRequestId + "/";
+  var maker = "{{theRequest.maker.id}}";
+
+  {% comment %} $(document).ready(function() {
+    $('#id_part').select2();
+  }); {% endcomment %}
+  //{"class" : "form-control form-control-sm form-select select", "data-mdb-size" : "sm", "data-mdb-filter":"true"}
+  $('#id_part').addClass("form-control form-control-sm form-select select");
+  $('#id_part').data("mdb-size", "sm");
+  $('#id_part').data("mdb-filter", "true");
+  $('#id_part').attr("name", "partFormName");
+  $(document).ready(function () {
+    $('#id_part').select2({
+      ajax: {
+        url: "/sale/request_part_add_in_detail/r_" + projectId + "/",
+        dataType: 'json',
+        delay: 250,
+        processResults: function (data) {
+          console.log("yükleniyor...");
+          return {
+              results: $.map(data, function (item) {
+                  console.log("yüklendi!");
+                  return {id: item.id, text: "Part No: " + item.partNo + " | Group: " + item.group + " | Description: " + item.description};
+              })
+          };
+        },
+        cache: true
+      },
+      minimumInputLength: 3,
+      placeholder: "Search for a part no or group",
+      allowClear: true,
+      closeOnSelect: false,
+      minimumResultsForSearch: Infinity,
+      scrollAfterSelect: true,
+      multiple: true,
+      maximumSelectionLength: 10
+      //theme: "bootstrap4",
+      //width: "100%"
+    });
+  });
+
+  $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+      $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+      
+  });
+
+  {% comment %} $.ajax({
+      url: '/data/api/parts',
+      data: {'maker': maker},
+      dataType: 'json',
+      success: function(data) {
+          $('#id_part').empty();
+          $.each(data, function(i, part) {
+              $('#id_part').append($('<option>').val(part.id).text(part.partNo));
+          });
+      }
+  }); {% endcomment %}
+    
+</script>
+

@@ -1,0 +1,517 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+    {{quotation.quotationNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 15%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} p-3 fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{ request.path }}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header shadow-4" style="padding: 10px;box-shadow:none!important;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="approvedButton"><i class="fa-solid fa-circle-check" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Approve"></i></button>
+        <button class="tableTopButtons inTableButtons" type="submit" name="notApprovedButton"><i class="fa-solid fa-circle-xmark" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Not Approve"></i></button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+      </div>
+
+      <div class="modal-body" style="box-shadow:none; padding:0;">
+
+        <!-- Tabs navs -->
+        <ul class="nav nav-pills mb-3 ms-2" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+            <a class="nav-link active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                Info
+            </a>
+          </li>
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+            <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                Parts
+            </a>
+          </li>
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-3">
+            <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-3" aria-selected="true">
+              Inquiry Comparison
+            </a>
+          </li>
+        </ul>
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+        <div class="tab-content" id="tab-{{elementTag}}-add">
+
+          <div class="tab-pane fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+            <div class="row mb-4" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;padding-top:15px;">
+
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{requestt.customer.name}}" readonly>
+                      <label for="textFormOutline" class="form-label">Customer</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                    <div class="form-outline">
+                        <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{requestt.vessel.name}}" readonly>
+                        <label for="textFormOutline" class="form-label">Vessel</label>
+                    </div>
+                  </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotation.quotationNo}}" readonly>
+                      <label for="textFormOutline" class="form-label">Quotation No</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                    <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotaiton.inquiry.theRequest.person}}" readonly>
+                    <label for="textFormOutline" class="form-label">Person</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotation.payment}}" readonly>
+                      <label for="textFormOutline" class="form-label">Payment</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                    <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotaiton.validity}}" readonly>
+                    <label for="textFormOutline" class="form-label">Valididty</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotation.quotationDate}}" readonly>
+                      <label for="textFormOutline" class="form-label">Date</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                    <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotaiton.currency}}" readonly>
+                    <label for="textFormOutline" class="form-label">Currency</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotation.delivery}}" readonly>
+                      <label for="textFormOutline" class="form-label">Delivery</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                    <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{quotaiton.remark}}" readonly>
+                    <label for="textFormOutline" class="form-label">Remark</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col-md-12 mb-3">
+                    <p class="mb-0"><strong>Note: </strong>{{form.note}}</p>
+                </div>
+            </div>
+              
+            </div>
+
+          </div>
+
+          <div class="tab-pane fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+              <div class="row mb-1" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;">
+
+                  <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}">
+                    
+                  </div>
+                  
+                  <div class="row mb-1 tableBox-inform-{{elementTagSub}}">
+                    <div class="col-md-12 mb-3">
+                      <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Part</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Unit Price 1</th>
+                                <th>Total Price 1</th>
+                                <th>% P</th>
+                                <th>Unit Price 2</th>
+                                <th>Total Price 2</th>
+                                <th>% D</th>
+                                <th>Unit Price 3</th>
+                                <th>Total Price 3</th>
+                                <th>Availability</th>
+                                <th>A. Type</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                          
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th>ID</th>
+                                <th>Part</th>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th>Unit</th>
+                                <th>Unit Price 1</th>
+                                <th>Total Price 1</th>
+                                <th>% P</th>
+                                <th>Unit Price 2</th>
+                                <th>Total Price 2</th>
+                                <th>% D</th>
+                                <th>Unit Price 3</th>
+                                <th>Total Price 3</th>
+                                <th>Availability</th>
+                                <th>A. Type</th>
+                            </tr>
+                        </tfoot>
+                      </table>
+                    </div>
+                  </div>
+
+                  <div class="row mb-1">
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partGroupInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partGroupInfoInput" class="form-label">Group</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partManufacturerInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partManufacturerInfoInput" class="form-label">Manufacturer</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partCrossRefInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partCrossRefInfoInput" class="form-label">Cross Ref</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partOurRefInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partOurRefInfoInput" class="form-label">Our Ref</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partQuantityInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partQuantityInfoInput" class="form-label">Total Stock</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partBuyingPriceInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partBuyingPriceInfoInput" class="form-label">Buying Price</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partRetailPriceInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partRetailPriceInfoInput" class="form-label">Retail Price</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                      <div class="form-outline">
+                        <input type="text" id="partDealerPriceInfoInput" class="form-control form-control-sm" value="-" readonly>
+                        <label for="partDealerPriceInfoInput" class="form-label">Dealer Price</label>
+                      </div>
+                    </div>
+                    <div class="col-md-12">
+                      {% comment %} <label for="exampleFormControlTextarea1" class="form-label">Last 3 Sales</label> {% endcomment %}
+                      <div class="input-group">
+                        <span class="input-group-text">Last 3 Sales</span>
+                        <input type="text" id="partlast3SalesInfoInput-1" class="form-control form-control-sm" readonly>
+                        <input type="text" id="partlast3SalesInfoInput-2" class="form-control form-control-sm" readonly>
+                        <input type="text" id="partlast3SalesInfoInput-3" class="form-control form-control-sm" readonly>
+                      </div>
+                      
+                    </div>
+                  </div>
+
+              </div>
+
+          </div>
+
+          <div class="tab-pane fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-3">
+            <div class="row mb-1" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;">
+
+              <div class="row mb-1">
+
+                <div class="col-md-12 mb-1" style="overflow-x:auto;white-space: nowrap;">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th><strong>Part</strong></th>
+                        <th><strong>Description</strong></th>
+                        <th><strong>Quantity</strong></th>
+                        <th><strong>Unit</strong></th>
+                        {% for inquiry in inquiries %}
+                          <th class="p-0">
+                            <table class="table table-borderless mb-0">
+                              <tr>
+                                <th class="text-center" colspan="4"><strong>{{inquiry.inquiryNo}}</strong></th>
+                              </tr>
+                              <tr>
+                                <th class="text-center" colspan="4"><strong>{{inquiry.supplier}}</strong></th>
+                              </tr>
+                              <tr>
+                                <th><strong>Unit Price ({{inquiry.currency.code}})</strong></th>
+                                <th><strong>Total Price ({{inquiry.currency.code}})</strong></th>
+                                <th><strong>Availability</strong></th>
+                              </tr>
+                            </table>
+                          </th>
+                        {% endfor %}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for key,value in projectParts.items %}
+                        <tr>
+                          <td>{{value.requestPart.part.partNo}}</td>
+                          <td>{{value.requestPart.part.description}}</td>
+                          <td>{{value.quantity}}</td>
+                          <td>{{value.requestPart.part.unit}}</td>
+                          {% for inquiry in inquiries %}
+                            <td class="p-0">
+                              <table class="table table-borderless mb-0">
+                                {% for inquiryPart in inquiryParts %}
+                                  {% if inquiryPart.parts.0.inquiry == inquiry %}
+                                    {% for inquiryPartIn in inquiryPart.parts %}
+                                      {% if inquiryPartIn.requestPart.part.partNo == value.requestPart.part.partNo %}
+                                        {% for key2,value2 in thePartsTotals.items %}
+                                          {% if inquiryPartIn.requestPart.part.partNo == key2 and inquiryPartIn.totalPrice == value2 %}
+                                            <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                              <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                              <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                              {% for key3,value3 in thePartsAvailabilities.items %}
+                                                {% if inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability == value3 %}
+                                                  <td class=" text-blue-600">
+                                                    {% if inquiryPartIn.availability > 0 %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                    {% else %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                    {% endif %}
+                                                  </td>
+                                                {% elif inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability != value3 %}
+                                                  <td class="">
+                                                    {% if inquiryPartIn.availability > 0 %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                    {% else %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                    {% endif %}
+                                                  </td>
+                                                {% endif %}
+                                              {% endfor %}
+                                            </tr>
+                                          {% elif inquiryPartIn.requestPart.part.partNo == key2 and inquiryPartIn.totalPrice != value2 %}
+                                            <tr class="p-1" style="background-color:transparent;">
+                                              <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                              <td class="">{{inquiry.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                              {% for key3,value3 in thePartsAvailabilities.items %}
+                                                {% if inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability == value3 %}
+                                                  <td class=" text-blue-600">
+                                                    {% if inquiryPartIn.availability > 0 %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                    {% else %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                    {% endif %}
+                                                  </td>
+                                                {% elif inquiryPartIn.requestPart.part.partNo == key3 and inquiryPartIn.availability != value3 %}
+                                                  <td class="">
+                                                    {% if inquiryPartIn.availability > 0 %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}s
+                                                    {% else %}
+                                                      {{inquiryPartIn.availability}} {{inquiryPartIn.availabilityType}}
+                                                    {% endif %}
+                                                  </td>
+                                                {% endif %}
+                                              {% endfor %}
+                                            </tr>
+                                          {% endif %}
+                                        {% endfor %}
+                                        
+                                      {% endif %}
+                                    {% endfor %}
+                                  {% endif %}
+                                {% endfor %}
+                              </table>
+                            </td>
+                          {% endfor %}
+                        </tr>
+                      {% endfor %}
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        {% for inquiry in inquiries %}
+                          {% for inquiryPart in inquiryParts %}
+                            {% if inquiryPart.parts.0.inquiry == inquiry %}
+                              <td class="p-0">
+                                <table class="table table-borderless mb-0">
+                                  {% if inquiryPart.min == True %}
+                                    <tr class="bg-green-200 p-1" style="background-color:transparent;">
+                                      <td class="text-start pr-0">Total</td>
+                                        <td class="text-start pl-0"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                      <td></td>
+                                    </tr>
+                                  {% else %}
+                                    <tr class="p-1" style="background-color:transparent;">
+                                      <td class="text-start pr-0"><strong>Total</strong></td>
+                                        <td class="text-start pl-0"><strong>{{inquiry.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                      <td></td>
+                                    </tr>
+                                  {% endif %}
+                                  
+                                </table>
+                              </td>
+                            {% endif %}
+                          {% endfor %}
+                        {% endfor %}
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                </div>
+      
+              </div>
+
+              <div class="row mb-1">
+                <div class="col-md-12 mb-10 scroll-section" style="max-height: 600px;overflow-y:auto;">
+                  
+                    {% for inquiry in inquirires %}
+                        <div class="row mb-3 border-bottom">
+                            <div class="col-md-12">
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6 ">
+                                      {% if inquiry == quotation.inquiry %}
+                                        Inquiry No: <span class="bg-green-200 text-wrap p-1 rounded-2">{{inquiry.inquiryNo}}</span>
+                                      {% else %}
+                                        Inquiry No: <span>{{inquiry.inquiryNo}}</span>
+                                      {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        Supplier: {{inquiry.supplier}}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped">
+                                              <thead>
+                                                <tr>
+                                                  <th><strong>Part</strong></th>
+                                                  <th><strong>Quantity</strong></th>
+                                                  <th><strong>Unit</strong></th>
+                                                  <th><strong>Unit Price</strong></th>
+                                                  <th><strong>Total Price</strong></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {% for inquiryPart in inquiryParts %}
+                                                    {% if inquiryPart.parts.0.inquiry == inquiry %}
+                                                        {% for inquiryPartIn in inquiryPart.parts %}
+                                                          {% if inquiryPartIn in quotationInquiryParts %}
+                                                            <tr class="bg-green-200 text-wrap p-1 rounded-2">
+                                                          {% else %}
+                                                            <tr>
+                                                          {% endif %}
+                                                              <td>{{inquiryPartIn.requestPart.part.partNo}}</td>
+                                                              <td>{{inquiryPartIn.quantity}}</td>
+                                                              <td>{{inquiryPartIn.requestPart.part.unit}}</td>
+                                                              <td>{{quotation.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                                              <td>{{quotation.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                        <tr>
+                                                          <td></td>
+                                                          <td></td>
+                                                          <td></td>
+                                                          <td></td>
+                                                          <td><strong>{{quotation.currency.symbol}} {{inquiryPart.total|floatformat:2}}</strong></td>
+                                                        </tr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                              </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+        <!-- Tabs content -->
+      
+  </form>
+</div>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var quotationId = "{{quotation.id}}";
+  var pageUrl = "/sale/manager_approval_update/{{elementTagId}}/"
+
+  $(".addClose-{{elementTag}}").click(function() {
+    document.getElementById("addFormBlock-{{elementTag}}").innerHTML = "";
+    $(".tableBox-{{elementTag}}").eq(0).removeClass("col-md-4");
+    $(".addForm-{{elementTag}}").eq(0).removeClass("col-md-8");
+    $("#table-{{elementTag}}").DataTable().ajax.reload(function(){
+      htmx.process('#table-{{elementTag}}');
+    },false);
+    $("#table-{{elementTag}}_filter").show();
+  });
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/manager_approval/detail.js' %}"></script>
+
+{% endblock javascript %}
+

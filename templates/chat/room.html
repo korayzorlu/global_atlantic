@@ -1,0 +1,120 @@
+{% load static %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+  
+      room
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 5%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{request.path}}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+      <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none;">
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="form-outline">
+                            <textarea id="chat-log" class="form-control form-control-sm" cols="100" rows="20"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="form-outline">
+                            <input type="text" id="chat-message-input" class="form-control form-control-sm" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="form-outline">
+                            <input type="button" id="chat-message-submit" class="form-control form-control-sm" value="Send">
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+  
+  </form>
+</div>
+
+{{ room_name|json_script:"room-name" }}
+
+{% comment %} <textarea id="chat-log" cols="100" rows="20"></textarea><br>
+<input id="chat-message-input" type="text" size="100"><br>
+<input id="chat-message-submit" type="button" value="Send">
+{{ room_name|json_script:"room-name" }} {% endcomment %}
+
+
+<script>
+    
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var roomId = "{{room_name}}";
+    var pageUrl = "/chat/{{room_name}}/"
+
+    const roomName = JSON.parse(document.getElementById('room-name').textContent);
+
+    const chatSocket = new WebSocket(
+        (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+        + window.location.host
+        + '/ws/chat/'
+        + roomName
+        + '/'
+    );
+
+    chatSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        document.querySelector('#chat-log').value += (data.message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.key === 'Enter') {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        const messageInputDom = document.querySelector('#chat-message-input');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    };
+
+    
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/chat/chat/detail.js' %}"></script>
+
+{% endblock javascript %}
+

@@ -1,0 +1,22 @@
+<!-- Base layout eklemimizi sağlayan komut. -->
+{% extends "sales/project/mail/base.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+{% block banner %}
+<img src="https://i.ibb.co/zbCSJ1Z/shipped.gif" alt="">
+{% endblock %}
+
+{% block content %}
+<p>Dear {{ delivery.project.request.person_in_contact.get_full_name }}</p>
+<br>
+<p>Your order has been packed in full and is ready to ship.</p>
+<br>
+<p>Your Ref: {{ delivery.project.request.customer_ref }}</p>
+<p>Our Ref: {{ delivery.project.no }}</p>
+<br>
+<p>Total boxes/Cases:1pc</p>
+<p>Weight 1: {{ delivery.weight }}</p>
+<br>
+<p>Have a nice day!</p>
+{% endblock %}

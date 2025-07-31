@@ -1,0 +1,12 @@
+{% include 'includes/control/htmx_control.html' %}
+
+<form hx-post="{{ request.path }}" class="modal-content form-container border" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Delete selected companies?</h5>
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit" name="deleteMaker">Delete</button>
+    </div>
+</form>

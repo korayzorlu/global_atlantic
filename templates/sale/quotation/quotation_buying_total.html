@@ -1,0 +1,56 @@
+{% load static %}
+<div class="bg-white">
+    
+
+    <div class="modal-header">
+        <h5 class="modal-title">Suppliers</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="table-{{elementTagSub}}-{{quotation.id}}-supplier" class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col" style="width:55%;">Supplier</th>
+                                    <th scope="col" style="width:10%;">Buying Total</th>
+                                    <th scope="col" style="width:10%;">Currency</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inquiry in inquiries %}
+                                    <tr>
+                                        <td class="ps-1 pe-1">{{inquiry.supplier}}</td>
+                                        <td class="text-end ps-1 pe-1">{{inquiry.totalPrice|floatformat:2}}</td>
+                                        <td class="ps-1 pe-1">{{quotation.currency.code}}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+</div>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/sale/quotation_buying_total/";
+    var user = "{{user.id}}";
+
+    
+
+</script>
+
+{% block javascript %}
+
+{% endblock javascript %}

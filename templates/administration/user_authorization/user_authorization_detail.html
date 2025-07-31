@@ -1,0 +1,105 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      {{profile.user.first_name}} {{profile.user.last_name}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form method="post" action="/user_authorization_update/{{user.id}}" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none; padding:0;">
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row">
+                  <div class="col-md-6 mb-2">
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <span>Access Authorization</span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        {% for accessAuthorization in accessAuthorizations %}
+                          <div class="form-check form-switch me-3">
+                            {% if accessAuthorization in profileAccessAuthorizations %}
+                              <input type="checkbox" id="formOutline-{{elementTag}}-access" role="switch" name="accessAuthorization-{{accessAuthorization.code}}" class="form-check-input" checked>
+                            {% else %}
+                              <input type="checkbox" id="formOutline-{{elementTag}}-access" role="switch" name="accessAuthorization-{{accessAuthorization.code}}" class="form-check-input">
+                            {% endif %}
+                            <label for="formOutline-{{elementTag}}-access" class="form-check-label text-dark">{{accessAuthorization.name}}</label>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    
+                  </div>
+                  <div class="col-md-6 mb-2">
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        <span>Data Authorization</span>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6 mb-2">
+                        {% for dataAuthorization in dataAuthorizations %}
+                          <div class="form-check form-switch me-3">
+                            {% if dataAuthorization in profileDataAuthorizations %}
+                              <input type="checkbox" id="formOutline-{{elementTag}}-data" role="switch" name="dataAuthorization-{{dataAuthorization.code}}" class="form-check-input" checked>
+                            {% else %}
+                              <input type="checkbox" id="formOutline-{{elementTag}}-data" role="switch" name="dataAuthorization-{{dataAuthorization.code}}" class="form-check-input">
+                            {% endif %}
+                            <label for="formOutline-{{elementTag}}-data" class="form-check-label text-dark">{{dataAuthorization.name}}</label>
+                          </div>
+                        {% endfor %}
+                      </div>
+                    </div>
+                    
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+      </div>
+      
+  </form>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var userAuthorizationId = "{{user.id}}";
+  var pageUrl = "/administration/user_authorization_update/{{elementTagId}}/"
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/administration/user_authorization/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

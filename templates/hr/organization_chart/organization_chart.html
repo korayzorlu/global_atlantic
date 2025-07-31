@@ -1,0 +1,52 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        {% comment %} <i class="fa-solid fa-diagram-project me-2"></i> {% endcomment %}
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 11%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+    <div class="row mb-3 p-3">
+        <div class="col-md-12">
+            <div id="advancedChartExample" class="organization-chart"></div>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+
+    var elementTag = "{{elementTag}}";
+    var elementTagId = "table";
+    var pageUrl = "/hr/organization_chart_data/";
+    
+</script>
+
+<script>
+
+
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/hr/organization_chart/list.js' %}"></script>
+
+{% endblock javascript %}
+

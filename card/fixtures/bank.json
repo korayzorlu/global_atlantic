@@ -1,0 +1,59 @@
+[
+    {
+        "model": "card.bank",
+        "pk": 1,
+        "fields": {
+            "name": "ABN AMBRO BANK"
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 2,
+        "fields": {
+            "name": "AKBANK"
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 3,
+        "fields": {
+            "name": "AKBANK T.A.S."
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 4,
+        "fields": {
+            "name": "ALBARAKA"
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 5,
+        "fields": {
+            "name": "ALBARAKA TÜRK"
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 6,
+        "fields": {
+            "name": "ASYA KATILIM BANKASI"
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 7,
+        "fields": {
+            "name": "BANCA CARIGE AG"
+        }
+    },
+    {
+        "model": "card.bank",
+        "pk": 8,
+        "fields": {
+            "name": "BANCO DE SABADEL"
+        }
+    }
+
+]

@@ -1,0 +1,284 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        {{user.first_name}} {{user.last_name}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}" style="height:100%;">
+    <form method="post" action="/profile/{{request.user.username}}" class="mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+
+        <div class="row m-0">
+            <div class="col-md-12">
+
+            <div class="row mb-3 detailHeader">
+                <div class="col-md-2 d-flex">
+                    <!-- <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+                        <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+                    </button> -->
+                </div>
+                <div class="col-md-10">
+                    <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}" style="line-height: 35px;"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="row">
+                        <div class="col-md-2">
+
+                            <div class="row lightbox">
+                                <div class="col-md-12">
+                                    <img src="{{profile.image.url}}" data-mdb-img="{{profile.image.url}}" alt="" class="" style="height:auto;width:100%;"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-md-10">
+
+                            <div class="row">
+
+                                <div class="col-md-4">
+            
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-firstName" class="form-control form-control-sm" value="{{profile.user.first_name}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-firstName" class="form-label">First Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-lastName" class="form-control form-control-sm" value="{{profile.user.last_name}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-lastName" class="form-label">Last Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-gender" class="form-control form-control-sm" value="{{profile.gender}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-gender" class="form-label select-label">Gender</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-birthday" class="form-control form-control-sm" value="{{profile.birthday}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-birthday" class="form-label">Birthday</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-email" class="form-control form-control-sm" value="{{profile.email}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-email" class="form-label">Email</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-phone" class="form-control form-control-sm" value="{{profile.phone}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-phone" class="form-label">Phone</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-address" class="form-control form-control-sm" value="{{profile.address}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-address" class="form-label">Address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                
+                                <div class="col-md-4">
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-registrationNo" class="form-control form-control-sm" value="{{profile.registrationNo}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-registrationNo" class="form-label">Registration Number</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-idetificationNo" class="form-control form-control-sm" value="{{profile.idetificationNo}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-idetificationNo" class="form-label">Identification Number(TC)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-motherName" class="form-control form-control-sm" value="{{profile.motherName}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-motherName" class="form-label">Mother Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-fatherName" class="form-control form-control-sm" value="{{profile.fatherName}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-fatherName" class="form-label">Father Name</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-drivingLicence" class="form-control form-control-sm" value="{{profile.drivingLicence}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-drivingLicence" class="form-label">Driving Licence</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-militaryStatus" class="form-control form-control-sm" value="{{profile.militaryStatus}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-militaryStatus" class="form-label select-label">Military Status</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-militaryPostponedDate" class="form-control form-control-sm" value="{{profile.militaryPostponedDate}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-militaryPostponedDate" class="form-label">Military Postponed Date</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                
+                                <div class="col-md-4">
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-socialSecurityNo" class="form-control form-control-sm" value="{{profile.socialSecurityNo}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-socialSecurityNo" class="form-label">Social Security Number(SGK)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-criminalRegistrationNo" class="form-control form-control-sm" value="{{profile.criminalRegistrationNo}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-criminalRegistrationNo" class="form-label">Criminal Registration Number</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-startDate" class="form-control form-control-sm" value="{{profile.startDate}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-startDate" class="form-label">Date of Start</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-socialSecurityStartDate" class="form-control form-control-sm" value="{{profile.socialSecurityStartDate}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-socialSecurityStartDate" class="form-label">Date of Social Security Start</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-retirementStatus" class="form-control form-control-sm" value="{{profile.retirementStatus}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-retirementStatus" class="form-label select-label">Retirement Status</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-professionCode" class="form-control form-control-sm" value="{{profile.professionCode}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-professionCode" class="form-label">Profession Code</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="form-outline">
+                                                <input type="text" id="formOutline-{{elementTag}}-positionType" class="form-control form-control-sm" value="{{profile.positionType}}" readonly>
+                                                <label for="formOutline-{{elementTag}}-positionType" class="form-label select-label">Position</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                
+                                </div>
+                
+                            </div>
+
+                        </div>
+                    </div>
+                
+                    
+
+
+
+                </div>
+            </div>
+
+            </div>
+        </div>
+        
+    </form>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var pageUrl = "/profile/{{elementTagId}}/"
+  
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/user/profile/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

@@ -1,0 +1,53 @@
+{% load static %}
+
+<form method="post" action="/logout/ot_{{orderTracking.id}}/" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-add-2" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Create commerical invoice?</h5>
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit">Create</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var orderTrackingId = "{{orderTracking.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/account/commerical_invoice_add/ot_{{orderTracking.id}}/";
+    var user = "{{user.id}}";
+
+    $("#form-{{elementTagSub}}-{{elementTagId}}-expense").submit(function (event) {
+        $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-expense .dataTables_scrollBody").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+
+        $("#table-{{elementTagSub}}-{{elementTagId}}-expense").DataTable().ajax.reload()
+
+        $("#table-{{elementTagSub}}-{{elementTagId}}-expense").on( 'draw.dt', function () {
+            htmx.process("#table-{{elementTagSub}}-{{elementTagId}}-expense");
+            $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-expense .dataTables_scrollBody").busyLoad("hide", {
+              animation: "fade"
+            });
+        });
+
+        $("#table-{{elementTagSub}}-{{elementTagId}}-expense").DataTable().columns.adjust();
+        
+    });
+</script>
+
+{% block javascript %}
+
+
+
+{% endblock javascript %}

@@ -1,0 +1,82 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}-part" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-3 mb-3">
+          <div class="form-outline">
+            {{form.part}}
+            <label for="selectFormOutline" class="form-label select-label">Part</label>
+          </div>
+        </div>
+        <div class="col-md-5 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutlineDescription" class="form-control form-control-sm" value="-" readonly>
+            <label for="textFormOutlineDescription" class="form-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline">
+                <input type="text" id="textFormOutlineUnit" class="form-control form-control-sm" value="-" readonly>
+              <label for="textFormOutlineUnit" class="form-label">Unit</label>
+            </div>
+          </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{ form.quantity }}
+            <label for="textFormOutline" class="form-label">Quantity</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}-part" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}-part" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}-part").click(function() {
+        $("#form-{{elementTagSub}}-{{elementTagId}}-part").remove();
+        
+    });
+
+    $('#id_part').on('change', function() {
+        var partInformId = $(this).val();
+        $.ajax({
+            url: '/data/api/parts',
+            data: {'id': partInformId},
+            dataType: 'json',
+            success: function(data) {
+                $.each(data, function(i, part) {
+                    $("#textFormOutlineDescription").val(part.description);
+                    $("#textFormOutlineUnit").val(part.unit);
+                });
+            }
+        });
+    });
+
+    //MDB Input'ların çalışması için
+    var inputs = $(".form-outline");
+    for (var i = 0; i < inputs.length; i++) {
+      var input = inputs[i];
+      new mdb.Input(input);
+    };
+
+    
+</script>
+

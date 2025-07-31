@@ -1,0 +1,184 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n stage_compare %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}Order Status{% endblock %}
+{% block mainDirectory %}Sales{% endblock %}
+{% block childDirectory %}Order Status{% endblock childDirectory %}
+{% block href %}{% url 'user:dashboard' %}{% endblock %}
+{% block mainRoute %}Order Status{% endblock %}
+{% block childRoute %}-{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+        src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/sales/order_status/order_status.css' %}">
+<!-- /StyleSheet End-->
+
+<!-- Basic initialization -->
+<div class="container-fluid">
+    <div class="table-wrapper">
+        <div class="table-responsive">
+            <table class="table table-borderless w-100">
+                <thead>
+                <tr>
+                    <th><strong>{% trans 'Project No' %}</strong></th>
+                    <th>{% trans 'Request' %}</th>
+                    <th>{% trans 'Inquiry' %}</th>
+                    <th>{% trans 'Quotation' %}</th>
+                    <th>{% trans 'Order Confirmation' %}</th>
+                    <th>{% trans 'Purchase Order' %}</th>
+                    <th>{% trans 'Delivery' %}</th>
+                </tr>
+                </thead>
+                <tbody class="card" id="makers_table">
+                {% for project in projects %}
+                <tr class="border-bottom"
+                    onclick="document.location = '{%  url 'sales:project_continue' project.id %}';">
+                    <td data-th="Project No" class="{% comment %} {% if project.is_closed %}text-secondary{% endif %} {% endcomment %}" style="width:10%">
+                        <span>{{project.no}}</span>
+                        {% if project.is_closed %}
+                            <img width="33" src="{% static 'images/icons/exclamation-mark(1).svg' %}" alt="">
+                        {% endif %}
+                    </td>
+                    
+                    {% comment  %}Eğer proje state == delivery and finished yeşil{% endcomment %}
+                    {% is_stage_finished project "delivery" as finished %}
+                    {% if finished %}
+                        <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(153, 255, 204,0.7);">
+                        </td>
+                        <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(153, 255, 204,0.7);">
+                        </td>
+                        <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(153, 255, 204,0.7);">
+                        </td>
+                        <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(153, 255, 204,0.7);">
+                        </td>
+                        <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(153, 255, 204,0.7);">
+                        </td>
+                        <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(153, 255, 204,0.7);">
+                        {{ project.updated_at|date:"d M Y H:i" }}
+                        </td>
+                    
+                    {% else %}
+                       
+                    {% comment  %}
+                        if project is claimed red
+                    
+                    {% endcomment %}
+
+                        {% if project.is_claim_continue  %}
+                        here
+                            <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(255, 92, 51, 0.7);">
+                            </td>
+                            <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(255, 92, 51, 0.7);">
+                            </td>
+                            <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(255, 92, 51, 0.7);">
+                            </td>
+                            <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(255, 92, 51, 0.7);">
+                            </td>
+                            <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(255, 92, 51, 0.7);">
+                            </td>
+                            <td class="text-white" style="border-radius: 10 0 0 10; background-color:rgba(255, 92, 51, 0.7);">
+                            {{ project.updated_at|date:"d M Y H:i" }}
+                            </td>
+                        {% else %}
+                            {% is_stage_finished project "request" as finished %}
+                            {% if finished or project.stage == "request" %}
+                            <td class="{% if not finished %}bg-teal{% endif %} text-white"
+                                style="border-radius: 10 0 0 10; background-color:rgba(102, 204, 255,0.7);">
+                                {% if project.stage == "request" %}
+                                {{ project.updated_at|date:"d M Y H:i" }}
+                                {% endif %}
+                            </td>
+                            {% else %}
+                            <td>
+                            </td>
+                            {% endif %}
+                            {% is_stage_finished project "inquiry" as finished %}
+                            {% if finished or project.stage == "inquiry" %}
+                            <td class="{% if not finished %}bg-teal{% endif %} text-white"
+                                style="border-radius: 10 0 0 10; background-color:rgba(102, 204, 255,0.7);">
+                                {% if project.stage == "inquiry" %}
+                                {{ project.updated_at|date:"d M Y H:i" }}
+                                {% endif %}
+                            </td>
+                            {% else %}
+                            <td>
+                            </td>
+                            {% endif %}
+                            {% is_stage_finished project "quotation" as finished %}
+                            {% if finished or project.stage == "quotation" %}
+                            <td class="{% if not finished %}bg-teal{% endif %} text-white"
+                                style="border-radius: 10 0 0 10; background-color:rgba(102, 204, 255,0.7);">
+                                {% if project.stage == "quotation" and not finished %}
+                                {{ project.updated_at|date:"d M Y H:i" }}
+                                {% endif %}
+                            </td>
+                            {% else %}
+                            <td>
+                            </td>
+                            {% endif %}
+                            {% is_stage_finished project "quotation" as finished %}
+                            {% if finished %}
+                            <td class="{% if not finished %}bg-teal{% endif %} text-white"
+                                style="border-radius: 10 0 0 10; background-color:rgba(102, 204, 255,0.7);">
+                                {% if project.stage == "quotation" %}
+                                {{ project.updated_at|date:"d M Y H:i" }}
+                                {% endif %}
+                            </td>
+                            {% else %}
+                            <td>
+                            </td>
+                            {% endif %}
+                            {% is_stage_finished project "purchase_order" as finished %}
+                            {% if finished or project.stage == "purchase_order" %}
+                            <td class="{% if not finished %}bg-teal{% endif %} text-white"
+                                style="border-radius: 10 0 0 10; background-color:rgba(102, 204, 255,0.7);">
+                                {% if project.stage == "purchase_order" %}
+                                {{ project.updated_at|date:"d M Y H:i" }}
+                                {% endif %}
+                            </td>
+                            {% else %}
+                            <td>
+                            </td>
+                            {% endif %}
+                            {% is_stage_finished project "delivery" as finished %}
+                            {% if finished or project.stage == "delivery" %}
+                            <td class="{% if not finished %}bg-teal{% endif %} text-white"
+                                style="border-radius: 10 0 0 10; background-color:rgba(102, 204, 255,0.7);">
+                                {% if project.stage == "delivery" %}
+                                {{ project.updated_at|date:"d M Y H:i" }}
+                                {% endif %}
+                            </td>
+                            {% else %}
+                            <td>
+                            </td>
+                            {% endif %} 
+                            {% endif %}
+                        {% endif %}
+                    
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<!-- /Basic initialization -->
+
+{% endblock %}
+{% block javascript %}
+{% endblock javascript %}

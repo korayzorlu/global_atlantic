@@ -1,0 +1,285 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    .home-section{overflow:hidden!important;}
+    
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        <i class="fa-solid fa-building me-2"></i>
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+      <div style="align-items: center;max-height: 90%;" class="border border-1 border-secondary-subtle rounded-2 p-2 m-4 overflow-auto">
+        <div class="row ms-2 me-2">
+          <div class="col-md-8 mt-4">
+            <div class="calendar" id="calendar-3" data-mdb-monday-first="true" data-mdb-calendar-init style="perspective: 1000;transition: .9s;transform-style: preserve-3d;">
+
+            </div>
+          </div>
+
+          <div class="col-md-4 border border-1 border-secondary-subtle" style="overflow: auto;max-height: 90vh;">
+            <div id="carouselExampleCrossfade" class="carousel slide carousel-fade" data-mdb-ride="carousel" data-mdb-carousel-init>
+              <div class="carousel-indicators">
+                <button
+                  type="button"
+                  data-mdb-target="#carouselExampleCrossfade"
+                  data-mdb-slide-to="0"
+                  class="active"
+                  aria-current="true"
+                  aria-label="Slide 1"
+                ></button>
+                <button
+                  type="button"
+                  data-mdb-target="#carouselExampleCrossfade"
+                  data-mdb-slide-to="1"
+                  aria-label="Slide 2"
+                ></button>
+                <button
+                  type="button"
+                  data-mdb-target="#carouselExampleCrossfade"
+                  data-mdb-slide-to="2"
+                  aria-label="Slide 3"
+                ></button>
+              </div>
+              <div class="carousel-inner">
+                <div class="carousel-item active">
+                  <div class="calendarPlan">
+                    <div class="calendars light" style="overflow: auto;max-height: 70vh;">
+                      <div class="calendar_plan">
+                        <div class="cl_plan">
+                          <div class="cl_title fs-5">Today</div>
+                          <div class="cl_copy">22nd  November  2023</div>
+                        </div>
+                      </div>
+                      <div class="calendar_events">
+                        <p class="ce_title">Upcoming Events</p>
+                        <div class="event_item">
+                          <div class="ei_Dot dot_active"></div>
+                          <div class="ei_Title">10:30 am</div>
+                          <div class="ei_Copy">Monday briefing with the team</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">12:00 pm</div>
+                          <div class="ei_Copy">Lunch for with the besties</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">13:00 pm</div>
+                          <div class="ei_Copy">Meet with the client for final design <br> @foofinder</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">14:30 am</div>
+                          <div class="ei_Copy">Plan event night to inspire students</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">15:30 am</div>
+                          <div class="ei_Copy">Add some more events to the calendar</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+                <div class="carousel-item">
+                  <div class="calendarPlan">
+                    <div class="calendars light">
+                      <div class="calendar_plan">
+                        <div class="cl_plan" style="background-color: #003865!important;">
+                          <div class="cl_title fs-5">Personel İzinleri</div>
+                          <div class="cl_copy">22nd  November  2023</div>
+                        </div>
+                      </div>
+                      <div class="calendar_events">
+                        <div class="event_item">
+                          <div class="ei_Dot dot_active"></div>
+                          <div class="ei_Title">Koray Zorlu</div>
+                          <div class="ei_Copy">Yıllık İzin</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">Elif Tuba Korkmaz</div>
+                          <div class="ei_Copy">Yurtdışı Seyahat</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+                <div class="carousel-item">
+                  <div class="calendarPlan">
+                    <div class="calendars light">
+                      <div class="calendar_plan">
+                        <div class="cl_plan text-dark" style="background-color: #BDBDBD!important;">
+                          <div class="cl_title fs-5">Projedeki kişilerin müsaitlikleri</div>
+                          <div class="cl_copy">22nd  November  2023</div>
+                        </div>
+                      </div>
+                      <div class="calendar_events">
+                        <div class="event_item">
+                          <div class="ei_Dot dot_active"></div>
+                          <div class="ei_Title">10:30 am</div>
+                          <div class="ei_Copy">Dilan Çağlayan</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">12:00 pm</div>
+                          <div class="ei_Copy">Koray Zorlu</div>
+                        </div>
+                        <div class="event_item">
+                          <div class="ei_Dot"></div>
+                          <div class="ei_Title">13:00 pm</div>
+                          <div class="ei_Copy">Elif Tuba Korkmaz</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+              </div>
+              <button class="carousel-control-prev text-dark" type="button" data-mdb-target="#carouselExampleCrossfade" data-mdb-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button class="carousel-control-next text-dark" type="button" data-mdb-target="#carouselExampleCrossfade" data-mdb-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+</div>
+
+<script>
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "table";
+    var pageUrl = "/event/calendar_data/"
+    
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/event/calendar/list.js' %}"></script>
+<script>
+
+   //MDB Calendar'ların çalışması için
+   var calendars = $("#calendar-3");
+            for (var i = 0; i < calendars.length; i++) {
+              var calendar = calendars[i];
+              new Calendar(calendar);
+            };
+            
+  const calendarEvent = [
+    {
+      summary: 'JS Conference',
+      start: {
+        date: Calendar.dayjs().format('DD/MM/YYYY'),
+      },
+      end: {
+        date: Calendar.dayjs().format('DD/MM/YYYY'),
+      },
+      color: {
+        background: '#cfe0fc',
+        foreground: '#0a47a9',
+      },
+    },
+    {
+      summary: 'Vue Meetup',
+      start: {
+        date: Calendar.dayjs().add(1, 'day').format('DD/MM/YYYY'),
+      },
+      end: {
+        date: Calendar.dayjs().add(5, 'day').format('DD/MM/YYYY'),
+      },
+      color: {
+        background: '#ebcdfe',
+        foreground: '#6e02b1',
+      },
+    },
+    {
+      summary: 'Angular Meetup',
+      description: 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur',
+      start: {
+        date: Calendar.dayjs().subtract(3, 'day').format('DD/MM/YYYY'),
+        dateTime: Calendar.dayjs().subtract(3, 'day').format('DD/MM/YYYY') + ' 10:00',
+      },
+      end: {
+        date: Calendar.dayjs().add(3, 'day').format('DD/MM/YYYY'),
+        dateTime: Calendar.dayjs().add(3, 'day').format('DD/MM/YYYY') + ' 14:00',
+      },
+      color: {
+        background: '#c7f5d9',
+        foreground: '#0b4121',
+      },
+    },
+    {
+      summary: 'React Meetup',
+      start: {
+        date: Calendar.dayjs().add(5, 'day').format('DD/MM/YYYY'),
+      },
+      end: {
+        date: Calendar.dayjs().add(8, 'day').format('DD/MM/YYYY'),
+      },
+      color: {
+        background: '#fdd8de',
+        foreground: '#790619',
+      },
+    },
+    {
+      summary: 'Meeting',
+      start: {
+        date: Calendar.dayjs().add(1, 'day').format('DD/MM/YYYY'),
+        dateTime: Calendar.dayjs().add(1, 'day').format('DD/MM/YYYY') + ' 8:00',
+      },
+      end: {
+        date: Calendar.dayjs().add(1, 'day').format('DD/MM/YYYY'),
+        dateTime: Calendar.dayjs().add(1, 'day').format('DD/MM/YYYY') + ' 12:00',
+      },
+      color: {
+        background: '#cfe0fc',
+        foreground: '#0a47a9',
+      },
+    },
+    {
+      summary: 'Call',
+      start: {
+        date: Calendar.dayjs().add(2, 'day').format('DD/MM/YYYY'),
+        dateTime: Calendar.dayjs().add(2, 'day').format('DD/MM/YYYY') + ' 11:00',
+      },
+      end: {
+        date: Calendar.dayjs().add(2, 'day').format('DD/MM/YYYY'),
+        dateTime: Calendar.dayjs().add(2, 'day').format('DD/MM/YYYY') + ' 14:00',
+      },
+      color: {
+        background: '#292929',
+        foreground: '#f5f5f5',
+      },
+    }
+  ];
+  
+  
+  const calendarElements = document.getElementById('calendar-3');
+  const calendarInstances = Calendar.getInstance(calendarElements);
+  calendarInstances.addEvents(calendarEvent);
+</script>
+
+{% endblock javascript %}
+

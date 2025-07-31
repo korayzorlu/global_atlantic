@@ -1,0 +1,234 @@
+[
+    {
+        "model": "user.employeetype",
+        "pk": 1,
+        "fields": {
+            "department": 1,
+            "name": "Accounting Director"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 2,
+        "fields": {
+            "department": 1,
+            "name": "Accounting Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 3,
+        "fields": {
+            "department": 7,
+            "name": "Branch Manager"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 4,
+        "fields": {
+            "department": 1,
+            "name": "Corporate Communications Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 5,
+        "fields": {
+            "department": 1,
+            "name": "Driver"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 6,
+        "fields": {
+            "department": 8,
+            "name": "Facilities Staff"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 7,
+        "fields": {
+            "department": 2,
+            "name": "Finance Director"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 8,
+        "fields": {
+            "department": 1,
+            "name": "Housekeepers"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 9,
+        "fields": {
+            "department": 8,
+            "name": "In-Site Team"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 10,
+        "fields": {
+            "department": 1,
+            "name": "IMS Execuitve"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 11,
+        "fields": {
+            "department": 7,
+            "name": "Logistics Assistant Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 12,
+        "fields": {
+            "department": 7,
+            "name": "Logistics Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 13,
+        "fields": {
+            "department": 5,
+            "name": "Managing Director"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 14,
+        "fields": {
+            "department": 6,
+            "name": "Marketing Director"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 15,
+        "fields": {
+            "department": 6,
+            "name": "Marketing Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 16,
+        "fields": {
+            "department": 8,
+            "name": "Occupational Health&Safety Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 17,
+        "fields": {
+            "department": 8,
+            "name": "On-Site Team(Fuel)"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 18,
+        "fields": {
+            "department": 8,
+            "name": "On-Site Team "
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 19,
+        "fields": {
+            "department": 7,
+            "name": "Operations Assistant"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 20,
+        "fields": {
+            "department": 1,
+            "name": "Receptionist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 21,
+        "fields": {
+            "department": 7,
+            "name": "Sales Assistant"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 22,
+        "fields": {
+            "department": 7,
+            "name": "Sales Assistant Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 23,
+        "fields": {
+            "department": 7,
+            "name": "Sales Executive"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 24,
+        "fields": {
+            "department": 7,
+            "name": "Sales Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 25,
+        "fields": {
+            "department": 1,
+            "name": "Senior HR Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 26,
+        "fields": {
+            "department": 8,
+            "name": "Service Engineer"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 27,
+        "fields": {
+            "department": 8,
+            "name": "Technical Coordinator"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 28,
+        "fields": {
+            "department": 7,
+            "name": "Warehouse Specialist"
+        }
+    },
+    {
+        "model": "user.employeetype",
+        "pk": 29,
+        "fields": {
+            "department": 8,
+            "name": "Workshop Foreman"
+        }
+    }
+]

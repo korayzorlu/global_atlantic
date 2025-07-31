@@ -1,0 +1,738 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+    {{company.name}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 5%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{% url 'card:company_update' company.id %}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {% load widget_tweaks %}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+      <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+        <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+      </button>
+      <div class="dropdown">
+        <button class="tableTopButtons inTableButtons dropdown-toggle" type="button" data-mdb-dropdown-init aria-expanded="false" name="pdfButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/setting.svg" alt="" style="height: 18px;">
+        </button>
+        <ul class="dropdown-menu">
+          {% if not company.mikroGuid %}
+            <li>
+              <a class="dropdown-item" hx-get="/card/company_create_mikro/c_{{company.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create new account card in Mikro</a>
+            </li>
+            <li>
+              <a class="dropdown-item" hx-get="/card/match_with_mikro/c_{{company.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Match with Mikro</a>
+            </li>
+            <li>
+              <a class="dropdown-item disabled" hx-get="/card/get_updates_from_mikro/c_{{company.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Get updates from Mikro</a>
+            </li>
+            <li>
+              <a class="dropdown-item disabled" hx-get="/card/send_updates_to_mikro/c_{{company.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Send updates to Mikro</a>
+            </li>
+          {% else %}
+            <li>
+              <a class="dropdown-item disabled" hx-get="#" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create new account card in Mikro</a>
+            </li>
+            <li>
+              <a class="dropdown-item" hx-get="/card/unmatch_with_mikro/c_{{company.id}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Unmatch with Mikro</a>
+            </li>
+            <li>
+              <a class="dropdown-item" hx-get="/card/get_updates_from_mikro/c_{{company.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Get updates from Mikro</a>
+            </li>
+            <li>
+              <a class="dropdown-item" hx-get="/card/send_updates_to_mikro/c_{{company.id}}_hk_{{cariKod}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Send updates to Mikro</a>
+            </li>
+          {% endif %}
+        </ul>
+      </div>
+      <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+      {% if company.mikroGuid %}
+        <div id="mikroStatuss" class="">
+          <div class="p-1 mb-0 me-5 text-blue-900"><i class="fas fa-circle-check me-3"></i>Matched with Mikro</div>
+        </div>
+      {% else %}
+        <div id="mikroStatuss" class="">
+          <div class="p-1 mb-0 me-5 text-red-900"><i class="fas fa-circle-xmark me-3"></i>Not Matched with Mikro</div>
+        </div>
+      {% endif %}
+      {% comment %} <div class="p-1 mb-0 me-5 text-success"><i class="fas fa-satellite-dish me-3"></i>Connected to Mikro</div>
+      <div class="p-1 mb-0 me-5 text-danger"><i class="fas fa-triangle-exclamation me-3"></i>Not connected to Mikro</div> {% endcomment %}
+      <div class="form-check form-switch">
+        {{form.customerCheck}}
+        <label for="{{form.customerCheck.field.widget.attrs.id}}" class="form-check-label me-4 text-dark">Customer</label>
+      </div>
+      <div class="form-check form-switch">
+        {{form.supplierCheck}}
+        <label for="{{form.supplierCheck.field.widget.attrs.id}}" class="form-check-label me-4 text-dark">Supplier</label>
+      </div>
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none;">
+
+      <!-- Tabs navs -->
+      <!-- <ul class="nav nav-pills mb-3 ms-2" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+          <a class="nav-link active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+              Info
+          </a>
+        </li>
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+          <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+            Contact
+          </a>
+        </li>
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-3">
+          <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-3" aria-selected="true">
+            Credit Details
+          </a>
+        </li>
+        {% if company.role.customer == True %}
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-4">
+          <a class="nav-link border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-4" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-4" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-4" aria-selected="true">
+            Fleets
+          </a>
+        </li>
+        {% endif %}
+      </ul> -->
+      <!-- Tabs navs -->
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="row">
+            <!-- <div class="col-md-2">
+              <div class="row">
+                <div class="col-md-12 d-flex justify-content-center">
+                  <div class="file-upload-wrapper" style="background-color: #c9c9c9;width: 90%;">
+                    {% if company.logo %}
+                      {% render_field form.logo data-mdb-default-file=company.logo.url data-mdb-height="10" data-mdb-accepted-extensions="image/*" %}
+                    {% else %}
+                      {% render_field form.logo data-mdb-height="180" data-mdb-accepted-extensions="image/*" %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div> -->
+
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    {{form.name}}
+                    <label for="{{form.name.field.widget.attrs.id}}" class="form-label">Company Name</label>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    {{form.companyNo}}
+                    <label for="{{form.companyNo.field.widget.attrs.id}}" class="form-label">Company No</label>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    {{form.satisTemsilcisi}}
+                    <label for="{{form.satisTemsilcisi.field.widget.attrs.id}}" class="form-label select-label">Key Account</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                        {% if company.mikroGuid %}
+                          {{form.hesapKodu|append_attr:"readonly"}}
+                        {% else %}
+                          {{form.hesapKodu}}
+                        {% endif %}
+                        <label for="{{form.hesapKodu.field.widget.attrs.id}}" class="form-label">Hesap Kodu</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                        {{form.vatNo}}
+                        <label for="{{form.vatNo.field.widget.attrs.id}}" class="form-label">Vat No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                        {{form.vatOffice}}
+                        <label for="{{form.vatOffice.field.widget.attrs.id}}" class="form-label">Vat Office</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <div class="form-outline">
+                        {{form.country}}
+                        <label for="{{form.country.field.widget.attrs.id}}" class="form-label select-label">Country</label>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                      <div class="form-outline">
+                        {{form.city}}
+                        <label for="{{form.city.field.widget.attrs.id}}" class="form-label select-label">City</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                        {{form.address}}
+                        <label for="{{form.address.field.widget.attrs.id}}" class="form-label">Address</label>
+                        <div class="form-helper"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-outline">
+                        {{form.about}}
+                        <label for="{{form.about.field.widget.attrs.id}}" class="form-label">About</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row mb-3"  style="border-radius:0;">
+
+          <!-- Tab Navs -->
+          <ul class="nav nav-pills ms-3" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+              <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} active m-0" data-mdb-pill-init id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                Contact
+              </a>
+            </li>
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+              <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} m-0" data-mdb-pill-init id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                Credit Details
+              </a>
+            </li>
+            {% if company.role.customer == True %}
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-3">
+              <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} m-0" data-mdb-pill-init id="navTagLink-{{elementTag}}-{{elementTagId}}-add-3" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-3" aria-selected="true">
+                Fleets
+              </a>
+            </li>
+            {% endif %}
+          </ul>
+          <!-- TAb NAvs -->
+
+          <!-- Tabs Content -->
+          <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+            
+            <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+              
+              <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+              
+              </div>
+
+              <div class="col-md-12">
+                <div class="row switchConnect">
+
+                  <div class="col-md-12 mb-2">
+                    <div class="row">
+                      <div class="col-md-2 dataTableInputMobile mt-3">
+        
+                        <div class="row" id="phoneBlock1">
+                          <div class="col-md-9 mb-2">
+                            <div class="form-outline">
+                                {{form.phone1}}
+                                <label for="{{form.phone1.field.widget.attrs.id}}" class="form-label">Phone</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3" id="phoneButtons1">
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton1" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                          </div>
+                        </div>
+        
+                        <div class="row d-none" id="phoneBlock2">
+                          <div class="col-md-9 mb-2">
+                            <div class="form-outline">
+                                {{form.phone2}}
+                                <label for="{{form.phone2.field.widget.attrs.id}}" class="form-label">Phone</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3 mb-2" id="phoneButtons2">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton2" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton2" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                          </div>
+                        </div>
+        
+                        <div class="row d-none" id="phoneBlock3">
+                          <div class="col-md-9 mb-2">
+                            <div class="form-outline">
+                                {{form.phone3}}
+                                <label for="{{form.phone3.field.widget.attrs.id}}" class="form-label">Phone</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3 mb-2" id="phoneButtons3">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton3" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton3" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                          </div>
+                        </div>
+                        
+                        <div class="row d-none" id="phoneBlock4">
+                          <div class="col-md-9 mb-2">
+                            <div class="form-outline">
+                                {{form.phone4}}
+                                <label for="{{form.phone4.field.widget.attrs.id}}" class="form-label">Phone</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3 mb-2" id="phoneButtons4">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton4" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton4" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                          </div>
+                        </div>
+        
+                        <div class="row d-none" id="phoneBlock5">
+                          <div class="col-md-9 mb-2">
+                            <div class="form-outline">
+                                {{form.phone5}}
+                                <label for="{{form.phone5.field.widget.attrs.id}}" class="form-label">Phone</label>
+                            </div>
+                          </div>
+                          <div class="col-md-3 mb-2" id="phoneButtons5">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton5" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                          </div>
+                        </div>
+        
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.fax}}
+                                <label for="{{form.fax.field.widget.attrs.id}}" class="form-label">Fax</label>
+                            </div>
+                          </div>
+                        </div>
+        
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.email}}
+                                <label for="{{form.email.field.widget.attrs.id}}" class="form-label">Email</label>
+                            </div>
+                          </div>
+                        </div>
+        
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.web}}
+                                <label for="{{form.web.field.widget.attrs.id}}" class="form-label">Web</label>
+                            </div>
+                          </div>
+                        </div>
+        
+                      </div>
+        
+                      <div class="col-md-10 dataTableMobile">
+                        
+                        <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                            
+                        </div>
+                        
+                        <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                          <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                            <thead>
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Person</th>
+                                  <th>Title</th>
+                                  <th>Email</th>
+                                  <th>Phone</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tbody">
+                              
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                  <th>ID</th>
+                                  <th>Person</th>
+                                  <th>Title</th>
+                                  <th>Email</th>
+                                  <th>Phone</th>
+                                </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+        
+                      </div>
+                    </div>
+                  </div>
+              
+                </div>
+              </div>
+
+            </div>
+
+            <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+              
+              <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-bank" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-bank">
+                    
+              </div>
+
+              <div class="col-md-12">
+                <div class="row mb-3 switchConnect">
+                  
+                  <div class="col-md-12 mb-2">
+                    <div class="row">
+                      <div class="col-md-2 dataTableInputMobile mt-4">
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.creditPeriod}}
+                                <label for="{{form.creditPeriod.field.widget.attrs.id}}" class="form-label">Credit Periot(Day)</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.creditLimit}}
+                                <label for="{{form.creditLimit.field.widget.attrs.id}}" class="form-label">Credit Limit</label>
+                            </div>
+                          </div>
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.currency}}
+                                <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-check form-switch">
+                                {{form.unlimitedCheck}}
+                                <label for="{{form.unlimitedCheck.field.widget.attrs.id}}" class="form-check-label">Unlimited</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.currency2}}
+                                <label for="{{form.currency2.field.widget.attrs.id}}" class="form-label select-label">Currency 2</label>
+                            </div>
+                          </div>
+                          <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.currency3}}
+                                <label for="{{form.currency3.field.widget.attrs.id}}" class="form-label select-label">Currency 3</label>
+                            </div>
+                          </div>
+                          <div class="col-md-12 mb-2">
+                            <div class="form-check form-switch">
+                                {{form.eFatura}}
+                                <label for="{{form.eFatura.field.widget.attrs.id}}" class="form-check-label">E-Fatura</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+    
+                      <div class="col-md-10 dataTableMobile">
+          
+                        <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-bank" hx-target="this" class="row addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-bank">
+                        
+                        </div>
+          
+                        <div class="row tableBox-inform-{{elementTagSub}}-{{elementTagId}}-bank">
+                        <table id="table-{{elementTagSub}}-{{elementTagId}}-bank" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                          <thead>
+                              <tr>
+                                  <th>ID</th>
+                                  <th>Bank Name</th>
+                                  <th>Account No</th>
+                                  <th>IBAN No</th>
+                                  <th>Swift No</th>
+                                  <th>Branch Name</th>
+                                  <th>Branch Code</th>
+                                  <th>Currency</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tbody">
+                                  
+                          </tbody>
+                          <tfoot>
+                              <tr>
+                                <th>ID</th>
+                                <th>Bank Name</th>
+                                <th>Account No</th>
+                                <th>IBAN No</th>
+                                <th>Swift No</th>
+                                <th>Branch Name</th>
+                                <th>Branch Code</th>
+                                <th>Currency</th>
+                              </tr>
+                          </tfoot>
+                        </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+              
+            </div>
+
+            <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-3" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-3">
+              
+              <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-part" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+              
+              </div>
+
+              <div class="col-md-12">
+                {% if company.role.customer == True %}
+                <div class="row mb-3">
+                  
+                  <div class="col-md-12">
+                    <div class="row mb-1 tableBox-inform-companyVessel-{{elementTagId}}">
+                      <table id="table-companyVessel-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                        <thead>
+                            <tr>
+                              <th>ID</th>
+                              <th>Name</th>
+                              <th>Company</th>
+                              <th>Owner</th>
+                              <th>Type</th>
+                              <th>IMO</th>
+                              <th>PIC</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                          {% for vessel in vessels %}
+                                <tr style="vertical-align: middle;">
+                                    <td>{{vessel.id}}</td>
+                                    <td>{{vessel.name}}</td>
+                                    <td>{{vessel.company}}</td>
+                                    <td>{{vessel.owner}}</td>
+                                    <td>{{vessel.type}}</td>
+                                    <td>{{vessel.imo}}</td>
+                                    <td>{{vessel.pic}}</td>
+                                </tr>
+                          {% endfor %}
+                          <tr style="vertical-align: middle;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                          <tr style="vertical-align: middle;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                          <tr style="vertical-align: middle;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                          <tr style="vertical-align: middle;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                          <tr style="vertical-align: middle;"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+        
+                  </div>
+                 
+                </div>
+              
+              {% endif %}
+              </div>
+
+            </div>
+
+          </div>
+          <!-- Tabs Content -->
+
+      </div>
+
+    </div>
+
+  
+  </form>
+</div>
+
+<script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/js/file-upload.min.js' %}"></script>
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var companyId = "{{company.id}}";
+  var pageUrl = "/card/company_update/{{elementTagId}}/"
+  var cariKod = "{{cariKod}}";
+  var mikroDBName = "{{user.profile.sourceCompany.mikroDBName}}";
+
+  
+
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  {% comment %} if(wsMikroData.status == "Connected to Mikro"){
+    document.getElementById('cariKodAlert').innerHTML = '<div class="p-1 mb-0 me-5 text-success"><i class="fas fa-satellite-dish me-3"></i>' + wsMikroData.status + '</div>';
+  }else{
+      $('#cariKodAlert').innerHTML = '<div class="p-1 mb-0 me-5 text-danger"><i class="fas fa-triangle-exclamation me-3"></i>' + wsMikroData.status + '</div>';
+  }; {% endcomment %}
+  
+
+  // Country seçildiğinde AJAX isteği yaparak City'leri günceller
+  {% comment %} asd(function() {
+    var countryInformId = $('#id_country').val();
+    $.ajax({
+        url: '/card/api/cities',
+        data: {'country': countryInformId},
+        dataType: 'json',
+        success: function(data) {
+            $('#id_city').empty();
+            $.each(data, function(i, city) {
+                $('#id_city').append($('<option>').val(city.id).text(city.name));
+            });
+            $("#id_city").trigger("change");
+        }
+    });
+  }); {% endcomment %}
+
+
+  $('#{{form.country.field.widget.attrs.id}}').on('change', function() {
+    var countryInformId = $(this).val();
+    $.ajax({
+        url: '/card/api/cities',
+        data: {'country': countryInformId},
+        dataType: 'json',
+        success: function(data) {
+            $('#{{form.city.field.widget.attrs.id}}').empty();
+            $.each(data, function(i, city) {
+                $('#{{form.city.field.widget.attrs.id}}').append($('<option>').val(city.id).text(city.name));
+            });
+            $("#{{form.city.field.widget.attrs.id}}").trigger("change");
+        }
+    });
+  });
+
+
+
+  //phone button control
+  $("#addPhoneButton1").click(function() {
+    $("#phoneBlock2").removeClass("d-none");
+    $("#phoneButtons1").addClass("d-none");
+  });
+
+  $("#addPhoneButton2").click(function() {
+    $("#phoneBlock3").removeClass("d-none");
+    $("#phoneButtons2").addClass("d-none");
+  });
+
+  $("#addPhoneButton3").click(function() {
+    $("#phoneBlock4").removeClass("d-none");
+    $("#phoneButtons3").addClass("d-none");
+  });
+
+  $("#addPhoneButton4").click(function() {
+    $("#phoneBlock5").removeClass("d-none");
+    $("#phoneButtons4").addClass("d-none");
+  });
+
+  $("#removePhoneButton2").click(function() {
+    $("#phoneBlock2").addClass("d-none");
+    $("#phoneButtons1").removeClass("d-none");
+    $("#id_phone2")[0].value = "";
+  });
+
+  $("#removePhoneButton3").click(function() {
+    $("#phoneBlock3").addClass("d-none");
+    $("#phoneButtons2").removeClass("d-none");
+    $("#id_phone3")[0].value = "";
+  });
+
+  $("#removePhoneButton4").click(function() {
+    $("#phoneBlock4").addClass("d-none");
+    $("#phoneButtons3").removeClass("d-none");
+    $("#id_phone4")[0].value = "";
+  });
+
+  $("#removePhoneButton5").click(function() {
+    $("#phoneBlock5").addClass("d-none");
+    $("#phoneButtons4").removeClass("d-none");
+    $("#id_phone5")[0].value = "";
+  });
+
+
+  // Ülke seçildiğinde AJAX isteği yaparak şehirleri güncelleyen JavaScript kodu
+  /*$('#id_country').on('change', function() {
+    var countryId = $(this).val();
+    $.ajax({
+        url: '/card/api/cities',
+        data: {'country': countryId},
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            $('#id_city').empty();
+            $.each(data, function(i, city) {
+                $('#id_city').append($('<option>').val(city.id).text(city.name));
+            });
+        }
+    });
+  });*/
+
+
+
+
+
+
+
+  $(".editName").click(function() {
+    console.log("sdfasdg")
+    if($(".formName").is("[readonly]")){
+        $(".formName").prop("readonly", false);
+        $(".formName").removeClass("form-control-plaintext");
+        $(".formName").addClass("form-control");
+        $(".formName").css({"background" : "#fff"});
+    }else{
+        $(".formName").prop("readonly", true);
+        $(".formName").removeClass("form-control");
+        $(".formName").addClass("form-control-plaintext");
+        $(".formName").css({"background" : "none"});
+    };
+  });
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-3").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}-bank").DataTable().columns.adjust();
+  });
+
+</script>
+
+{% block javascript %}
+<script>
+
+  var vesselDataTable = $("#vesselsTableSmall")
+  var vesselApiSource = '/card/api/vessels?company={{company.id}}&format=datatables';
+  var vesselColumns = [
+                  {"data" : "id"},
+                  {"data" : "name"},
+                  {"data" : "company"},
+                  {"data" : "owner"},
+                  {"data" : "type"},
+                  {"data" : "imo"},
+                  {"data" : "pic"}
+  ];
+</script>
+<script src="{% static 'js/card/company/detail.js' %}"></script>
+
+{% endblock javascript %}

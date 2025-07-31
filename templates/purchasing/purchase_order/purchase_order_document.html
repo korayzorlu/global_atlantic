@@ -1,0 +1,95 @@
+{% load static %}
+{% load widget_tweaks %}
+
+
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-12 d-flex justify-content-center">
+          <div class="file-upload-wrapper" style="background-color: #c9c9c9;">
+              {% render_field purchaseOrderDocumentForm.file data-mdb-height="100" data-mdb-accepted-extensions=".pdf" %}
+          </div>
+        </div>
+    </div>
+    <div class="row p-2">
+        <div class="col-md-12 d-grid">
+            <button type="button" id="purchaseOrderDocumentUploadButton" class="btn btn-sm d-none d-flex justify-content-center text-center bg-blue-gray-900 text-white" style="cursor:pointer;">
+                Upload
+                <i class="fa-solid fa-cloud-arrow-up ms-2"></i>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 overflow-auto" style="max-height:240px;">
+            {% for document in documents %}
+            <div class="row p-2">
+                <div class="col-md-11 text-start">
+                    <a hx-get="/purchasing/purchase_order_document_pdf/{{document.id}}_{{document.name}}" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                        <i class="fa-solid fa-file-pdf fa-xl"></i>
+                        {{document.name}}
+                    </a>
+                </div>
+                <div class="col-md-1 text-center">
+                    <button type="button" data-document-id="{{document.id}}" class="deleteData tableTopButtons inTableButtons p-0 m-0 purchaseOrderDocumentRemoveButton" style="height:auto;">
+                        <i class="fa-regular fa-trash-can text-red-300" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Remove this image" style="font-size:0.875rem;"></i>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#purchaseOrderDocumentUpload").on("fileAdd.mdb.fileUpload", function(e) {
+
+        $("#purchaseOrderDocumentUploadButton").removeClass("d-none");
+
+        $("#purchaseOrderDocumentUploadButton").off("click").on("click", function(){
+            var formData = new FormData();
+            formData.append('file', e.files[0]);
+            
+            $.ajax({
+                type: "POST",
+                url: "/purchasing/purchase_order_document_add/ot_{{purchaseOrder.id}}/",
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function () {
+                    document.getElementById("purchaseOrderDocumentRow-{{elementTag}}-{{purchaseOrder.id}}").innerHTML = "";
+                    htmx.ajax('GET', "/purchasing/purchase_order_document/{{purchaseOrder.id}}", "#purchaseOrderDocumentRow-{{elementTag}}-{{purchaseOrder.id}}");
+                }
+            });
+
+            {% comment %} htmx.ajax("POST", "/purchasing/purchase_order_document_add/ot_{{purchaseOrder.id}}/", {target : "#addUpdateDataDialog-inform", headers : "{'X-CSRFToken': '{{ csrf_token }}'}"});
+
+            
+
+            setTimeout(function(){
+                htmx.ajax('GET', "/purchasing/purchase_order_document/{{purchaseOrder.id}}", "#purchaseOrderDocumentRow-{{elementTag}}-{{purchaseOrder.id}}");
+            },1500); {% endcomment %}
+
+            
+
+            
+        });
+
+    });
+    
+    $("#purchaseOrderDocumentUpload").on("fileRemove.mdb.fileUpload", function(e) {
+        $("#purchaseOrderDocumentUploadButton").addClass("d-none");
+    });
+
+    $(".purchaseOrderDocumentRemoveButton").on("click", function(){
+        let documentId = $(this).attr("data-document-id");
+        $.ajax({
+            type: "POST",
+            url: "/purchasing/purchase_order_document_delete/" + documentId + "/",
+            success: function () {
+                document.getElementById("purchaseOrderDocumentRow-{{elementTag}}-{{purchaseOrder.id}}").innerHTML = "";
+                htmx.ajax('GET', "/purchasing/purchase_order_document/{{purchaseOrder.id}}", "#purchaseOrderDocumentRow-{{elementTag}}-{{purchaseOrder.id}}");
+            }
+        });
+    });
+
+</script>

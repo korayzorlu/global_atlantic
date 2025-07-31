@@ -1,0 +1,188 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Contact Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Information' %}{% endblock %}
+{% block childDirectory %}{% trans 'Contact Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:contact_person_data' %}{% endblock %}
+{% block mainRoute %}Contact{% endblock %}
+{% block childRoute %}Contact Detail{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/contact/contact_detail.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-7">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Contact Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Contact</u> information.</li>
+                        </ul>
+                    </div>
+                    {% block buttoneditremove %}
+                        {% include "components/buttoneditremove.html" %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted">{% trans 'First Name' %}</th>
+                            <td>{{contact.first_name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Last Name' %}</th>
+                            <td>{{contact.last_name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Email Address' %}</th>
+                            <td><a href="mailto:{{contact.email}}" target="_blank">{{contact.email}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Birthday' %}</th>
+                            <td>{{contact.birthday}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Phone Number' %}</th>
+                            <td><a href="tel:{{contact.phone_number}}" target="_blank">{{contact.phone_number}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Office Address' %}</th>
+                            <td>{{contact.office_address}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Position' %}</th>
+                            <td>{{contact.position}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">
+                                {% trans 'Company' %}
+                            </th>
+                            <td class="p-0">
+                                {% for company in contact.company.all %}
+                                <div class="exit">
+                                    <a href="{% url 'information:company_detail' company.id %}" target="_blank"
+                                        class="font-weight-semibold letter-icon-title">
+                                        {{ company }}</a>
+                                    <!-- <div class="text-muted font-size-sm"><i>{{ contact }}</i></div> -->
+                                </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans 'Default Person in Contact of' %}</th>
+                            <td>
+                                {% if contact.default_person_in_contact_of %}
+                                <a href="{% url 'information:company_detail' contact.default_person_in_contact_of.id %}" target="_blank">
+                                    {{contact.default_person_in_contact_of}}</a>
+                                {% else %}
+                                -
+                                {% endif %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/history.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Company History' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Company</u> list for this contact.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <colgroup>
+                                <col span="1" style="width: 60%">
+                            </colgroup>
+                            <tr>
+                                <th>{% trans 'Company' %}</th>
+                                <th>{% trans 'Working Status' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for history in contact.company_history.all %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'information:company_detail' history.company.id %}" target="_blank">
+                                        {{history.company}}
+                                    </a>
+                                </td>
+                                <td>{{history.get_working_status_display}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /Company info -->
+</div>
+
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    let companyEditURL = "{% url 'information:contact_edit' contact.id %}"
+    let companyDeleteURL = "{% url 'information:contact_delete' contact.id %}"
+</script>
+<script type="module" src="{% static 'js/information/contact/contact_detail.js' %}"></script>
+{% endblock javascript %}

@@ -1,0 +1,451 @@
+{% extends 'layout/dashboard_layout.html' %}
+
+{% load static %}
+
+{% block body %}
+
+<li class="nav-item ms-1 p-1" role="presentation" id="dashboardNavTag">
+    <a class="nav-link mainNavLink" id="dashboardNavTagLink" data-mdb-toggle="tab" href="#dashboardTabPane" role="tab" aria-controls="dashboardTabPane" aria-selected="true" >
+        <i class="fa-solid fa-table me-2"></i>
+        {{tag}}
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="dashboardTabPane" role="tabpanel" aria-labelledby="dashboardNavTagLink">
+
+<div class="globalBoxes">
+    <div class="box">
+        <div class="overview-boxes row mb-3">
+            <div class="col-md-3">
+                <div class="row p-2">
+                    <div class="card col-md-12 shadow-4" style="background-color: rgb(187,211,235);">
+                        <div class="row p-2">
+                            <div class="col-md-12 text-start fs-5">Profile</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4 text-center">
+                                {% if user.profile.image %}
+                                    <div class="row">
+                                        <div class="col-md-12 text-center">
+                                            <img src="{{user.profile.image.url}}" style="width:auto;max-height:80px;border-radius:50%;" class="text-center">
+                                        </div>
+                                    </div>
+                                {% else %}
+                                    <img src="/static/images/icons/no-image.png" style="max-width:44px;border-radius:50%;" class="text-center">
+                                {% endif %}
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-12 text-start"><strong>Name: </strong>{{user.first_name}} {{user.last_name}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 text-start"><strong>Position: </strong>{{user.profile.position}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 text-start"><strong>Phone: </strong>{{user.profile.phone}}</div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 text-start"><strong>Bonus: </strong>$0</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row p-2">
+                            <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark" hx-get="{% url 'user:user_profile' request.user %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true">Profile <i class="fa-solid fa-chevron-right"></i></button></div>
+                        </div>
+                        <!-- <i class="bx bxs-cart cart three"></i> -->  
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row p-2">
+                    <div class="card col-md-12 shadow-4" style="background-color: rgb(187,211,235);">
+                        <div class="row p-2">
+                            <div class="col-md-12 text-start fs-5">Last Projects</div>
+                        </div>
+                        {% for request in requests|slice:":4" %}
+                            <div class="row">
+                                <div class="col-md-12 text-center"><span class="text-red-500">{{request.created_date.date|date:'d.m.Y'}} - </span><a href="#" style="text-decoration:underline;">{{request.requestNo}}</a></div>
+                            </div>
+                        {% endfor %}
+                        {% if requests|length < 4 %}
+                            {% for i in ''|center:emptyLineRequestCounter %}
+                            <div class="row">
+                                <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="row p-2">
+                            <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark" data-mdb-ripple-color="dark" hx-get="{% url 'sale:request_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More <i class="fa-solid fa-chevron-right"></i></button></div>
+                        </div>
+                        <!-- <i class="bx bxs-cart cart three"></i> -->  
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row p-2">
+                    <div class="card col-md-12 shadow-4" style="background-color: rgb(187,211,235);">
+                        <div class="row p-2">
+                            <div class="col-md-12 text-start fs-5">Pending Invoices</div>
+                        </div>
+                        {% for approvalInvoice in approvalInvoices|slice:":4" %}
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div>{{approvalInvoice.project.projectNo}} </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="text-truncate" style="max-width: 200px">{{approvalInvoice.quotation.inquiry.theRequest.customer}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if approvalInvoices|length < 4 %}
+                            {% for i in ''|center:emptyLineOCCounter %}
+                            <div class="row">
+                                <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="row p-2">
+                            <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark" hx-get="{% url 'account:order_in_process_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalInvoices|length}}</span> <i class="fa-solid fa-chevron-right"></i></button></div>
+                        </div>
+                        <!-- <i class="bx bxs-cart cart three"></i> -->  
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="row p-2">
+                    <div class="card col-md-12 shadow-4" style="background-color: rgb(187,211,235);">
+                        <div class="row p-2">
+                            <div class="col-md-12 text-start fs-5">Pending Approval</div>
+                        </div>
+                        {% for approvalQuotation in approvalQuotations|slice:":4" %}
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <span class="text-red-500">{{approvalQuotation.quotationDate|date:'d.m.Y'}} - </span>
+                                    <a hx-get="{% url 'sale:manager_approval_update_in_dashboard' approvalQuotation.id %}" hx-target="#addUpdateDataDialogXl" style="text-decoration:underline;">{{approvalQuotation.quotationNo}}</a>
+                                    <span class="text-truncate" style="max-width: 150px"> - {{approvalQuotation.inquiry.theRequest.project.user.first_name}} {{approvalQuotation.inquiry.theRequest.project.user.last_name}}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {% if approvalQuotations|length < 4 %}
+                            {% for i in ''|center:emptyLineMACounter %}
+                            <div class="row">
+                                <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="row p-2">
+                            <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark" hx-get="{% url 'sale:manager_approval_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalQuotations|length}}</span> <i class="fa-solid fa-chevron-right"></i></button></div>
+                        </div>
+                        <!-- <i class="bx bxs-cart cart three"></i> -->  
+                    </div>
+                </div>
+            </div>
+            
+            <!-- <div class="box">
+                <div class="left-side">
+                    <div class="box-topic">Haftalık Satış:</div>
+                    <div class="number">279</div>
+                    <div class="indicator">
+                        <i class="bx bx-down-arrow-alt down"></i>
+                        <span class="text">Geçen haftadan daha düşük</span>
+                    </div>
+                </div>
+                <i class="bx bxs-cart-download cart four"></i>
+            </div> -->
+        </div>
+
+            <div class="large-boxes row mb-5">
+            <div class="col-md-8">
+                <div class="row mb-3 h-100 p-0" style="width: 100%;">
+                    <div class="col-md-12 shadow-4">
+                        <main class="ps-2" style="margin-top: 10px;">
+                            <!-- Container for demo purpose -->
+                            <div class="container px-1">
+                              <!--Section: Chat-->
+                              <section>
+                                <div class="card shadow-4">
+                                  <div class="card-body" style="position: relative; overflow: hidden;">
+                                    <!--Section: Users-->
+                                    <section>
+                                      <!-- Sidenav-->
+                                      <div id="sidenav-inner" class="sidenav shadow-4" data-mdb-hidden="false" data-mdb-accordion="true"
+                                           role="navigation" data-mdb-mode="side" data-mdb-position="absolute" style="z-index: 1000">
+                                        <div class="p-3">
+                                          <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+                                                 aria-describedby="search-addon" />
+                                        </div>
+                          
+                                        <ul class="sidenav-menu">
+                                          <li class="sidenav-item">
+                                            <a class="sidenav-link" href="">
+                                              <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(24).jpg" class="rounded-circle me-2"
+                                                   style="width: 30px; height: 30px" alt="" />
+                                              <span class="d-block">Anna Doe</span>
+                                            </a>
+                                          </li>
+                                          <li class="sidenav-item">
+                                            <a class="sidenav-link" href="">
+                                              <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(9).jpg" class="rounded-circle me-2"
+                                                   style="width: 30px; height: 30px" alt="" />
+                                              <span class="d-block">Alan Turing</span>
+                                            </a>
+                                          </li>
+                                          <li class="sidenav-item">
+                                            <a class="sidenav-link" href="">
+                                              <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(4).jpg" class="rounded-circle me-2"
+                                                   style="width: 30px; height: 30px" alt="" />
+                                              <span class="d-block">Veronica Smith</span>
+                                            </a>
+                                          </li>
+                                          <li class="sidenav-item">
+                                            <a class="sidenav-link" href="">
+                                              <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(32).jpg" class="rounded-circle me-2"
+                                                   style="width: 30px; height: 30px" alt="" />
+                                              <span class="d-block">Tom Johnson</span>
+                                            </a>
+                                          </li>
+                                        </ul>
+                                      </div>
+                                      <!-- Sidenav-->
+                                    </section>
+                                    <!--Section: Users-->
+                          
+                                    <!--Section: Messages-->
+                                    <section class="inner-content">
+                                      <div class="d-flex">
+                                        <button data-mdb-toggle="sidenav" data-target="#sidenav-inner"
+                                                class="btn shadow-4 p-0 d-block d-lg-none" aria-controls="#sidenav-inner" aria-haspopup="true">
+                                          <i class="fas fa-bars fa-lg"></i>
+                                        </button>
+                          
+                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(24).jpg" class="rounded-circle me-2"
+                                             style="width: 30px; height: 30px" alt="" />
+                          
+                                        <span>Anna Doe</span>
+                                      </div>
+                          
+                                      <hr class="hr"/>
+                          
+                                      <!-- Single message - interlocutor -->
+                                      <div class="d-flex justify-content-start w-100">
+                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(24).jpg" class="rounded-circle me-2"
+                                             style="width: 30px; height: 30px" alt="" />
+                                        <p class="p-3 bg-light rounded-4 shadow-4" style="max-width: 533px">
+                                          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                                          Unde praesentium ad, dolores quaerat maxime architecto
+                                          dolore, necessitatibus rem possimus quam ratione sit neque
+                                          quidem officia dolorum nostrum enim dignissimos eum.
+                                          <small class="float-right text-dark mt-4">14:52</small>
+                                        </p>
+                                      </div>
+                                      <!-- Single message - interlocutor -->
+                          
+                                      <!-- Single message - me -->
+                                      <div class="d-flex justify-content-end ms-auto">
+                                        <p class="p-3 bg-primary shadow-4-strong text-white rounded-4" style="max-width: 533px">
+                                          Lorem, ipsum dolor sit amet consectetur adipisicing elit.
+                                          Unde praesentium ad, dolores quaerat maxime architecto
+                                          dolore, necessitatibus rem possimus quam ratione sit neque
+                                          quidem officia dolorum nostrum enim dignissimos eum.
+                                          <small class="float-right mt-4">14:53</small>
+                                        </p>
+                                        <img src="https://mdbootstrap.com/img/Photos/Avatars/img%20(26).jpg" class="rounded-circle ms-2"
+                                             style="width: 30px; height: 30px" alt="" />
+                                      </div>
+                                      <!-- Single message - me -->
+                                    </section>
+                                    <!--Section: Messages-->
+                          
+                                    <!--Section: Message input-->
+                                    <section id="message-input" class="card bg-light">
+                                      <div class="card-body">
+                                        <form class="d-flex">
+                                          <button type="button" class="btn btn-secondary px-3">
+                                            <i class="fas fa-plus-circle"></i>
+                                          </button>
+                          
+                                          <div class="w-100 mx-2">
+                                            <textarea class="form-control" id="textAreaExample" rows="1"
+                                                      placeholder="Type a message"></textarea>
+                                          </div>
+                          
+                                          <button type="button" class="btn btn-secondary px-3">
+                                            <i class="fas fa-thumbs-up"></i>
+                                          </button>
+                                        </form>
+                                      </div>
+                                    </section>
+                                    <!--Section: Message input-->
+                                  </div>
+                                </div>
+                              </section>
+                            </div>
+                        </main>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="row mb-3 h-100 p-2">
+                    <div class="col-md-12 box shadow-4">
+                        <div class="col-md-12">
+                            <div class="title">Notes</div>
+                            <div id="noteBlock">
+
+                            </div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="large-boxes row mb-5">
+            <div class="col-md-8">
+                <div class="row mb-3 h-100 p-2">
+                    <div class="col-md-12 box shadow-4">
+                        <div class="calendar" id="calendar-2" data-mdb-monday-first="true"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="row h-100 p-2">
+                    <div class="col-md-12 shadow-4">
+                        <div class="col-md-12">
+                            <div class="col-md-12 box shadow-4">
+                                <canvas
+                                class="mt-5 h-100"
+                                data-mdb-chart="pie"
+                                data-mdb-dataset-label="Traffic"
+                                data-mdb-labels="['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' , 'Saturday' , 'Sunday ']"
+                                data-mdb-dataset-data="[2112, 2343, 2545, 3423, 2365, 1985, 987]"
+                                data-mdb-dataset-background-color="['rgba(63, 81, 181, 0.5)', 'rgba(77, 182, 172, 0.5)', 'rgba(66, 133, 244, 0.5)', 'rgba(156, 39, 176, 0.5)', 'rgba(233, 30, 99, 0.5)', 'rgba(66, 73, 244, 0.4)', 'rgba(66, 133, 244, 0.2)']"
+                                ></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+    
+</div>
+</div>
+
+<div class="row shadow-5" id="widgetMenu" style="position: absolute;display: none; top:30vh;right: 20px;z-index: 9999999;border:1px solid #c8c7ff;background: #fff;border-radius:0.25rem;">
+    <div class="col-md-12">
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-solid fa-comments fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Messages</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-solid fa-note-sticky fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Notes</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-regular fa-calendar-days fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Calendar</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-solid fa-dollar-sign fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Exchanges</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-solid fa-clock fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Times</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-solid fa-chart-pie fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Reports</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#d7d5d5;border-radius:0.25rem;">
+                    <i class="fa-solid fa-list-check fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Tasks</p> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button type="button" id="openWidgetMenu" class="btn btn-primary btn-floating" style="position: absolute;display: block; top:85vh;right: 10px;z-index: 9999999;animation: 1s ease 0s 1 normal none running fadeIn;">
+    <i class="fa-solid fa-grip"></i>
+</button>
+
+
+<script>
+    var elementTag = "{{elementTag}}";
+    
+    $(".home-section").css({"overflow" : "hidden"});
+    //$("#tabCont").css({"overflow" : "scroll", "height" : "100vh"});
+    $("#dashboardTabPane").css({"overflow" : "scroll"});
+
+    $(".mainNavLink").removeClass("active");
+    $(".mainTabPane").removeClass("show active");
+
+    $("#tabNav").append($("#dashboardNavTag"));
+    $("#tabCont").append($("#dashboardTabPane"));
+    $("#dashboardNavTagLink").addClass("active");
+    $("#dashboardTabPane").addClass("show active");
+
+    $(".mainNavLink:not(.active)").children("button").hide();
+
+    $("#dashboardNavTagLink").on("shown.bs.tab", function(e){
+        $(e.relatedTarget).children("button").hide();
+        $(".home-section").css({"overflow" : "auto"});
+        history.pushState({}, null, "/user");
+    });
+    
+    htmx.ajax('GET', "/note/note_dashboard_data", "#noteBlock");
+
+    $("#openWidgetMenu").on('click',function(){
+        $("#widgetMenu").toggle();
+    });
+
+    //cookies = new URLSearchParams(document.cookie.replaceAll("&", "%26").replaceAll("; ","&"))
+    
+    //if(cookies.get("companyTab") == "true"){
+    //    htmx.ajax('GET', "/card/card_data", "#tabCont");
+    //};
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/user/dashboard/page.js' %}"></script>
+
+{% endblock javascript %}

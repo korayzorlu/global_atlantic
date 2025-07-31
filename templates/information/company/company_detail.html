@@ -1,0 +1,462 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Company Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Information' %}{% endblock %}
+{% block childDirectory %}{% trans 'Company Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:customer_data' %}{% endblock %}
+{% block mainRoute %}{% endblock %}
+{% block childRoute %}Company Detail{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/company/company_detail.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<!-- Modal contact table -->
+<div id="modal_full_for_contacts" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/contact-information.svg' %}" class="rounded" width="44"
+                            height="44" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Contacts Table' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Contact table</u> of this company.</li>
+                        </ul>
+                    </div>
+                    {% block buttonaddlist %}
+                        {% include "components/buttonaddlist.html" %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Position</th>
+                                <th>Phone</th>
+                                <th>E-mail</th>
+                                <th class="dataTableAction">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for contact in company.contacts.all %}
+                            <tr id="{{contact.id}}">
+                                <td>
+                                    <a href="{% url 'information:contact_detail' contact.id %}" class="postForEdit">
+                                        {{contact.get_full_name}}
+                                    </a>
+                                    {% if contact == company.default_person_in_contact %}
+                                    <i data-toggle="tooltip" data-placement="right" class="fas fa-star text-yellow"
+                                        title="{% trans 'Default Person in Contact' %}"></i>
+                                    {% endif %}
+                                </td>
+                                <td>{{contact.position}}</td>
+                                <td><a href="tel:{{contact.phone_number}}" target="_blank">{{contact.phone_number}}</a>
+                                </td>
+                                <td><a href="mailto:{{contact.email}}" target="_blank">{{contact.email}}</a></td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'information:contact_remove' contact.id company.id %}"
+                                            class="button-remove-row button-remove-contact">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal contact table -->
+<!-- Modal contact table -->
+<div id="modal_full_for_vessel" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/vessel.svg' %}" class="rounded" width="44" height="44" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Vessels Table' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Vessel table</u> of this company.</li>
+                        </ul>
+                    </div>
+                    {% block buttonaddForTableList %}
+                        {% include "components/buttonaddForTableList.html" %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Name' %}</th>
+                                <th>{% trans 'Type' %}</th>
+                                <th>{% trans 'Imo' %}</th>
+                                <th>{% trans 'Gross Ton' %}</th>
+                                <th>{% trans 'Summer Deadweight' %}</th>
+                                <th>{% trans 'Year Built' %}</th>
+                                <th>{% trans 'Hull No' %}</th>
+                                <th>{% trans 'Shipyard' %}</th>
+                                <th class="dataTableAction">{% trans 'Actions' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                            {% for vessel in company.available_vessels %}
+                            <tr id="{{vessel.id}}">
+                                <td>
+                                    <a href="{% url 'information:vessel_detail' vessel.id %}" class="postForEdit">
+                                        {{vessel.name}}
+                                    </a>
+                                </td>
+                                <td>{{vessel.type}}</td>
+                                <td>{{vessel.imo}}</td>
+                                <td>{{vessel.gross_ton}}</td>
+                                <td>{{vessel.deadweight}}</td>
+                                <td>{{vessel.year_built}}</td>
+                                <td>{{vessel.hull_no}}</td>
+                                <td>{{vessel.shipyard}}</td>
+                                <td class="p-0">
+                                    <div class="rowActions">
+                                        <a href="{% url 'information:vessel_remove' vessel.id %}?next={{ request.path }}"
+                                            class="button-remove-row button-remove-vessel">
+                                            <img src="{% static 'images/icons/cancel.svg' %}">
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal contact table -->
+<!-- Modal Select Contact for table -->
+<div id="modal_default" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 id="quotationNumber" class="text-center">Contact Add</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <select class="form-control contactList select-search" data-fouc>
+                </select>
+            </div>
+            <div class="modal-footer">
+                <button id="postContactBTN" type="button" class="btn bg-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /modal -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-7">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Company Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Company</u> information.</li>
+                        </ul>
+                    </div>
+                    {% block buttoneditremove %}
+                        {% include "components/buttoneditremove.html" %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted">{% trans "Company Name" %}</th>
+                            <td>{{company.name}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Company Group" %}</th>
+                            <td>{{company.company_group}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Company Type" %}</th>
+                            <td>{{company.company_type}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Direct Phone" %}</th>
+                            <td><a href="tel:{{company.direct_phone}}" target="_blank">{{company.direct_phone}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Phone 1" %}</th>
+                            <td><a href="tel:{{company.phone1}}" target="_blank">{{company.phone1}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Phone 2" %}</th>
+                            <td><a href="tel:{{company.phone2}}" target="_blank">{{company.phone2}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Fax Address" %}</th>
+                            <td><a href="fax:{{company.fax_address}}" target="_blank">{{company.fax_address}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Email" %}</th>
+                            <td><a href="mailto:{{company.email}}" target="_blank">{{company.email}}</a></td>
+                        </tr>
+
+                        <tr>
+                            <th class="text-muted">{% trans "Country" %}</th>
+                            <td>{{company.country}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "City" %}</th>
+                            <td>{{company.city}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Sales Team" %}</th>
+                            <td>
+                                {% if company.sales_team %}
+                                <a href="{% url 'hr:team_detail' company.sales_team.id %}"
+                                    class="text-default font-weight-semibold letter-icon-title">
+                                    {{company.sales_team}}
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Customer Representative" %}</th>
+                            <td>
+                                {% if company.customer_representative %}
+                                <a href="{% url 'hr:user_detail' company.customer_representative.id %}"
+                                    class="text-default font-weight-semibold letter-icon-title">
+                                    {{company.customer_representative}}
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Key Account" %}</th>
+                            <td>
+                                {% if company.key_account %}
+                                <a href="{% url 'hr:user_detail' company.key_account.id %}"
+                                    class="text-default font-weight-semibold letter-icon-title">
+                                    {{company.key_account}}
+                                </a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Vat Office" %}</th>
+                            <td>{{company.vat_office}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Vat No" %}</th>
+                            <td>{{company.vat_no}}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Website" %}</th>
+                            <td><a href="{{company.website}}" target="_blank">{{company.website}}</a></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Address" %}</th>
+                            <td>{{company.address}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/contact-information.svg' %}" class="rounded" width="44"
+                            height="44" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Contacts List' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Contact</u> list of this company.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal"
+                            data-target="#modal_full_for_contacts">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 20.2rem;">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'ID' %}</th>
+                                <th class="w-100">{% trans 'Name' %} / <span class="text-muted">
+                                        {% trans 'Position'%}</span></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyList">
+                            {% for contact in company.contacts.all %}
+                            <tr id="{{contact.id}}">
+                                <td>{{contact.id}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a href="{% url 'information:contact_detail' contact.id %}"
+                                                class="text-default font-weight-semibold letter-icon-title">
+                                                {{contact.get_full_name}}</a>
+                                            {% if contact == company.default_person_in_contact %}
+                                            <i data-toggle="tooltip" data-placement="right" class="fas fa-star text-yellow"
+                                                title="{% trans 'Default Person in Contact' %}"></i>
+                                            {% endif %}
+                                            <div class="text-muted font-size-sm"><i>{{contact.position}}</i></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% if company.is_customer %}
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/vessel.svg' %}" class="rounded" width="44" height="44" alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Vessel List' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Vessel</u> list of this company.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal" data-target="#modal_full_for_vessel">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 20.2rem;">
+                    <table class="table table-bordered vessel-table-list">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'IMO' %}</th>
+                                <th class="w-100">{% trans 'Name' %} / <span class="text-muted">
+                                        {% trans 'Type'%}</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vessel in company.available_vessels %}
+                            <tr id="{{contact.id}}">
+                                <td>{{vessel.imo}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a href="{% url 'information:vessel_detail' vessel.id %}"
+                                                class="text-default font-weight-semibold letter-icon-title">
+                                                {{vessel.name}}</a>
+                                            <div class="text-muted font-size-sm"><i>{{vessel.type}}</i></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    <!-- /Company info -->
+</div>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    const companyID = Number("{{ company.id }}")
+    // <---- Contact actions ---->
+    const contacts_api = "{% url 'information:contacts_api' %}";
+    const contact_api = "{% url 'information:contact_api' 0 %}";
+    // <---- /Contact actions ---->
+    // <---- Contact Table actions ---->
+
+    const contactDetailURL = "{% url 'information:contact_detail' 0 %}";
+    const contactDeleteURL = "{% url 'information:contact_remove' 0 company.id %}";
+    const editImage = "{% static 'images/icons/editing.svg' %}";
+    const removeImage = "{% static 'images/icons/cancel.svg' %}";
+    // <---- /Contact Table actions ---->
+    // <---- Company Table actions ---->
+    const companyURL = "{% url 'information:company_api' company.id %}";
+    const customerDataURL = "{% url 'information:customer_data' %}";
+    const companyEditURL = "{% url 'information:company_edit' company.id %}";
+    const companyDeleteURL = "{% url 'information:company_delete' company.id %}";
+    const company_add_url = "{% url 'information:contact_add' %}?company={{company.id}}&next={{request.path}}";
+    const vessel_add_url = "{% url 'information:vessel_add' %}?manager_company={{company.company_group.id}}&owner_company={{company.id}}&next={{request.path}}"
+    // <---- /Company Table actions ---->
+
+</script>
+<script type="module" src="{% static 'js/information/company/company_detail.js' %}"></script>
+{% endblock javascript %}

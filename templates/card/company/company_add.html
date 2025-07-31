@@ -1,0 +1,512 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      New Company
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+  <form action="/card/company_add/" method="post" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;">
+      <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+        <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+      </button>
+      <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+      <div class="form-check form-switch me-3">
+        {{form.customerCheck}}
+        <label for="textFormOutline" class="form-check-label text-dark">Customer</label>
+      </div>
+      <div class="form-check form-switch me-3">
+        {{form.supplierCheck}}
+        <label for="textFormOutline" class="form-check-label text-dark">Supplier</label>
+      </div>
+      {% comment %} <div class="form-check form-switch me-4">
+        {{form.agentCheck}}
+        <label for="textFormOutline" class="form-check-label text-dark">Ship Agency</label>
+      </div> {% endcomment %}
+      <div id="test-full"></div>
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none;">
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="row">
+                <!-- <div class="col-md-2">
+                  <div class="row">
+                    <div class="col-md-12 d-flex justify-content-center">
+                      <div class="file-upload-wrapper" style="background-color: #c9c9c9;width: 90%;">
+                        {% if company.logo %}
+                          {% render_field form.logo data-mdb-default-file=company.logo.url data-mdb-height="180" data-mdb-accepted-extensions="image/*" %}
+                        {% else %}
+                          {% render_field form.logo data-mdb-height="180" data-mdb-accepted-extensions="image/*" %}
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div> -->
+  
+                <div class="col-md-12 mb-2">
+                  <div class="row">
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                          {{form.name}}
+                          <label for="{{form.name.field.widget.attrs.id}}" class="form-label">Company Name</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                          {{form.companyNo}}
+                          <label for="{{form.companyNo.field.widget.attrs.id}}" class="form-label">Company No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                        {{form.satisTemsilcisi}}
+                        <label for="{{form.satisTemsilcisi.field.widget.attrs.id}}" class="form-label select-label">Key Account</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                            {{form.hesapKodu}}
+                            <label for="{{form.hesapKodu.field.widget.attrs.id}}" class="form-label">Hesap Kodu</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                            {{form.vatNo}}
+                            <label for="{{form.vatNo.field.widget.attrs.id}}" class="form-label">Vat No</label>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                            {{form.vatOffice}}
+                            <label for="{{form.vatOffice.field.widget.attrs.id}}" class="form-label">Vat Office</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="row">
+                        <div class="col-md-6 mb-2">
+                          <div class="form-outline">
+                            {{form.country}}
+                            <label for="{{form.country.field.widget.attrs.id}}" class="form-label select-label">Country</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                          <div class="form-outline">
+                            {{form.city}}
+                            <label for="{{form.city.field.widget.attrs.id}}" class="form-label select-label">City</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                            {{form.address}}
+                            <label for="{{form.address.field.widget.attrs.id}}" class="form-label">Address</label>
+                            <div class="form-helper"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-outline">
+                            {{form.about}}
+                            <label for="{{form.about.field.widget.attrs.id}}" class="form-label">About</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="row">
+  
+                <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-0 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                        
+                </div>
+                
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-2 dataTableInputMobile">
+      
+                      <div class="row" id="phoneBlock1">
+                        <div class="col-md-9 mb-2 mt-4">
+                          <div class="form-outline">
+                              {{form.phone1}}
+                              <label for="{{form.phone1.field.widget.attrs.id}}" class="form-label">Phone</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3 mb-2" id="phoneButtons1">
+                          <button class="btn btn-tertiary btn-floating" id="addPhoneButton1" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                      </div>
+                      <div class="row d-none" id="phoneBlock2">
+                        <div class="col-md-9 mb-2">
+                          <div class="form-outline">
+                              {{form.phone2}}
+                              <label for="{{form.phone2.field.widget.attrs.id}}" class="form-label">Phone</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3 mb-2" id="phoneButtons2">
+                          <button class="btn btn-tertiary btn-floating" id="removePhoneButton2" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                          <button class="btn btn-tertiary btn-floating" id="addPhoneButton2" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                      </div>
+      
+                      <div class="row d-none" id="phoneBlock3">
+                        <div class="col-md-9 mb-2">
+                          <div class="form-outline">
+                              {{form.phone3}}
+                              <label for="{{form.phone3.field.widget.attrs.id}}" class="form-label">Phone</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3 mb-2" id="phoneButtons3">
+                          <button class="btn btn-tertiary btn-floating" id="removePhoneButton3" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                          <button class="btn btn-tertiary btn-floating" id="addPhoneButton3" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                      </div>
+                      
+                      <div class="row d-none" id="phoneBlock4">
+                        <div class="col-md-9 mb-2">
+                          <div class="form-outline">
+                              {{form.phone4}}
+                              <label for="{{form.phone4.field.widget.attrs.id}}" class="form-label">Phone</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3 mb-2" id="phoneButtons4">
+                          <button class="btn btn-tertiary btn-floating" id="removePhoneButton4" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                          <button class="btn btn-tertiary btn-floating" id="addPhoneButton4" type="button" style="color: #8d0e0e;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                      </div>
+      
+                      <div class="row d-none" id="phoneBlock5">
+                        <div class="col-md-9 mb-2">
+                          <div class="form-outline">
+                              {{form.phone5}}
+                              <label for="{{form.phone5.field.widget.attrs.id}}" class="form-label">Phone</label>
+                          </div>
+                        </div>
+                        <div class="col-md-3 mb-2" id="phoneButtons5">
+                          <button class="btn btn-tertiary btn-floating" id="removePhoneButton5" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                        </div>
+                      </div>
+      
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                              {{form.fax}}
+                              <label for="{{form.fax.field.widget.attrs.id}}" class="form-label">Fax</label>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                              {{form.email}}
+                              <label for="{{form.email.field.widget.attrs.id}}" class="form-label">Email</label>
+                          </div>
+                        </div>
+                      </div>
+      
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                              {{form.web}}
+                              <label for="{{form.web.field.widget.attrs.id}}" class="form-label">Web</label>
+                          </div>
+                        </div>
+                      </div>
+      
+                      
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                              {{form.creditPeriot}}
+                              <label for="{{form.creditPeriot.field.widget.attrs.id}}" class="form-label">Credit Periot (Day)</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                              {{form.creditLimit}}
+                              <label for="{{form.creditLimit.field.widget.attrs.id}}" class="form-label">Credit Limit</label>
+                          </div>
+                        </div>
+                        <div class="col-md-12 mb-2">
+                          <div class="form-outline">
+                              {{form.currency}}
+                              <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12 mb-2">
+                          <div class="form-check form-switch">
+                              {{form.unlimitedCheck}}
+                              <label for="{{form.unlimitedCheck.field.widget.attrs.id}}" class="form-check-label">Unlimited</label>
+                          </div>
+                        </div>
+                      </div>
+      
+                    </div>
+      
+                    <div class="col-md-10 dataTableMobile">
+                      
+                      <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-0 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                          
+                      </div>
+                      
+                      <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                        <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                          <thead>
+                              <tr>
+                                <th>ID</th>
+                                <th>Person</th>
+                                <th>Title</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tbody">
+                            
+                          </tbody>
+                          <tfoot>
+                              <tr>
+                                <th>ID</th>
+                                <th>Person</th>
+                                <th>Title</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                              </tr>
+                          </tfoot>
+                        </table>
+                      </div>
+      
+                    </div>
+      
+                  </div>
+      
+                </div>
+                
+              </div>
+            </div>
+          </div>
+
+
+    </div>
+
+    
+  </form>
+</div>
+
+<script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/js/file-upload.min.js' %}"></script>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var sourceCompanyId = "{{user.profile.sourceCompany.id}}";
+  var pageUrl = "/card/company_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  $('#{{form.country.field.widget.attrs.id}}').on('change', function() {
+    var countryInformId = $(this).val();
+    $.ajax({
+        url: '/card/api/cities',
+        data: {'country': countryInformId},
+        dataType: 'json',
+        success: function(data) {
+            $('#{{form.city.field.widget.attrs.id}}').empty();
+            $.each(data, function(i, city) {
+                $('#{{form.city.field.widget.attrs.id}}').append($('<option>').val(city.id).text(city.name));
+            });
+            $("#{{form.city.field.widget.attrs.id}}").trigger("change");
+        }
+    });
+  });
+
+    //phone button control
+    $("#addPhoneButton1").click(function() {
+      $("#phoneBlock2").removeClass("d-none");
+      $("#phoneButtons1").addClass("d-none");
+    });
+  
+    $("#addPhoneButton2").click(function() {
+      $("#phoneBlock3").removeClass("d-none");
+      $("#phoneButtons2").addClass("d-none");
+    });
+  
+    $("#addPhoneButton3").click(function() {
+      $("#phoneBlock4").removeClass("d-none");
+      $("#phoneButtons3").addClass("d-none");
+    });
+  
+    $("#addPhoneButton4").click(function() {
+      $("#phoneBlock5").removeClass("d-none");
+      $("#phoneButtons4").addClass("d-none");
+    });
+  
+    $("#removePhoneButton2").click(function() {
+      $("#phoneBlock2").addClass("d-none");
+      $("#phoneButtons1").removeClass("d-none");
+      $("#id_phone2")[0].value = "";
+    });
+  
+    $("#removePhoneButton3").click(function() {
+      $("#phoneBlock3").addClass("d-none");
+      $("#phoneButtons2").removeClass("d-none");
+      $("#id_phone3")[0].value = "";
+    });
+  
+    $("#removePhoneButton4").click(function() {
+      $("#phoneBlock4").addClass("d-none");
+      $("#phoneButtons3").removeClass("d-none");
+      $("#id_phone4")[0].value = "";
+    });
+  
+    $("#removePhoneButton5").click(function() {
+      $("#phoneBlock5").addClass("d-none");
+      $("#phoneButtons4").removeClass("d-none");
+      $("#id_phone5")[0].value = "";
+    });
+
+
+
+  $("#navTagLink-{{elementTag}}-add-3").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}").DataTable().columns.adjust();
+  });
+
+  $("#removeNav-{{elementTag}}-new").click(function() {
+    var user = "{{user.id}}";
+    var sessionPersons = [];
+
+    fetch('/card/api/persons?company__isnull=true&sessionKey=' + sessionKey + '&user=' + user + '&sourceCompany=' + sourceCompanyId + '&format=datatables', {method : "GET"})
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        for(let i = 0; i < data["data"].length; i++){
+          sessionPersons.push(data["data"][i]["id"])
+        };
+        htmx.ajax("POST", "/card/person_delete/" + sessionPersons, {target : "#addUpdateDataDialog-inform", headers : "{'X-CSRFToken': '{{ csrf_token }}'}"});
+      });
+  });
+
+  $("#form-{{elementTag}}-new").submit(function (event) {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+    event.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    $.ajax({
+      type: "POST",
+      url: "/card/company_add/",  // Formunuzun işleneceği view'ın URL'si
+      data: formData,
+      success: function (response, status, xhr) {
+          // Başarılı yanıt geldiğinde mesajı görüntüleyin
+          if (xhr.status === 204) {
+              setTimeout(function() {
+          
+                let navTagSub = $("#navTag-{{elementTag}}-new");
+                let tabPaneSub = $("#tabPane-{{elementTag}}-new");
+            
+                navTagSub.prev().children("a").addClass("active");
+                
+                navTagSub.prev().children("a").children("button").show();
+                
+                $("#table-{{elementTag}}").DataTable().columns.adjust();
+
+                navTagSub.remove();
+                tabPaneSub.remove();
+
+                $("#table-company").DataTable().ajax.reload(function() {
+                  htmx.process("#table-company");
+                }, false);
+
+
+                fetch('/card/api/companies?ordering=-id&sessionKey={{sessionKey}}&project__user={{user.id}}&format=datatables', {method : "GET"})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data["data"]);
+                    htmx.ajax("GET", "/card/company_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                    window.history.pushState({}, '', "/card/company_update/" + data["data"][0]["id"] + "/");
+                });
+          
+                setTimeout(function() {
+                  $("body").busyLoad("hide", {
+                    animation: "fade"
+                  });
+                }, 500);
+          
+              }, 500);
+          }
+      },
+      error: function (xhr, status, error) {
+        //spinner durdurur
+        $("body").busyLoad("hide", {
+            animation: "fade"
+        });
+      }
+    });
+    
+
+    
+
+  });
+
+
+
+  
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/card/company/add.js' %}"></script>
+
+{% endblock javascript %}

@@ -1,0 +1,165 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+
+      {{orderTracking.project.projectNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 15%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} p-3 fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{ request.path }}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header shadow-4" style="padding: 10px;box-shadow:none!important;">
+        
+      </div>
+
+      <div class="modal-body" style="box-shadow:none; padding:0;">
+
+        <!-- Tabs navs -->
+        <ul class="nav nav-pills mb-3 ms-2" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+            <a class="nav-link active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                Info
+            </a>
+          </li>
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+            <a class="nav-link" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                Parts
+            </a>
+          </li>
+        </ul>
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+        <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+
+          <div class="tab-pane fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+            <div class="row mb-4" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;padding-top:15px;">
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{orderTracking.theRequest.customer.name}}" readonly>
+                      <label for="textFormOutline" class="form-label">Customer</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{orderTracking.theRequest.vessel.name}}" readonly>
+                      <label for="textFormOutline" class="form-label">Vessel</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{orderTracking.theRequest.maker}}" readonly>
+                      <label for="textFormOutline" class="form-label">Maker</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{orderTracking.theRequest.makerType}}" readonly>
+                      <label for="textFormOutline" class="form-label">Type</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrders.0.orderConfirmation.orderConfirmationNo}}" readonly>
+                      <label for="textFormOutline" class="form-label">Order Confirmation No</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrders.0.orderConfirmation.orderConfirmationDate}}" readonly>
+                      <label for="textFormOutline" class="form-label">Order Confirmation Date</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collections.0.agent.name}}" readonly>
+                      <label for="textFormOutline" class="form-label">Delivery Agent</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                  <div class="form-outline">
+                      <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collections.0.port}}" readonly>
+                      <label for="textFormOutline" class="form-label">Port</label>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+          </div>
+
+          <div class="tab-pane fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+              <div class="row mb-1" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;">
+
+             
+                  
+      
+              </div>
+
+          </div>
+
+        </div>
+        <!-- Tabs content -->
+
+      </div>
+      
+      <div class="modal-footer shadow-5-strong d-flex justify-content-between" style="padding: 10px;box-shadow:none!important;">
+        
+        
+        
+      </div>
+      
+  </form>
+
+</div>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var purchaseOrderId = "{{purchaseOrders.0.id}}";
+  var quotationId = "{{purchaseOrders.0.orderConfirmaiton.quotation.id}}"
+  var pageUrl = "/account/order_in_process_update/{{elementTagId}}/"
+
+  $(".addClose-{{elementTag}}").click(function() {
+    document.getElementById("addFormBlock-{{elementTag}}").innerHTML = "";
+    $(".tableBox-{{elementTag}}").eq(0).removeClass("col-md-4");
+    $(".addForm-{{elementTag}}").eq(0).removeClass("col-md-8");
+    $("#table-{{elementTag}}").DataTable().ajax.reload(function(){
+      htmx.process('#table-{{elementTag}}');
+    },false);
+    $("#table-{{elementTag}}_filter").show();
+  });
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+
+
+</script>
+
+{% block javascript %}
+<script src="{% static 'js/account/order_in_process/detail.js' %}"></script>
+{% endblock javascript %}
+

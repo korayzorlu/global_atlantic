@@ -1,0 +1,157 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      New Project
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+  <form action="/purchasing/project_add/" method="post" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none; padding:0;">
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-customer" class="form-control form-control-sm" value="{{user.profile.sourceCompany.formalName}}" readonly>
+                            <label for="formOutline-{{elementTag}}-customer" class="form-label select-label">Customer</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            {{form.projectDate}}
+                            <label for="{{form.projectDate.field.widget.attrs.id}}" class="form-label select-label">Project Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            {{form.customerRef}}
+                            <label for="{{form.customerRef.field.widget.attrs.id}}" class="form-label select-label">Customer Ref</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+      </div>
+      
+  </form>
+</div>
+
+
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var pageUrl = "/purchasing/project_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  $("#form-{{elementTag}}-new").submit(function (event) {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+    event.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    $.ajax({
+      type: "POST",
+      url: "/purchasing/project_add/",  // Formunuzun işleneceği view'ın URL'si
+      data: formData,
+      success: function (response, status, xhr) {
+          // Başarılı yanıt geldiğinde mesajı görüntüleyin
+          if (xhr.status === 204) {
+              setTimeout(function() {
+          
+                let navTagSub = $("#navTag-{{elementTag}}-new");
+                let tabPaneSub = $("#tabPane-{{elementTag}}-new");
+            
+                navTagSub.prev().children("a").addClass("active");
+                
+                navTagSub.prev().children("a").children("button").show();
+                
+                $("#table-{{elementTag}}").DataTable().columns.adjust();
+
+                navTagSub.remove();
+                tabPaneSub.remove();
+
+                $("#table-project").DataTable().ajax.reload(function() {
+                  htmx.process("#table-project");
+                }, false);
+
+
+                fetch('/purchasing/api/projects?ordering=-id&sessionKey={{sessionKey}}&user={{user.id}}&format=datatables', {method : "GET"})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    htmx.ajax("GET", "/purchasing/project_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                    window.history.pushState({}, '', "/purchasing/project_update/" + data["data"][0]["id"] + "/");
+                });
+          
+                setTimeout(function() {
+                  $("body").busyLoad("hide", {
+                    animation: "fade"
+                  });
+                }, 500);
+          
+              }, 500);
+          }
+      },
+      error: function (xhr, status, error) {
+          //spinner durdurur
+          $("body").busyLoad("hide", {
+              animation: "fade"
+            });
+          // Hata durumunda mesajı görüntüleyin
+          $("#message-container-{{elementTag}}-new").html('<div id="message-container-inside-{{elementTag}}-new"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+      }
+    });
+    
+
+    
+
+  });
+
+
+
+  
+
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/purchasing/project/add.js' %}"></script>
+
+{% endblock javascript %}
+

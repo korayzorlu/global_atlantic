@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @page {
+            size: a4 portrait;
+
+            @frame header_frame {
+                /* Static frame */
+                -pdf-frame-content: header_content;
+                left: 25pt;
+                right: 25pt;
+                top: 25pt;
+            }
+
+            @frame content_frame {
+                /* Content Frame */
+                left: 25pt;
+                top: 225pt;
+            }
+        }
+
+        /* Normal */
+        @font-face {
+            font-family: "Arial";
+            src: url('arial.ttf');
+        }
+
+
+        /* Bold */
+        @font-face {
+            font-family: "Arial Bold";
+            src: url('arial-bold.ttf');
+        }
+
+        body {
+            font-family: "Arial";
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header_content">
+        <table class="table">
+            <td>
+
+            </td>
+            <td>
+                <h4>INQUIRY</h4>
+                <h4>test</h4>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <span>Yayın Tarihi</span>
+                        </td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Revizyon Tarihi</span>
+                        </td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Sayfa No</span>
+                        </td>
+                        <td>:
+                            <pdf:pagenumber />
+                            /
+                            <pdf:pagecount />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <span>Katılımcı</span>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>
+                    <span>Doldurma</span>
+                </td>
+                <td></td>
+                <td colspan="2">
+                    <span>Davetiye</span>
+                    <span></span>
+                </td>
+                <td colspan="2">
+                    <span>İnceleme</span>
+                    <span></span>
+                    <span>Dil</span>
+                    <span></span>
+                </td>
+            </tr>
+        </table>
+        <h2></h2>
+    </div>
+</body>
+
+</html>

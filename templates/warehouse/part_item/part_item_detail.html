@@ -1,0 +1,180 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+        {{partItem.itemNo}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form method="post" action="/project_update/{{project.project.id}}" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="deleteButton" hx-get="{% url "warehouse:part_item_delete" partItem.id %}" hx-target="#addUpdateDataDialog">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none; padding:0;">
+
+        <div class="row">
+            <div class="col-md-12">
+
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                        {{form.warehouse}}
+                        <label for="{{form.warehouse.field.widget.attrs.id}}" class="form-label select-label">Warehouse</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-part-partUnique" class="form-control form-control-sm" value="{{partUnique}}" readonly>
+                            <label for="formOutline-{{elementTag}}-part-partUnique" class="form-label">Part Unique</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-part-maker" class="form-control form-control-sm" value="{{partItem.part.maker.name}}" readonly>
+                            <label for="formOutline-{{elementTag}}-part-maker" class="form-label">Maker</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-part-type" class="form-control form-control-sm" value="{{partItem.part.type.type}}" readonly>
+                            <label for="formOutline-{{elementTag}}-part-type" class="form-label">Type</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        {{form.part}}
+                    </div>
+                    
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                          {{form.quantity}}
+                          <label for="{{form.quantity.field.widget.attrs.id}}" class="form-label">Quantity</label>
+                      </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                        {{form.barcode}}
+                        <label for="{{form.barcode.field.widget.attrs.id}}" class="form-label">Barcode</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <div class="form-outline">
+                        {{form.location}}
+                        <label for="{{form.location.field.widget.attrs.id}}" class="form-label">Location</label>
+                    </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <div class="form-outline datepicker">
+                        {{form.itemDate}}
+                        <label for="{{form.itemDate.field.widget.attrs.id}}" class="form-label">Inventory Date</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                          {{form.weight}}
+                          <label for="{{form.weight.field.widget.attrs.id}}" class="form-label">Weight</label>
+                      </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                        {{form.width}}
+                        <label for="{{form.width.field.widget.attrs.id}}" class="form-label">Width</label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                        {{form.height}}
+                        <label for="{{form.height.field.widget.attrs.id}}" class="form-label">Height</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                          {{form.buyingPrice}}
+                          <label for="{{form.buyingPrice.field.widget.attrs.id}}" class="form-label">Buying Price</label>
+                      </div>
+                  </div>
+                  <div class="col-md-2 mb-2">
+                    <div class="form-outline">
+                        {{form.cost}}
+                        <label for="{{form.cost.field.widget.attrs.id}}" class="form-label">Cost</label>
+                    </div>
+                </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                        {{form.salePrice}}
+                        <label for="{{form.salePrice.field.widget.attrs.id}}" class="form-label">Sale Price</label>
+                    </div>
+                  </div>
+                  <div class="col-md-4 mb-2">
+                    <div class="form-outline">
+                        {{form.currency}}
+                        <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                          {{form.note}}
+                          <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                      </div>
+                  </div>
+                </div>
+
+            </div>
+        </div>
+
+      </div>
+      
+  </form>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var partItemId = "{{partItem.id}}";
+  var pageUrl = "/warehouse/part_item_update/{{elementTagId}}/"
+
+  {% comment %} $('#id_part').addClass("form-control form-control-sm form-select select");
+  $('#id_part').data("mdb-size", "sm");
+  $('#id_part').data("mdb-filter", "true"); {% endcomment %}
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/warehouse/part_item/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

@@ -1,0 +1,94 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        <i class="fa-solid fa-folder me-2"></i>
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 11%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+    <!-- Tabs navs Sub-->
+    <ul class="nav nav-pills  sortable-list d-flex" style="background-color: #f1f2f7" id="tabNavSub-{{elementTag}}" data-mdb-sortable="sortable" role="tablist" style="margin-bottom: 0 !important;">
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-table">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-table" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-table" role="tab" aria-controls="tabPane-{{elementTag}}-table" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                List
+            </a>
+        </li>
+    </ul>
+    <!-- Tabs navs Sub-->
+
+    <!-- Tabs content -->
+    <div class="tab-content" id="tabContSub-{{elementTag}}" hx-target="this">
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-table" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-table">
+
+            <div class="globalBoxes split">
+                <div id="addFormBlock-left-{{elementTag}}" hx-target="this" class="box addFormBlock addForm-left-{{elementTag}} d-none">
+                        
+                </div>
+                
+                <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}" style="transition: all 1s ease;">
+                    <table id="table-{{elementTag}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%;transition: all 1s ease;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>File Name</th>
+                                <th>Type</th>
+                                <th>Level</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th></th>
+                                <th>File Name</th>
+                                <th>Type</th>
+                                <th>Level</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div id="addFormBlock-{{elementTag}}" hx-target="this" class="box addFormBlock addForm-{{elementTag}}">
+                    
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    
+    var elementTag = "{{elementTag}}";
+    var elementTagId = "table";
+    var pageUrl = "/library/sale_documents_data/"
+
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/library/sale_documents/list.js' %}"></script>
+
+{% endblock javascript %}
+

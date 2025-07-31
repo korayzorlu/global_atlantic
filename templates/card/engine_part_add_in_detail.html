@@ -1,0 +1,116 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="row border-bottom">
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            {{form.maker}}
+            <label for="{{form.maker.field.widget.attrs.id}}" class="form-label select-label">Maker</label>
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            {{form.makerType}}
+            <label for="{{form.makerType.field.widget.attrs.id}}" class="form-label select-label">Type</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{ form.category }}
+            <label for="{{form.category.field.widget.attrs.id}}" class="form-label">Category</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{ form.serialNo }}
+            <label for="{{form.serialNo.field.widget.attrs.id}}" class="form-label">Serial No</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{ form.cyl }}
+            <label for="{{form.cyl.field.widget.attrs.id}}" class="form-label">Cyl</label>
+          </div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="form-outline">
+            {{ form.description }}
+            <label for="{{form.description.field.widget.attrs.id}}" class="form-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var enginePartId = "{{enginePart.id}}";
+    var vesselId = "{{enginePart.vessel.id}}";
+    var pageUrl = "/card/engine_part_add_in_detail/v_" + vesselId + "/";
+    var addSubDataHxGet = "/card/engine_part_add_in_detail/v_" + vesselId + "/";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+
+    // Maker seçildiğinde AJAX isteği yaparak Type'ları günceller
+    $('#{{form.maker.field.widget.attrs.id}}').on('change', function() {
+        var makerInformId = $(this).val();
+        $("#select-wrapper-{{form.makerType.field.widget.attrs.id}} .form-label.select-fake-value").text("");
+        $.ajax({
+            url: '/data/api/maker_types',
+            data: {'maker': makerInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#{{form.makerType.field.widget.attrs.id}}').empty();
+                $('#{{form.makerType.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+                $.each(data, function(i, type) {
+                    $('#{{form.makerType.field.widget.attrs.id}}').append($('<option>').val(type.id).text(type.type));
+                });
+                //$("#{{form.makerType.field.widget.attrs.id}}").trigger("change");
+            }
+        });
+    });
+
+    {% comment %} $('#id_makerType').on('change', function() {
+        var makerTypeInformId = $(this).val();
+        $("#select-wrapper-id_maker .form-label.select-fake-value").text("");
+        $.ajax({
+          url: '/data/api/maker_types',
+          data: {'id': makerTypeInformId},
+          dataType: 'json',
+          success: function(data) {
+              console.log(data);
+              $.each(data, function(i, makerType) {
+                  $('#id_maker option[value=' + makerType.maker.id + ']').attr('selected', 'selected'); 
+                  
+              });
+              $('#id_maker').trigger("change");
+          }
+        });
+      }); {% endcomment %}
+    
+    
+</script>
+

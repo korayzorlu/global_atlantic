@@ -1,0 +1,68 @@
+{% extends "../../registration/password_reset_root.html" %}
+{% load i18n static %}
+
+{% block title %}Part Client {% endblock %}
+{% block back_button %}{% url 'user:landing_page' %}{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/registration/registration.css' %}">
+
+<!-- Content bloğu -->
+<div class="content d-flex justify-content-center align-items-center">
+    <div class="card company-info col-8 p-3">
+        <div class="card-header">
+            <div class="media flex-md-row mb-2">
+                <a id="iconBuild" class="align-self-md-start mr-3">
+                    <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44" alt="">
+                </a>
+                <div class="media-body">
+                    <h5 class="media-title font-weight-semibold">{% trans 'Part' %}</h5>
+                    <ul class="list-inline list-inline-dotted text-muted mb-0">
+                        <li class="list-inline-item"><u>Part</u> information.</li>
+                    </ul>
+                </div>
+                <div class="align-self-md-center actionButtons">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <colgroup>
+                    <col span="1" style="width: 1%; white-space: nowrap">
+                    <col>
+                </colgroup>
+                <tbody>
+                <tr>
+                    <th class="text-muted">{% trans "Description" %}</th>
+                    <td>{{ part_info.description }}</td>
+                </tr>
+                <tr>
+                    <th class="text-muted">{% trans "Dimensions" %}</th>
+                    <td>
+                        {% if part_info.dimensions %}
+                        {{ part_info.dimensions }}
+                        {% else %}
+                        n/a
+                        {%endif%}
+                    </td>
+                </tr>
+                <tr>
+                    <th class="text-muted">{% trans "Material" %}</th>
+                    <td>
+                        {% if part_info.material %}
+                        {{ part_info.material }}
+                        {% else %}
+                        n/a
+                        {%endif%}
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+{% endblock javascript %}

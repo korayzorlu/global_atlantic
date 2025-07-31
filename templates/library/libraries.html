@@ -1,0 +1,275 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        <i class="fa-solid fa-folder me-2"></i>
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 11%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+  <div class="border border-1 border-secondary-subtle rounded-2 p-2 m-4" style="align-items: center;overflow: auto;max-height: 80vh;">
+      <div class="input-group p-2">
+        <div class="form-outline rounded-0" data-mdb-input-init>
+          <input type="search" id="form1" class="form-control" />
+          <label class="form-label" for="form1">Search</label>
+        </div>
+        <button type="button" class="btn rounded-2" data-mdb-ripple-init style="background-color: #9d2235;">
+          <i class="fas fa-search text-white"></i>
+        </button>
+      </div>
+      <div class="row ms-2 me-2">
+        <div class="col-md-6 border border-1 border-secondary-subtle border-end-0 rounded-2 overflow-auto">
+          <div class="row p-2 " style="max-height: 735px;">
+            <div data-mdb-treetable-init class="treetable d-flex w-100" >
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr data-depth="1">
+                    <td>Card</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Companies</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr>
+                    <td>Vessels</td>
+                    <td>500mb</td>
+                    <td>png</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>Data</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Makers</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr>
+                    <td>Parts</td>
+                    <td>500mb</td>
+                    <td>png</td>
+                  </tr>
+                  <tr>
+                    <td>Service Cards</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Expenses</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>Sales</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Projects</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr>
+                    <td>Inquiry</td>
+                    <td>500mb</td>
+                    <td>png</td>
+                  </tr>
+                  <tr>
+                    <td>Quotation</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Order Process</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Order Confirmations</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Order Not Confirmations</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Purchase Order</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Order Tracking</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>Projects</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Offers</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr>
+                    <td>Active Projects</td>
+                    <td>500mb</td>
+                    <td>png</td>
+                  </tr>
+                  <tr>
+                    <td>Fİnished Projects</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Workshop Calendar</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>Account</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Incoming Invoice</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr>
+                    <td>Send Invoice</td>
+                    <td>500mb</td>
+                    <td>png</td>
+                  </tr>
+                  <tr>
+                    <td>Proforma Invoice</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Process Status</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Payment</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Bank</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>SOA</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>HR</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Departments</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr>
+                    <td>Teams</td>
+                    <td>500mb</td>
+                    <td>png</td>
+                  </tr>
+                  <tr>
+                    <td>Employees</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr>
+                    <td>Organization Chart</td>
+                    <td>500mb</td>
+                    <td>webp</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>Manager</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                  <tr>
+                    <td>Pending Approval</td>
+                    <td>500mb</td>
+                    <td>jpeg</td>
+                  </tr>
+                  <tr data-depth="1">
+                    <td>Vessel API</td>
+                    <td>1,5gb</td>
+                    <td>Folder</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 border border-1 border-secondary-subtle border-start-0 rounded-2">
+          <div class="row mb-1 p-2">
+            <div class="col-md-12 mb-3 text-center">
+                <i class="fa-solid fa-file-invoice" style="font-size:5rem;"></i>
+            </div>
+        </div>
+        <div class="row mb-1 p-2">
+            <div class="col-md-12 mb-3 text-center">
+                <h4>NO DATA</h4>
+            </div>
+        </div>
+        </div>
+      </div>
+  </div>
+    
+
+</div>
+
+<script>
+    
+    var elementTag = "{{elementTag}}";
+    var elementTagId = "table";
+    var pageUrl = "/library/libraries_data/"
+
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/library/library/list.js' %}"></script>
+
+{% endblock javascript %}
+

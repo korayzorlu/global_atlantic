@@ -1,0 +1,472 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Vessel Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Information' %}{% endblock %}
+{% block childDirectory %}{% trans 'Vessel Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:vessel_data' %}{% endblock %}
+{% block mainRoute %}Vessel{% endblock %}
+{% block childRoute %}Vessel Detail{% endblock %}
+
+{% block content %}
+
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/vessel/vessel_detail.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div id="modal_map" class="modal fade">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div id="map" class="modal-body"></div>
+            <script type="text/javascript">
+                // Map appearance
+                var width = "100%";
+                var height = "600";
+                var names = true;
+                var zoom = "7";
+                var imo = {{ vessel.imo }};
+                var show_track = true;
+
+                (
+                    function () {
+                        document.addEventListener('DOMContentLoaded', function () {
+                            document.querySelector(".button-map").addEventListener("click", function () {
+                                initiliaze()
+                            })
+                        });
+
+                        function parseBoolValue(value) {
+                            var new_value;
+                            if (value === undefined) new_value = false;
+                            if (value === 'true' || value == true) new_value = true;
+                            else if (value === 'false' || value == false) new_value = false;
+                            else new_value = false;
+                            return new_value;
+                        };
+
+                        function initiliaze() {
+                            var rh = window.location.href;
+                            if (rh.indexOf('file://') >= 0 || rh.indexOf('file%3A%2F%2F') >= 0) rh = 'testingonly';
+                            rh = encodeURIComponent(rh);
+                            var w = window.width; if (w === undefined) w = 800;
+                            var ws = w.toString();
+                            if ((parseInt(w) < 480 && ws.charAt(ws.length - 1) !== '%')) w = 480;
+                            if (ws.charAt(ws.length - 1) === '%') window.width = ws; else window.width = parseInt(w);
+
+                            var h = window.height; if (h === undefined) h = 600;
+                            var height = parseInt(h);
+                            if (height < 400) window.height = 400; else window.height = height;
+
+                            if (window.names === undefined) window.names = false; else
+                                window.names = parseBoolValue(window.names);
+
+                            window.show_track = parseBoolValue(window.show_track);
+
+                            window.click_to_activate = parseBoolValue(window.click_to_activate);
+                            var f = (typeof (window.fleet) === 'undefined') ? false : window.fleet;
+                            if (f !== false && f.indexOf('@') >= 0) { f = false; }
+                            var fn = (typeof (window.fleet_name) === 'undefined') ? false : encodeURIComponent(window.fleet_name);
+                            if (fn !== false && fn.indexOf('@') >= 0) { fn = false; }
+
+                            if (window.store_position === undefined) window.store_position = true; else
+                                window.store_position = parseBoolValue(window.store_position);
+                            if (window.mmsi !== undefined && parseInt(window.mmsi) != window.mmsi) window.mmsi = undefined;
+                            if (window.imo !== undefined && parseInt(window.imo) != window.imo) window.imo = undefined;
+                            if (window.latitude !== undefined && parseFloat(window.latitude) != window.latitude) window.latitude = undefined;
+                            if (window.longitude !== undefined && parseFloat(window.longitude) != window.longitude) window.longitude = undefined;
+                            document.getElementById("map").innerHTML =
+                                '<iframe name="vesselfinder" id="vesselfinder" '
+                                + ' width="' + window.width + '"'
+                                + ' height="' + window.height + '"'
+                                + ' frameborder="0"'
+                                + ' src="https://www.vesselfinder.com/aismap?'
+                                + 'zoom=' + ((window.zoom === undefined) ? 'undefined' : window.zoom)
+                                + ((window.latitude === undefined) ? '&amp;lat=undefined' : '&amp;lat=' + window.latitude)
+                                + ((window.longitude === undefined) ? '&amp;lon=undefined' : '&amp;lon=' + window.longitude)
+                                + '&amp;width=' + window.width
+                                + '&amp;height=' + window.height
+                                + '&amp;names=' + window.names
+                                + ((window.mmsi === undefined) ? '' : '&amp;mmsi=' + window.mmsi)
+                                + ((window.imo === undefined) ? '' : '&amp;imo=' + window.imo)
+                                + '&amp;track=' + window.show_track
+                                + ((window.fleet === undefined) ? '&amp;fleet=false' : '&amp;fleet=' + f)
+                                + ((window.fleet_name === undefined) ? '&amp;fleet_name=false' : '&amp;fleet_name=' + fn)
+                                + ((window.fleet_timespan !== undefined) ? '&amp;fleet_timespan=' + window.fleet_timespan : '')
+                                + ((window.fleet_hide_old_positions === undefined) ? '&amp;fleet_hide_old_positions=false' : '&amp;fleet_hide_old_positions=' + window.fleet_hide_old_positions)
+                                + '&amp;clicktoact=' + window.click_to_activate
+                                + '&amp;store_pos=' + window.store_position
+                                + ((window.fil === undefined) ? '' : '&amp;fil=' + window.fil)
+                                + ((window.default_maptype === undefined) ? '' : '&amp;default_maptype=' + window.default_maptype)
+                                + '&amp;ra=' + rh
+                                + '">Browser does not support embedded objects.<br/>Visit directly <a href="https://www.vesselfinder.com" target="_blank">www.vesselfinder.com</a>'
+                                + '</iframe>';
+                        }
+                    })();
+            </script>
+        </div>
+    </div>
+</div>
+<!-- Modal contact table -->
+<div id="modal_full_for_transactions" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/transaction.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Transactions Table' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Transactions table</u> of this company.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForTable">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Type' %}</th>
+                                <th>{% trans 'Amount' %}</th>
+                                <th>{% trans 'Status' %}</th>
+                                <th>{% trans 'Date' %}</th>
+                                <th>{% trans 'Action' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal contact table -->
+<!-- Modal contact table -->
+<div id="modal_full_for_vessel_engine" class="modal fade">
+    <div class="modal-dialog modal-full">
+        <div class="modal-content">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/car-engine.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Vessels Table' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Vessel table</u> of this company.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped dataTable">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Maker' %}</th>
+                                <th>{% trans 'Type' %}</th>
+                                <th>{% trans 'Category' %}</th>
+                                <th>{% trans 'Serial No' %}</th>
+                                <th>{% trans 'Cylinder' %}</th>
+                                <th>{% trans 'Action' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Modal contact table -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-7">
+        <div class="card company-info disabledVesselWrapper">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Vessel Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Vessel</u> information.</li>
+                        </ul>
+                    </div>
+                    {% block buttonmapeditremove %}
+                        {% include "components/buttonmapeditremove.html" %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted">{% trans "Manager Company" %}</th>
+                            <td>{{ vessel.manager_company }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Owner Company" %}</th>
+                            <td class="p-0">
+                                <div class="w-100 exit">
+                                    <a href="{% url 'information:company_detail' vessel.owner_company.id %}"
+                                        target="_blank" class="font-weight-semibold letter-icon-title">
+                                        {{ vessel.owner_company }}</a>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th class="text-muted">{% trans "Vessel Name" %}</th>
+                            <td>{{ vessel.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Vessel Type" %}</th>
+                            <td>{{ vessel.get_type_display }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "IMO Number" %}</th>
+                            <td>{{ vessel.imo }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Flag" %}</th>
+                            <td class="pt-0 pb-0"><img src="{{ vessel.flag.url }}" alt="Australia" height="35"></td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Flag Name" %}</th>
+                            <td>{{ vessel.flag_name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Gross Ton" %}</th>
+                            <td>{{ vessel.gross_ton }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Deadweight" %}</th>
+                            <td>{{ vessel.deadweight }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Year Built" %}</th>
+                            <td>{{ vessel.year_built }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Hull No" %}</th>
+                            <td>{{ vessel.hull_no }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Shipyard" %}</th>
+                            <td>{{ vessel.shipyard }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Status" %}</th>
+                            <td>{{ vessel.get_status_display }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">
+                                {% trans 'Person in Contacts' %}
+                            </th>
+                            <td class="contacts p-0">
+                                {% for contact in vessel.person_in_contacts.all %}
+                                <div class="w-100 exit">
+                                    <a href="{% url 'information:contact_detail' contact.id %}" target="_blank"
+                                        class="font-weight-semibold letter-icon-title">
+                                        {{ contact }}</a>
+                                </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/history.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Vessel History' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Vessel History</u> list of this vessel.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 13.4rem;">
+                    <table class="table table-bordered vessel-table-list">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'Field' %}</th>
+                                <th>{% trans 'From' %}</th>
+                                <th>{% trans 'To' %}</th>
+                                <th>{% trans 'Date' %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for change in vessel.all_changes %}
+                            <tr>
+                                <td>{{change.field}}</td>
+                                <td>{{change.old}}</td>
+                                <td>{{change.new}}</td>
+                                <td>{{change.date}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/car-engine.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Vessel Enginee' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Vessel Enginee</u> list of this vessel.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal"
+                            data-target="#modal_full_for_vessel_engine">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 13.4rem;">
+                    <table class="table table-bordered vessel-table-list">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'IMO' %}</th>
+                                <th class="w-100">{% trans 'Name' %} /
+                                    <span class="text-muted">{% trans 'Type' %}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vessel in company.vessels.all %}
+                            <tr id="{{contact.id}}">
+                                <td>{{vessel.imo}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a href="#" class="text-default font-weight-semibold letter-icon-title">
+                                                {{vessel.name}}</a>
+                                            <div class="text-muted font-size-sm"><i>{{vessel.type}}</i></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/transaction.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Transactions' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Transactions</u> list of this vessel.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal"
+                            data-target="#modal_full_for_transactions">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 13.4rem;">
+                    <table class="table table-bordered table-str">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'ID' %}</th>
+                                <th class="w-100">{% trans 'Name' %} /
+                                    <span class="text-muted">{% trans 'Position' %}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyList">
+                            {% for contact in company.contacts.all %}
+                            <tr id="{{contact.id}}">
+                                <td>{{contact.id}}</td>
+
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a href="#" class="text-default font-weight-semibold letter-icon-title">
+                                                {{contact.get_full_name}}</a>
+                                            <div class="text-muted font-size-sm"><i>{{contact.position}}</i></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+
+<script>
+    let status = "{{vessel.get_status_display}}"
+    let companyEditURL = "{% url 'information:vessel_edit' vessel.id %}"
+    let companyDeleteURL = "{% url 'information:vessel_remove' vessel.id %}"
+
+</script>
+<script type="module" src="{% static 'js/information/vessel/vessel_detail.js' %}"></script>
+{% endblock javascript %}

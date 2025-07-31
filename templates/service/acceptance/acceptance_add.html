@@ -1,0 +1,338 @@
+{% load static %}
+
+<style>
+  .select-option-text{font-size:0.75rem!important;}
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0!important;">
+      New Acceptance
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+  <form method="post" action="/service/acceptance_add/" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none;">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row">
+
+              <div class="col-md-7 mb-2">
+
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.customer}}
+                      <label for="selectFormOutline" class="form-label select-label">Customer</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.person}}
+                      <label for="selectFormOutline" class="form-label select-label">Person</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.vessel}}
+                      <label for="selectFormOutline" class="form-label select-label">Vessel</label>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row">
+                  <div class="col-md-12 mb-2">
+                    <div class="form-outline">
+                      {{form.equipment}}
+                      <label for="selectFormOutline" class="form-label select-label">Equipment</label>
+                    </div>
+                  </div>
+                </div>
+                
+              </div>
+
+              <div class="col-md-5 mb-2">
+
+                <div class="row">
+
+                  <div class="col-md-8 mb-2">
+
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.machineType}}
+                          <label for="selectFormOutline" class="form-label select-label">Machine Type</label>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.customerRef}}
+                          <label for="selectFormOutline" class="form-label">Customer Ref.</label>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.paymentType}}
+                          <label for="selectFormOutline" class="form-label">Payment Type</label>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.deliveryMethod}}
+                          <label for="selectFormOutline" class="form-label">Delivery Method</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 mb-2">
+
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline datepicker">
+                          {{form.acceptanceDate}}
+                          <label for="selectFormOutline" class="form-label">Offer Date</label>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.period}}
+                          <label for="selectFormOutline" class="form-label">Period</label>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.currency}}
+                          <label for="selectFormOutline" class="form-label select-label">Currency</label>
+                        </div>
+                      </div>
+                    </div>
+    
+                    <div class="row">
+                      <div class="col-md-12 mb-2">
+                        <div class="form-outline">
+                          {{form.discount}}
+                          <label for="selectFormOutline" class="form-label">Discount</label>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+      
+  </form>
+</div>
+
+
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var pageUrl = "/service/acceptance_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  // Company seçildiğinde AJAX isteği yaparak Vessel ve Person'ları günceller
+  $('#id_customer').on('change', function() {
+    var companyInformId = $(this).val();
+    console.log(companyInformId);
+    //$("#select-wrapper-id_vessel .form-label.select-fake-value").text("");
+    $.ajax({
+        url: '/card/api/vessels',
+        data: {'company': companyInformId},
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            $('#id_vessel').empty();
+            $('#id_vessel').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, vessel) {
+                $('#id_vessel').append($('<option>').val(vessel.id).text(vessel.name));
+            });
+            //$('#id_vessel').trigger("change");
+        }
+    });
+    $.ajax({
+      url: '/card/api/persons',
+      data: {'company': companyInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          $('#id_person').empty();
+          $('#id_person').append($('<option>').val("").text("--------"));
+          $.each(data, function(i, person) {
+              $('#id_person').append($('<option>').val(person.id).text(person.name));
+          });
+      }
+    });
+  });
+
+  $('#id_vessel').on('change', function() {
+    var vesselInformId = $(this).val();
+    //$("#select-wrapper-id_customer .form-label.select-fake-value").text("");
+    $.ajax({
+      url: '/card/api/engine_parts',
+      data: {'vessel': vesselInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          $('#id_equipment').empty();
+          $('#id_equipment').append($('<option>').val("").text("--------"));
+          $.each(data, function(i, equipment) {
+            $('#id_equipment').append($('<option>').val(equipment.id).text(equipment.maker.name + " | " + equipment.makerType.type + " | " + equipment.category + " | " + equipment.serialNo + " | " + "Cyl: " + equipment.cyl + " | " + "Ver: " + equipment.version));
+            //$('#id_equipment').css({"font-size":"0.5rem"});
+          });
+      }
+    });
+  });
+
+  {% comment %} $("#form-{{elementTag}}-{{elementTagId}}-add-2").submit(function (event) {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+    event.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    $.ajax({
+      type: "POST",
+      url: "/service/acceptance_add/",  // Formunuzun işleneceği view'ın URL'si
+      data: formData,
+      success: function (response, status, xhr) {
+        // Başarılı yanıt geldiğinde mesajı görüntüleyin
+        if (xhr.status === 204) {
+          setTimeout(function() {
+            let navTagSub = $("#navTag-{{elementTag}}-{{elementTagId}}");
+            let tabPaneSub = $("#tabPane-{{elementTag}}-{{elementTagId}}");
+          
+            navTagSub.prev().children("a").addClass("active");
+              
+            navTagSub.prev().children("a").children("button").show();
+            $("#table-{{elementTag}}").DataTable().columns.adjust();
+            
+            navTagSub.remove();
+            tabPaneSub.remove();
+
+            $("#table-purchaseOrder").DataTable().ajax.reload(function() {
+                htmx.process("#table-purchaseOrder");
+            }, false);
+
+            if($("#navTag-purchaseOrder").length > 0){
+              $("#navTagLink-orderConfirmation").removeClass("active");
+              $("#tabPane-orderConfirmation").removeClass("active show");
+              $("#navTagLink-purchaseOrder").addClass("active");
+              $("#tabPane-purchaseOrder").addClass("active show");
+
+              fetch('/sale/api/purchase_orders?ordering=-id&user={{user.id}}&orderConfirmation__id={{elementTagId}}&format=datatables', {method : "GET"})
+              .then((response) => {
+                  return response.json();
+              })
+              .then((data) => {
+                htmx.ajax("GET", "/sale/purchase_order_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                window.history.pushState({}, '', "/sale/purchase_order_update/" + data["data"][0]["id"] + "/");
+                
+              });
+            }else{
+              htmx.ajax("GET", "/sale/purchase_order_data", {target:"#tabCont", swap:"afterbegin"});
+              setNavTabPurchaseOrder();
+              fetch('/sale/api/purchase_orders?ordering=-id&user={{user.id}}&orderConfirmation__id={{elementTagId}}&format=datatables', {method : "GET"})
+              .then((response) => {
+                  return response.json();
+              })
+              .then((data) => {
+                htmx.ajax("GET", "/sale/purchase_order_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                window.history.pushState({}, '', "/sale/purchase_order_update/" + data["data"][0]["id"] + "/");
+              });
+            };
+      
+          setTimeout(function() {
+              $("body").busyLoad("hide", {
+              animation: "fade"
+              });
+          }, 500);
+      
+          }, 500);
+          $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+          // Mesajı belirli bir süre sonra gizle
+          setTimeout(function() {
+          $("#message-container-inside-{{elementTag}}-{{elementTagId}}-add-2").fadeOut("slow");
+          }, 500); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+        }
+        },
+        error: function (xhr, status, error) {
+            //spinner durdurur
+            $("body").busyLoad("hide", {
+                animation: "fade"
+            });
+            // Hata durumunda mesajı görüntüleyin
+            $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+        }
+    });
+  
+
+  
+
+}); {% endcomment %}
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/service/acceptance/add.js' %}"></script>
+
+{% endblock javascript %}
+

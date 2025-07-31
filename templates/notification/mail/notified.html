@@ -1,0 +1,16 @@
+<!-- Base layout eklemimizi sağlayan komut. -->
+{% extends "sales/project/mail/base.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+{% load get_objects %}
+
+{% block banner %}
+<img src="{{the_company.image.url}}" alt="{{the_company.image}}">
+{% endblock %}
+
+{% block content %}
+<p>Dear {{ project.request.person_in_contact.get_full_name }}</p>
+<p>A while ago we sent you our offer (our reference) for your request (customer reference) We kindly ask you to inform us about the status of this project, as the validity of our offer has already expired. If this project is still pending, we would like to know how we can be of assistance, so you will choose our company as supplier for this project. After your feedback we will send you a revised offer with current lead-times and prices. In order to improve our relationship, we would appreciate it if you could provide us some feedback.</p>
+
+<p>We are looking forward to your response. (This is an automatic mail, if you response our quotation already, please disregard it.)</p>
+{% endblock %}

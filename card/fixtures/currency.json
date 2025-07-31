@@ -1,0 +1,135 @@
+[
+  {
+    "model": "card.currency",
+    "pk": 33,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/euro.png",
+      "country": "Euro Member",
+      "currency": "Euro",
+      "code": "EUR",
+      "symbol": "€",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": null,
+      "rateOther": 0.00,
+      "tcmbRateDate": null
+    }
+  },
+  {
+    "model": "card.currency",
+    "pk": 52,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/japan.png",
+      "country": "Japan",
+      "currency": "Yen",
+      "code": "JPY",
+      "symbol": "¥",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": 0.00,
+      "rateOther": null,
+      "tcmbRateDate": null
+    }
+  },
+  {
+    "model": "card.currency",
+    "pk": 83,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/qatar.png",
+      "country": "Qatar",
+      "currency": "Riyal",
+      "code": "QAR",
+      "symbol": "﷼",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": 0.00,
+      "rateOther": null,
+      "tcmbRateDate": null
+    }
+  },
+  {
+    "model": "card.currency",
+    "pk": 85,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/russia.png",
+      "country": "Russia",
+      "currency": "Ruble",
+      "code": "RUB",
+      "symbol": "₽",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": 0.00,
+      "rateOther": null,
+      "tcmbRateDate": null
+    }
+  },
+  {
+    "model": "card.currency",
+    "pk": 102,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/turkey.png",
+      "country": "Turkey",
+      "currency": "Turkish Lira",
+      "code": "TRY",
+      "symbol": "₺",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": 0.00,
+      "rateOther": null,
+      "tcmbRateDate": null
+    }
+  },
+  {
+    "model": "card.currency",
+    "pk": 105,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/unitedkingdom.png",
+      "country": "United Kingdom",
+      "currency": "Pound",
+      "code": "GBP",
+      "symbol": "£",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": null,
+      "rateOther": 0.00,
+      "tcmbRateDate": null
+    }
+  },
+  {
+    "model": "card.currency",
+    "pk": 106,
+    "fields": {
+      "flag": "https://www.currencyremitapp.com/wp-content/themes/currencyremitapp/images/countryimages/unitedstates.png",
+      "country": "United States",
+      "currency": "Dollar",
+      "code": "USD",
+      "symbol": "$",
+      "baseCurrency": "try",
+      "forexBuying": 0.00,
+      "forexSelling": 0.00,
+      "banknoteBuying": 0.00,
+      "banknoteSelling": 0.00,
+      "rateUSD": null,
+      "rateOther": null,
+      "tcmbRateDate": null
+    }
+  }
+]

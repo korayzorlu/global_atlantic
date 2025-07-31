@@ -1,0 +1,53 @@
+{% load static %}
+
+<div class="col-md-6 border dueSendInvoicesWidget">
+    <div class="row p-3 pt-1 pb-0 d-block">
+        <div class="col-md-12">
+
+            <div class="row d-none">
+                <div class="col-md-12 text-end fs-5">
+                    <button class="btn btn-tertiary p-2 removeDueSendInvoicesWidget">
+                        <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="row mb-3 p-2 ps-0">
+                <div class="col-md-12 text-start fs-5">
+                    Due Send Invoices
+                </div>
+            </div>
+
+            <div class="row p-0 mb-3">
+                <div class="col-md-12 text-center fs-5 p-0 overflow-auto" style="height: 400px;">
+                    <table class="table table-striped table-hover dataTable no-footer dashboardTable">
+                        <thead>
+                            <tr>
+                                <th class="text-red-esms fw-bold">PROJECT</th>
+                                <th class="text-red-esms fw-bold">CUSTOMER</th>
+                                <th class="text-red-esms fw-bold">INVOICE</th>
+                                <th class="text-red-esms fw-bold">INVOICE DATE</th>
+                                <th class="text-red-esms fw-bold">PAYMENT DATE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sendInvoice in sendInvoices|slice:":10" %}
+                                <tr>
+                                    {% if sendInvoice.project %}
+                                        <td class="text-start" style="vertical-align:middle;">{{sendInvoice.project.projectNo}}</td>
+                                    {% elif sendInvoice.offer %}
+                                        <td class="text-start" style="vertical-align:middle;">{{sendInvoice.offer.offerNo}}</td>
+                                    {% endif %}
+                                    <td class="text-start" style="vertical-align:middle;">{{sendInvoice.customer.name}}</td>
+                                    <td class="text-start" style="vertical-align:middle;">{{sendInvoice.sendInvoiceNo}}</td>
+                                    <td class="text-start" style="vertical-align:middle;">{{sendInvoice.sendInvoiceDate|date:'d.m.Y'}}</td>
+                                    <td class="text-start" style="vertical-align:middle;">{{sendInvoice.paymentDate|date:'d.m.Y'}}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

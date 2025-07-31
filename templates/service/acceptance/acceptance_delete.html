@@ -1,0 +1,93 @@
+<form hx-post="{{ request.path }}" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-delete" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Delete selected acceptances?</h5>
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-mdb-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit" name="deleteAcceptance">Delete</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var pageUrl = "/service/acceptance_delete/{{elementTagId}}/";
+
+    let ee = elementTag;
+    let ei = elementTagId;
+    let u = pageUrl;
+    
+    $("#form-" + ee +  "-" + ei + "-delete").submit(function (event) {
+      //spinner başlatır
+      $("body").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+      });
+
+      event.preventDefault();
+
+      $.ajax({
+        type: "POST",
+        url: u,  // Formunuzun işleneceği view'ın URL'si
+        success: function (response, status, xhr) {
+            // Başarılı yanıt geldiğinde mesajı görüntüleyin
+            if (xhr.status === 204) {
+                setTimeout(function() {
+                    
+                    let eSub = ee +  "-" + ei + "-delete";
+                    let removeNavSub = $("#removeNav-" + ee +  "-" + ei);
+
+                    let navTagSub = $("#navTag-" + ee +  "-" + ei);
+                    let tabPaneSub = $("#tabPane-" + ee +  "-" + ei);
+                    let sideBarButtonSub = $(".nav-list li ." + ee +  "-" + ei);
+
+                    navTagSub.prev().children("a").addClass("active");
+                    tabPaneSub.prev().addClass("show active");
+                    navTagSub.prev().children("a").children("button").show();
+                    $("#table-" + ee).DataTable().columns.adjust();
+                    navTagSub.remove();
+                    tabPaneSub.remove();
+                    sideBarButtonSub.attr("hx-swap", "afterbegin");
+
+                    $("#table-" + ee).DataTable().ajax.reload(function(){
+                        htmx.process(tableId);
+                    },false);
+                    
+                    setTimeout(function() {
+                        //spinner durdurur
+                        $("body").busyLoad("hide", {
+                        animation: "fade"
+                        });
+                    }, 1000);
+            
+                }, 2000);
+                $("#message-container-" + ee + '-' + ei + "-add-2").html('<div id="message-container-inside-' + ee + '-' + ei + "-add-2" + '"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+                // Mesajı belirli bir süre sonra gizle
+                setTimeout(function() {
+                  $("#message-container-inside-" + ee + '-' + ei + "-add-2").fadeOut("slow");
+                }, 2000); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+            }
+        },
+        error: function (xhr, status, error) {
+          //spinner durdurur
+          $("body").busyLoad("hide", {
+            animation: "fade"
+          });
+            // Hata durumunda mesajı görüntüleyin
+            $("#message-container-" + ee + '-' + ei + "-add-2").html('<div id="message-container-inside-' + ee + '-' + ei + "-add-2" + '"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+        }
+      });
+      
+  
+      
+  
+    });
+</script>

@@ -1,0 +1,67 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Department Data' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Human Resource' %}{% endblock %}
+{% block childDirectory %}{% trans 'Department Data' %}{% endblock childDirectory %}
+{% block href %}{% url 'user:dashboard' %}{% endblock %}
+{% block mainRoute %}{% trans 'Department' %}{% endblock %}
+{% block childRoute %}{% trans 'Department Data' %}{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+{% endblock %}
+
+{% block content %}
+{% url 'hr:department_add' as add_url %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/customer/customer_data/customer_data.css' %}">
+<!-- /StyleSheet End-->
+<!-- Basic initialization -->
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <div class="header-elements">
+            <h5 class="m-0">Departments Table</h5>
+        </div>
+        {% block buttonaddinfo %}
+        {% include "components/buttonaddinfo.html" with add_url=add_url|add:"?next="|add:request.path %}
+        {% endblock %}
+    </div>
+
+    <table id="makerDatatable" class="table table-striped table-hover table-bordered dataTable no-footer">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>No.</th>
+                <th>Name</th>
+                <th>About</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+<!-- /Basic initialization -->
+
+{% endblock %}
+{% block javascript %}
+<script>
+    const department_add_url = "{% url 'hr:department_add' %}?next={{request.path}}";
+    const departments_api = "{% url 'departments_api' %}?format=datatables";
+</script>
+<script type="module" src="{% static 'js/hr/department/department_data/department_data.js' %}"></script>
+{% endblock javascript %}

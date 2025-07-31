@@ -1,0 +1,151 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      {{profile.user.first_name}} {{profile.user.last_name}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form method="post" action="/user_authorization_update/{{user.id}}" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none; padding:0;">
+
+        <div class="row mb-3">
+            <div class="col-md-12">
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            {{form.username}}
+                            <label for="formOutline-{{elementTag}}-username" class="form-label">Username</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            {{form.first_name}}
+                            <label for="formOutline-{{elementTag}}-firstName" class="form-label">First Name</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                          {{form.last_name}}
+                          <label for="formOutline-{{elementTag}}-lastName" class="form-label">Last Name</label>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            {{form.email}}
+                            <label for="formOutline-{{elementTag}}-email" class="form-label">Email</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="password" id="formOutline-{{elementTag}}-password" class="form-control form-control-sm" value="" name="password" autocomplete="new-password">
+                            <label for="formOutline-{{elementTag}}-password" class="form-label">Password</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="password" id="formOutline-{{elementTag}}-passwordConfirm" class="form-control form-control-sm" value="" name="passwordConfirm">
+                            <label for="formOutline-{{elementTag}}-passwordConfirm" class="form-label">Password Confirm</label>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+              <!-- Tabs navs -->
+              <ul class="nav nav-pills mb-1" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+                <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                  <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle active" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                    Source Company
+                  </a>
+                </li>
+              </ul>
+              <!-- Tabs navs -->
+
+              <!-- Tabs Content -->
+              <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+                <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" style="border-radius:0;margin:2px;" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+                  <div class="row">
+                    
+                    <div class="col-md-12">
+                      
+                      <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                      
+                      </div>
+        
+                      <div class="row tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                        <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                          <thead>
+                              <tr>
+                                  {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}" name="parts" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                  <th>Select</th>
+                                  <th>Line</th>
+                                  <th>ID</th>
+                                  <th>Name</th>
+                                  <th>Formal Name</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tbody">
+                                  
+                          </tbody>
+                          <tfoot>
+                        </table>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+      </div>
+      
+  </form>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var userId = "{{theUser.id}}";
+  var pageUrl = "/administration/user_update/{{elementTagId}}/"
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/administration/user/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

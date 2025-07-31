@@ -1,0 +1,316 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      {{requestt.requestNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form method="post" action="/request_update/{{requestt.project.id}}" class="mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+
+      <div class="row m-0">
+        <div class="col-md-12">
+
+          <div class="row mb-3 detailHeader">
+            <div class="col-md-2 d-flex">
+              <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+                <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+              </button>
+              {% comment %} <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+                <img src="/static/images/icons/datatable/pencil.svg" alt="" style="height: 18px;">
+              </button> {% endcomment %}
+              {% if not inquiries %}
+                <button class="tableTopButtons inTableButtons" type="button" name="deleteButton" hx-get="{% url 'sale:request_delete' requestt.project.id %}" hx-target="#addUpdateDataDialog">
+                  <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+                </button>
+              {% endif %}
+              <div class="dropdown">
+                <button class="tableTopButtons inTableButtons dropdown-toggle" type="button" data-mdb-dropdown-init aria-expanded="false" name="pdfButton">
+                    <img src="/static/images/icons/flaticon/{{user.profile.theme}}/setting.svg" alt="" style="height: 18px;">
+                </button>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item" hx-get="/sale/inquiry_add/r_{{requestt.project.id}}" hx-swap="afterbegin" hx-target="#tab-{{elementTag}}-{{elementTagId}}-add" hx-push-url="true" style="cursor:pointer;">Create Inquiry</a>
+                  </li>
+                  <li><a class="dropdown-item" href="#"></a></li>
+                </ul>
+              </div>
+            </div>
+            <div class="col-md-10">
+              <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}" style="line-height: 35px;"></div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-12">
+              
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                        {{form.customer}}
+                        <label for="{{form.customer.field.widget.attrs.id}}" class="form-label select-label">Customer</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                        {{form.vessel}}
+                        <label for="{{form.vessel.field.widget.attrs.id}}" class="form-label select-label">Vessel</label>
+                      </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                      <div class="form-outline">
+                        {{form.customerRef}}
+                        <label for="{{form.customerRef.field.widget.attrs.id}}" class="form-label">Customer Ref.</label>
+                      </div>
+                    </div>
+                  </div>
+  
+                  <div class="row">
+                    <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                        {{form.person}}
+                        <label for="{{form.person.field.widget.attrs.id}}" class="form-label select-label">Customer Contact</label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                        {{form.vesselPerson}}
+                        <label for="{{form.vesselPerson.field.widget.attrs.id}}" class="form-label select-label">Vessel Contact</label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                        {% if parts %}
+                          {{form.maker}}
+                        {% else %}
+                          {{form.maker}}
+                        {% endif %}
+                        <label for="{{form.maker.field.widget.attrs.id}}" class="form-label select-label">Maker</label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                          {% if parts %}
+                            {{form.makerType}}
+                          {% else %}
+                            {{form.makerType}}
+                          {% endif %}
+                          <label for="{{form.makerType.field.widget.attrs.id}}" class="form-label select-label">Type</label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <div class="form-outline">
+                        <input type="text" id="formOutline-{{elementTag}}-requestNo" class="form-control form-control-sm" value="{{requestt.requestNo}}" readonly>
+                        <label for="formOutline-{{elementTag}}-requestNo" class="form-label">Request No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                      <div class="form-outline datepicker">
+                        {{form.requestDate}}
+                        <label for="{{form.requestDate.field.widget.attrs.id}}" class="form-label">Date</label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                        {{form.note}}
+                        <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                        <div class="form-helper"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-md-12">
+                  <!-- Tabs navs -->
+                  <ul class="nav nav-pills mb-1" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+                    <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                      <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle active" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                        Items
+                      </a>
+                    </li>
+                  </ul>
+                  <!-- Tabs navs -->
+  
+                  <!-- Tabs Content -->
+                  <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+                    <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" style="border-radius:0;margin:2px;" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+                      <div class="row">
+                        
+                        <div class="col-md-12" id="partTableMainBlock-{{elementTagSub}}-{{elementTagId}}">
+                          
+                          <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                          
+                          </div>
+            
+                          <div class="row tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                            <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                              <thead>
+                                  <tr>
+                                      {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTagSub}}-{{elementTagId}}" name="parts" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                      <th>Select</th>
+                                      <th>Line</th>
+                                      <th>ID</th>
+                                      <th>Part No</th>
+                                      <th>Description</th>
+                                      <th>
+                                        Quantity
+                                        <button class="inTableButtons p-0 duplicateSelectedQuantityButton" type="button" data-pk="" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Copy selected to all rows">
+                                          <i class="fa-solid fa-clone" style="font-size:.875rem;"></i>
+                                        </button>
+                                      </th>
+                                      <th>Unit</th>
+                                      <th>Stock Code</th>
+                                      <th>Stock</th>
+                                      <th>Warehouse</th>
+                                  </tr>
+                              </thead>
+                              <tbody id="tbody">
+                                      
+                              </tbody>
+                              <tfoot>
+                            </table>
+                          </div>
+                        </div>
+  
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+  </form>
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var theRequestId = "{{requestt.project.id}}";
+  var projectMakerId = "{{requestt.maker.id}}";
+  var pageUrl = "/sale/request_update/{{elementTagId}}/"
+
+  //var maker = "{{requestt.maker.id}}";
+  //var type = "{{requestt.makerType.id}}";
+
+  
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  $("#createInquiryButton").on("click", function(){
+    //spinner başlatır
+    $("body").busyLoad("show", {
+      animation: false,
+      spinner: "pulsar",
+      maxSize: "150px",
+      minSize: "150px",
+      text: "Loading ...",
+      background: "rgba(69, 83, 89, 0.6)",
+      color: "#455359",
+      textColor: "#fff"
+    });
+    $(this).addClass("d-none");
+  });
+
+  $('#{{form.maker.field.widget.attrs.id}}').on('change', function() {
+    var makerInformId = $(this).val();
+    $.ajax({
+        url: '/data/api/maker_types',
+        data: {'maker': makerInformId},
+        dataType: 'json',
+        success: function(data) {
+            $('#{{form.makerType.field.widget.attrs.id}}').empty();
+            $('#{{form.makerType.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, type) {
+                $('#{{form.makerType.field.widget.attrs.id}}').append($('<option>').val(type.pk).text(type.type));
+            });
+            $("#{{form.makerType.field.widget.attrs.id}}").trigger("change");
+        }
+    });
+  });
+
+  // Company seçildiğinde AJAX isteği yaparak Vessel ve Person'ları günceller
+  $('#{{form.customer.field.widget.attrs.id}}').on('change', function() {
+    var companyInformId = $(this).val();
+    console.log(companyInformId);
+    $.ajax({
+        url: '/card/api/vessels',
+        data: {'company__id': companyInformId},
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            $('#{{form.vessel.field.widget.attrs.id}}').empty();
+            $('#{{form.vessel.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, vessel) {
+                $('#{{form.vessel.field.widget.attrs.id}}').append($('<option>').val(vessel.pk).text(vessel.name));
+            });
+        }
+    });
+    $.ajax({
+      url: '/card/api/persons',
+      data: {'company': companyInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          $('#{{form.person.field.widget.attrs.id}}').empty();
+          $.each(data, function(i, person) {
+              $('#{{form.person.field.widget.attrs.id}}').append($('<option>').val(person.pk).text(person.name));
+          });
+      }
+    });
+  });
+
+  $('#{{form.vessel.field.widget.attrs.id}}').on('change', function() {
+    var vesselInformId = $(this).val();
+    $("#select-wrapper-{{form.customer.field.widget.attrs.id}} .form-label.select-fake-value").text("");
+    $.ajax({
+      url: '/card/api/persons',
+      data: {'vessel': vesselInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          $('#{{form.vesselPerson.field.widget.attrs.id}}').empty();
+          $('#{{form.vesselPerson.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+          $.each(data, function(i, person) {
+              $('#{{form.vesselPerson.field.widget.attrs.id}}').append($('<option>').val(person.id).text(person.name));
+          });
+      }
+    });
+  });
+
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/request/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

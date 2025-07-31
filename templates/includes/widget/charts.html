@@ -1,0 +1,170 @@
+{% load static %}
+
+<!-- Chart -->
+<div class="col-md-6 chartWidget">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row p-2 border border-1 shadow-1 drag">
+                <div class="col-md-12" style="display: flex;justify-content: end;">
+                    <button class="btn btn-tertiary p-2 removeChartWidget">
+                        <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                    </button>
+                </div>
+                <div class="col-md-12" style="height: 485px;">
+                    <div class="row mobileChart">
+                        <div class="col-md-12">
+                            <div class="text-start fs-5 widgetHeader">Charts</div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="row p-2">
+                                <div id="carouselExampleInterval" class="carousel slide" data-mdb-ride="carousel">
+                                <div class="carousel-inner">
+                                    <div class="carousel-item active" data-mdb-interval="10000">
+                                        <canvas id="mixedChart" class="d-block w-100" style="height: 400px!important;"></canvas>
+                                    </div>
+                                    <div class="carousel-item" data-mdb-interval="2000">
+                                        <canvas id="scatterChart" class="d-block w-100" style="height: 150px!important;"></canvas>
+                                    </div>
+                                    <div class="carousel-item">
+                                        <canvas id="barChart" class="d-block w-100" style="height: 150px!important;"></canvas>
+                                    </div>
+                                </div>
+                                <button class="carousel-control-prev text-dark" data-mdb-target="#carouselExampleInterval" type="button" data-mdb-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next text-dark" data-mdb-target="#carouselExampleInterval" type="button" data-mdb-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Chart -->
+
+<script>
+    //MixedChart.js
+    const ctx = document.getElementById('mixedChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                'January',
+                'February',
+                'March',
+                'April'
+            ],
+            datasets: [{
+                type: 'bar',
+                label: 'Bar Dataset',
+                data: [10, 20, 30, 40],
+                borderColor: 'rgb(255, 99, 132)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)'
+            }, {
+                type: 'line',
+                label: 'Line Dataset',
+                data: [50, 50, 50, 50],
+                fill: false,
+                borderColor: 'rgb(54, 162, 235)'
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+    //scatterChart
+    const ctx1 = document.getElementById('scatterChart').getContext('2d');
+
+    new Chart(ctx1, {
+        type: 'scatter',
+        data: {
+            datasets: [{
+                label: 'Scatter Dataset',
+                data: [{
+                    x: -10,
+                    y: 0
+                }, {
+                    x: 0,
+                    y: 10
+                }, {
+                    x: 10,
+                    y: 5
+                }, {
+                    x: 0.5,
+                    y: 5.5
+                }],
+                backgroundColor: 'rgb(255, 99, 132)'
+            }],
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'linear',
+                    position: 'bottom'
+                }
+            }
+        }
+    });
+    //barCHart
+    const ctx3 = document.getElementById('barChart').getContext('2d');
+
+    new Chart(ctx3, {
+        type: 'bar',
+        data: {
+            labels: [
+                'January',
+                'February',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July'
+            ],
+            datasets: [{
+                label: 'My First Dataset',
+                data: [65, 59, 80, 81, 56, 55, 40],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 205, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(201, 203, 207, 0.2)'
+                ],
+                borderColor: [
+                    'rgb(255, 99, 132)',
+                    'rgb(255, 159, 64)',
+                    'rgb(255, 205, 86)',
+                    'rgb(75, 192, 192)',
+                    'rgb(54, 162, 235)',
+                    'rgb(153, 102, 255)',
+                    'rgb(201, 203, 207)'
+                ],
+                borderWidth: 1
+            }],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        },
+    });
+//MDB Sortable'ların çalışması için
+new DragAndDrop.Sortable(document.getElementById("widgetReports"));
+new DragAndDrop.Draggable(document.getElementById("widgetReports"));
+</script>

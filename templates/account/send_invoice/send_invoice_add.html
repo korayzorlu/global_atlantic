@@ -1,0 +1,29 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<form method="post" action="/send_invoice_add/oc_{{orderConfirmation.id}}/" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-add-2" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Create send invoice?</h5>
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit">Create</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var orderConfirmationId = "{{orderConfirmation.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/account/send_invoice_add/id_{{model.id}}_type_{{invoiceType}}";
+    var user = "{{user.id}}";
+</script>
+
+{% block javascript %}
+
+
+<script src="{% static 'js/account/send_invoice/add.js' %}"></script>
+
+{% endblock javascript %}

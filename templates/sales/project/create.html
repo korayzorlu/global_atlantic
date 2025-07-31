@@ -1,0 +1,70 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Project Create' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Sales' %}{% endblock %}
+{% block childDirectory %}{% trans 'Project Create' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:customer_data' %}{% endblock %}
+{% block mainRoute %}Project Create{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/information/company/company_add.css' %}">
+<!-- /StyleSheet End-->
+<!-- Content bloğu -->
+<div class="card">
+    <div class="card-header">
+        <div class="media flex-md-row mb-2">
+            <div class="media-body">
+            </div>
+            <div class="header-elements">
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <form id="form" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                {% for field in project_create_request_form %}
+                <div class="form-group col-lg-3">
+                    <label>{{field.label}}</label>
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+                {% endfor %}
+            </div>
+            <!-- /Company info -->
+            <fieldset class="card-body border-top w-100 text-center">
+                <button type="submit" class="btn btn-sm btn-success">{% trans 'Create' %}</button>
+            </fieldset>
+        </form>
+    </div>
+    <!-- /inner container -->
+</div>
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    vessels_api_url = new URL(window.location.href)
+    vessels_api_url.pathname = "{% url 'information:vessels_api' %}"
+    contacts_api_url = new URL(window.location.href)
+    contacts_api_url.pathname = "{% url 'information:contacts_api' %}"
+    maker_types_api_url = new URL(window.location.href)
+    maker_types_api_url.pathname = "{% url 'parts:maker_types_api' %}"
+</script>
+<script src="{% static 'js/sales/project/create/create.js' %}"></script>
+{% endblock javascript %}

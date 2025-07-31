@@ -1,0 +1,271 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+
+      {{purchaseOrder.purchaseOrderNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{request.path}}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton" hx-get="{% url 'sale:purchase_order_delete' purchaseOrder.id %}" hx-target="#addUpdateDataDialog"
+        data-mdb-toggle="tooltip" data-mdb-placement="right" title="Delete">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="saveButton" hx-get="/sale/purchase_order_pdf/{{elementTagId}}_s_po/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true">
+          <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="dropdown">
+          <button class="tableTopButtons inTableButtons dropdown-toggle" type="button" data-mdb-dropdown-init aria-expanded="false" name="pdfButton">
+              <img src="/static/images/icons/flaticon/{{user.profile.theme}}/setting.svg" alt="" style="height: 18px;">
+          </button>
+          <ul class="dropdown-menu">
+              {% if not collection %}
+                <li>
+                  <a class="dropdown-item" hx-get="/sale/order_tracking_add/po_{{purchaseOrder.id}}" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create Order Tracking</a>
+                </li>
+              {% else %}
+                <li>
+                  <a class="dropdown-item disabled" hx-get="#" hx-target="#addUpdateDataDialog" hx-push-url="true" style="cursor:pointer;">Create Order Tracking</a>
+                </li>
+              {% endif %}
+          </ul>
+        </div>
+        <!-- <button class="tableTopButtons inTableButtons" type="submit" name="saveButton"><i class="fa-solid fa-floppy-disk" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save"></i></button>
+        <a class="tableTopButtons inTableButtons" href="#"><i class="fa-solid fa-trash" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Remove"></i></a>
+        <a class="tableTopButtons inTableButtons" hx-get="/sale/purchase_order_pdf/{{elementTagId}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true"><i class="fa-solid fa-print" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Print"></i></a>
+        {% comment %} <a class="tableTopButtons inTableButtons ms-auto" hx-get="/account/incoming_invoice_add/po_{{purchaseOrder.id}}" hx-target="#addUpdateDataDialog" hx-push-url="true"><i class="fa-solid fa-file-import" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Create Incoming Invoice"></i></a> {% endcomment %} -->
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+
+        {% if collection %}
+          <div class="p-1 mb-0" data-mdb-color="success"><i class="fas fa-check-circle me-3"></i>Order Tracking Created</div>
+        {% else %}
+        {% comment %} <button class="shadow-none me-2 create" type="button">
+          <a class="tableTopButtons inTableButtons ms-auto" hx-get="/sale/order_tracking_add/po_{{purchaseOrder.id}}" hx-target="#addUpdateDataDialog" hx-push-url="true"><i class="fa-solid fa-money-bill-1 me-2" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Create Order Tracking"></i>
+            Create Order Tracking
+          </a>
+        </button> {% endcomment %}
+        {% endif %}
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none;;">
+
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-supplier" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.supplier}}" readonly>
+                    <label for="formOutline-{{elementTag}}-supplier" class="form-label">Supplier</label>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-vessel" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.theRequest.vessel}}" readonly>
+                    <label for="formOutline-{{elementTag}}-vessel" class="form-label">Vessel</label>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-supplierRef" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.supplierRef}}" readonly>
+                    <label for="formOutline-{{elementTag}}-supplierRef" class="form-label">Supplier Ref</label>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-maker" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.theRequest.maker}}" readonly>
+                    <label for="formOutline-{{elementTag}}-maker" class="form-label">Maker</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-makerType" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.theRequest.makerType}}" readonly>
+                    <label for="formOutline-{{elementTag}}-makerType" class="form-label">Type</label>
+                  </div>
+                </div>
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-inquiryNo" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.inquiryNo}}" readonly>
+                    <label for="formOutline-{{elementTag}}-inquiryNo" class="form-label">Inquiry No</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-purchaseOrderNo" class="form-control form-control-sm" value="{{purchaseOrder.purchaseOrderNo}}" readonly>
+                    <label for="formOutline-{{elementTag}}-purchaseOrderNo" class="form-label">Purchase Order No</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline datepicker">
+                    {{form.purchaseOrderDate}}
+                    <label for="{{form.purchaseOrderDate.field.widget.attrs.id}}" class="form-label">Date</label>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-md-4 mb-2">
+                  <div class="form-outline">
+                    {{form.delivery}}
+                    <label for="{{form.delivery.field.widget.attrs.id}}" class="form-label">Delivery</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline datepicker">
+                    {{form.orderDueDate}}
+                    <label for="{{form.orderDueDate.field.widget.attrs.id}}" class="form-label select-label">Order Due Date</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline">
+                    {{form.payment}}
+                    <label for="{{form.payment.field.widget.attrs.id}}" class="form-label">Payment</label>
+                  </div>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <div class="form-outline">
+                    {{form.discount}}
+                    <label for="{{form.discount.field.widget.attrs.id}}" class="form-label">Discount(%)</label>
+                  </div>
+                </div>
+                <div class="col-md-1 mb-2">
+                  <div class="form-outline">
+                    {{form.discountAmount}}
+                    <label for="{{form.discountAmount.field.widget.attrs.id}}" class="form-label">Discount({{purchaseOrder.currency.symbol}})</label>
+                  </div>
+                </div>
+                <div class="col-md-2 mb-2">
+                  <div class="form-outline">
+                    <input type="text" id="formOutline-{{elementTag}}-currency" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.currency.code}}" readonly>
+                    <label for="formOutline-{{elementTag}}-currency" class="form-label">currency</label>
+                  </div>
+                </div>
+              </div>
+  
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-outline">
+                      {{form.note}}
+                      <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+
+            <div class="col-md-12">
+              <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                
+              </div>
+              
+              <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                  <thead>
+                      <tr>
+                          <th>Select</th>
+                          <th>Line</th>
+                          <th>ID</th>
+                          <th>Part</th>
+                          <th>Description</th>
+                          <th>Quantity</th>
+                          <th>Unit</th>
+                          <th>Unit Price</th>
+                          <th>Total Price</th>
+                          <th>Availability</th>
+                          <th>Note</th>
+                          <th>Remark</th>
+                          <th>Currency</th>
+                      </tr>
+                  </thead>
+                  <tbody id="tbody">
+                    
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="row" style="display: flex;justify-content: end;">
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm mb-1">
+                    <label class="input-group-text w-50 rounded-0 bg-red-esms text-white" id="inputGroup-sizing-sm">Gross Total</label>
+                    <input type="text" class="form-control rounded-0 text-end bg-red-esms text-white" style="opacity: 0.9;" id="purchaseOrderTotalBuyingPrice-{{purchaseOrder.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{purchaseOrder.currency.symbol}} {{totalBuyingPriceFixed}}" readonly/>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm mb-1">
+                    <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="inputGroup-sizing-sm">Discount Total</label>
+                    <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="purchaseOrderTotalDiscountPrice-{{purchaseOrder.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{purchaseOrder.currency.symbol}} {{totalDiscountPriceFixed}}" readonly/>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="input-group input-group-sm">
+                    <label class="input-group-text w-50 rounded-0 fw-bold bg-blue-esms text-white" id="inputGroup-sizing-sm">TOTAL</label>
+                    <input type="text" class="form-control rounded-0 text-end fw-bold bg-blue-esms text-white" style="opacity: 0.9;" id="purchaseOrderTotalTotalPrice-{{purchaseOrder.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{purchaseOrder.currency.symbol}} {{totalTotalPriceFixed}}" readonly/>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+        
+          </div>
+
+      </div>
+      
+      <div class="modal-footer shadow-5-strong d-flex justify-content-between" style="padding: 10px;box-shadow:none!important;">
+        
+        
+        
+      </div>
+      
+  </form>
+
+</div>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var purchaseOrderId = "{{purchaseOrder.id}}";
+  var pageUrl = "/sale/purchase_order_update/{{elementTagId}}/"
+
+  $(".addClose-{{elementTag}}").click(function() {
+    document.getElementById("addFormBlock-{{elementTag}}").innerHTML = "";
+    $(".tableBox-{{elementTag}}").eq(0).removeClass("col-md-4");
+    $(".addForm-{{elementTag}}").eq(0).removeClass("col-md-8");
+    $("#table-{{elementTag}}").DataTable().ajax.reload(function(){
+      htmx.process('#table-{{elementTag}}');
+    },false);
+    $("#table-{{elementTag}}_filter").show();
+  });
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-2").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/purchase_order/detail.js' %}"></script>
+
+{% endblock javascript %}
+

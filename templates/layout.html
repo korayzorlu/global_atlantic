@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/icons/anchor.svg' %}" sizes="32x32">
+    <!-- Global stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet"
+        type="text/css" />
+    <link href="{% static 'lib/global_assets/css/icons/fontawesome/styles.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/global_assets/css/extras/animate.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/global_assets/css/extras/jquery-ui.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'lib/global_assets/css/icons/icomoon/styles.min.css' %}" rel="stylesheet" type="text/css" />
+    <!-- /global stylesheets -->
+    <!-- Main CSS file -->
+    <link rel="stylesheet" href="{% static 'css/layout/main/main.css' %}" />
+    {% if request.user.profile.theme == 'light' %}
+    <link rel="stylesheet" href="{% static 'lib/light/css/all.min.css' %}" type="text/css">
+    {% else %}
+    <link rel="stylesheet" href="{% static 'lib/dark/css/all.min.css' %}" type="text/css">
+    {% endif %}
+    <!-- /Main CSS file -->
+
+    <!-- Core JS files -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{% static 'lib/global_assets/js/main/jquery.min.js' %}"></script>
+    <script src="{% static 'lib/global_assets/js/main/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'lib/global_assets/js/main/bootstrap.bundle.min.js' %}"></script>
+    <!-- /core JS files -->
+
+    <!--Plugins-->
+    <script src="{% static 'lib/global_assets/js/plugins/notifications/sweet_alert.min.js' %}"></script>
+    {% block plugins %}{% endblock %}
+    <!--/plugins-->
+
+     <!-- Bootstrap -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    
+
+    <!--Demo_pages-->
+    {% block demo_pages %}{% endblock %}
+    <!--/demo_pages-->
+
+    <link id="lightThemeLinkMDB" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/css/mdb-custom.min.css' %}" rel="stylesheet" type="text/css">
+
+    <title>{% block title %}{% endblock %}</title>
+
+</head>
+
+<body class="navbar-top">
+    {% block header %} {% include "components/header.html" %} {% endblock %}
+    <!-- Page content -->
+    <div class="page-content">
+        <!-- Main sidebar -->
+        {% block aside %} {% include "components/aside.html" %} {% endblock %}
+        <!-- /main sidebar -->
+        <!-- Main content -->
+        <div class="content-wrapper ">
+            <!-- Page header -->
+            <div class="page-header border-bottom-0">
+                <div class="page-header-content header-elements-md-inline">
+                    <div class="page-title d-flex">
+                        <a href="{{ request.META.HTTP_REFERER }}">
+                            <img src="{% static 'images/icons/curve-arrow.svg' %}">
+                        </a>
+                        <span id="pageMainTitle" class="font-weight-semibold">
+                            {% block mainDirectory %}{% endblock %}
+                        </span>
+                        <span>&nbsp;-&nbsp;</span>
+                        <span>{% block childDirectory %}{% endblock %}</span>
+                        <a href="#" class="header-elements-toggle text-default d-md-none"><i class="icon-more"></i></a>
+                    </div>
+                    <div class="header-elements py-0">
+                        <div class="breadcrumb">
+                            <a href="{% url 'user:dashboard' %}" class="breadcrumb-item"><i class="icon-home2 mr-2"></i>
+                                Home</a>
+                            <span id="pageMainRoute" class="breadcrumb-item active">
+                                {% block mainRoute %}{% endblock%}</span>
+                            <span id="pageChildRoute" class="breadcrumb-item active">
+                                {% block childRoute %}{% endblock %}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /page header -->
+            <!-- Content area -->
+            <div id="load" class="pace-demo bg-dark">
+                <div class="theme_xbox">
+                    <div class="pace_progress" data-progress-text="60%" data-progress="60"></div>
+                    <div class="pace_activity"></div>
+                </div>
+            </div>
+            <div class="content pt-0">{% block content %} {% endblock %}</div>
+            <!-- /content area -->
+            <!-- Footer -->
+            {% block footer %} {% include "components/footer.html" %} {% endblock %}
+            <!-- /footer -->
+        </div>
+        <!-- /main content -->
+        {% block right_aside %}{% endblock %}
+    </div>
+    <!-- /page content -->
+    <div class="btn-to-top">
+        <button type="button" class="btn btn-secondary btn-icon rounded-pill"><i class="icon-arrow-up8"></i></button>
+    </div>
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+    <script>
+        const csrfToken = "{{ csrf_token }}"
+        const profile_theme_api_url = " {% url 'user:profile_theme_api' request.user.id %}"
+        const currentTheme = "{{request.user.profile.theme}}"
+
+        let lightIcon = "{% static 'images/landing/logo-light.png' %}"
+        let darkIcon = "{% static 'images/landing/logo-dark.png' %}";
+    </script>
+    <script src="{% static 'js/layout/functions.js' %}"></script>
+    <script type="module" src="{% static 'js/layout/all.js' %}"></script>
+    {% if messages %}
+    <script>
+    const messages = [
+    {% for message in messages %}
+        { "message":{"non_field_message":"{{message}}"} {% if message.tags %}, "icon":"{{ message.tags }}"{% endif %}
+        {% if message.tags == "warning" %}, "toast":true{% endif %}},
+    {% endfor %}
+    ]
+    fire_alert(messages)
+    </script>
+    {% endif %}
+    {% block javascript %}{% endblock javascript %}
+</body>
+
+</html>

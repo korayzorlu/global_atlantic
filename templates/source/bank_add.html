@@ -1,0 +1,137 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+        New Bank
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+    <form hx-post="{{ request.path }}" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+            <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+                <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+            </button>
+            <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+            <div id="test-full"></div>
+        </div>
+
+        <div class="modal-body p-2" style="box-shadow:none;">
+
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.bankName}}
+                                <label for="textFormOutline" class="form-label">Bank Name</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.accountType}}
+                                <label for="textFormOutline" class="form-label select-label">Account Type</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.accountNo}}
+                                <label for="textFormOutline" class="form-label">Account No</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.ibanNo}}
+                                <label for="textFormOutline" class="form-label">IBAN</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.swiftNo}}
+                                <label for="textFormOutline" class="form-label">Swift No</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.company}}
+                                <label for="textFormOutline" class="form-label select-label">Company</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.branchName}}
+                                <label for="textFormOutline" class="form-label">Branch Name</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.branchCode}}
+                                <label for="textFormOutline" class="form-label">Branch Code</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.balance}}
+                                <label for="textFormOutline" class="form-label">Balance</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-2">
+                            <div class="form-outline">
+                                {{form.currency}}
+                                <label for="textFormOutline" class="form-label select-label">Currency</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+    </form>
+</div>
+
+
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var pageUrl = "/source/bank_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  
+
+
+
+
+  
+
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/source/bank/add.js' %}"></script>
+
+{% endblock javascript %}
+

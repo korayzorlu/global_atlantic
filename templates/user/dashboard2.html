@@ -1,0 +1,895 @@
+{% extends 'layout/dashboard_layout.html' %}
+
+{% load static %}
+
+{% block body %}
+
+<li class="nav-item" role="presentation" id="dashboardNavTag">
+    <a class="nav-link mainNavLink border border-1 rounded-0 border-secondary-subtle" id="dashboardNavTagLink" data-mdb-pill-init data-mdb-toggle="tab" href="#dashboardTabPane" role="tab" aria-controls="dashboardTabPane" aria-selected="true" >
+        {% comment %} <i class="fa-solid fa-table me-2"></i> {% endcomment %}
+        {{tag}}
+    </a>
+</li>
+
+<!-- Tab -->
+<div class="tab-pane mainTabPane fade" id="dashboardTabPane" role="tabpanel" aria-labelledby="dashboardNavTagLink">
+    <!-- Global Boxes -->
+    <div class="row globalBoxes m-0">
+        <!-- Box -->
+        <div class="col-md-12">
+            <!-- Overview Boxes -->
+            {% include "includes/widget/overview_boxes.html" %}
+            <!-- Overview Boxes End -->
+
+            <!-- Widget BAslangıç -->
+            <div class="row" style="">
+                <div class="col-md-12">
+                    <div id="widgetBlock" data-mdb-sortable="sortable" class="row sortable-list" data-mdb-connected-list="#widgetMenu" style="padding-bottom:80px;">
+                        
+                        {% include "includes/widget/note_ex.html" %}
+
+                        {% include "includes/widget/calendar.html" %}
+
+                        {% include "includes/widget/exchange.html" %}
+
+                        {% include "includes/widget/world_clock.html" %}
+                        
+                        {% if "sale" in userAccessesList %}
+                            {% include "includes/widget/my_quotations.html" %}
+                            {% include "includes/widget/my_order_confirmations.html" %}
+                        {% endif %}
+
+                        {% if "account" in userAccessesList %}
+                            {% include "includes/widget/due_send_invoices.html" %}
+                            {% include "includes/widget/due_incoming_invoices.html" %}
+                        {% endif %}
+
+                        {% if "report" in userAccessesList %}
+                            {% comment %} {% include "includes/widget/charts.html" %} {% endcomment %}
+                        {% endif %}
+
+                        {% if "hr" in userAccessesList %}
+                            {% comment %} {% include "includes/widget/annual_leave.html" %} {% endcomment %}
+                        {% endif %}
+
+                        {% if "hr" in userAccessesList %}
+                            {% comment %} {% include "includes/widget/personal_permissions.html" %} {% endcomment %}
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <!-- Widget Bİtiş -->
+
+        </div>
+        <!-- Box End -->
+    </div>
+    <!-- GLobal Boxes End -->
+</div>
+<!-- Tab End -->
+
+{% include "includes/widget/widget_menu.html" %}
+
+
+<!-- <button type="button" id="openWidgetMenu" class="btn btn-primary btn-floating" style="position: absolute;display: block; top:85vh;right: 10px;z-index: 9999999;animation: 1s ease 0s 1 normal none running fadeIn;">
+    <i class="fa-solid fa-grip"></i>
+</button> -->
+
+
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var user = "{{user.id}}";
+    var userId = "{{user.id}}";
+    var theme = "{{user.profile.theme}}"
+    
+
+    {% comment %} var wsMikro = new WebSocket(
+        (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+        + window.location.host
+        + '/ws/mikro_status/'
+    ); {% endcomment %}
+
+    $(".home-section").css({"overflow" : "hidden"});
+    //$("#tabCont").css({"overflow" : "scroll", "height" : "100vh"});
+    $("#dashboardTabPane").css({"overflow" : "scroll"});
+
+    $(".mainNavLink").removeClass("active");
+    $(".mainTabPane").removeClass("show active");
+
+    $("#tabNav").append($("#dashboardNavTag"));
+    $("#tabCont").append($("#dashboardTabPane"));
+    $("#dashboardNavTagLink").addClass("active");
+    $("#dashboardTabPane").addClass("show active");
+
+    $(".mainNavLink:not(.active)").children("button").hide();
+
+    $("#dashboardNavTagLink").on("shown.bs.tab", function(e){
+        $(e.relatedTarget).children("button").hide();
+        $(".home-section").css({"overflow" : "auto"});
+        history.pushState({}, null, "/user");
+    });
+    
+    // htmx.ajax('GET', "/note/note_dashboard_data", "#noteBlock");
+
+    //cookies = new URLSearchParams(document.cookie.replaceAll("&", "%26").replaceAll("; ","&"))
+    
+    //if(cookies.get("companyTab") == "true"){
+    //    htmx.ajax('GET', "/card/card_data", "#tabCont");
+    //};
+
+    $("#requestFromDashboard").on('click', function(e){
+        if($("#navTag-commericalInvoice").length > 0){
+            $("#navTagLink-orderTracking").removeClass("active");
+            $("#tabPane-orderTracking").removeClass("active show");
+            $("#navTagLink-commericalInvoice").addClass("active");
+            $("#tabPane-commericalInvoice").addClass("active show");
+
+            fetch('/account/api/commerical_invoices?ordering=-id&sessionKey=' + sessionKey + '&user=' + user + '&format=datatables', {method : "GET"})
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                htmx.ajax("GET", "/account/commerical_invoice_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-"+ee, swap:"afterbegin"});
+                window.history.pushState({}, '', "/account/commerical_invoice_update/" + data["data"][0]["id"] + "/");
+            });
+        }else{
+            htmx.ajax("GET", "/account/commerical_invoice_data", {target:"#tabCont", swap:"afterbegin"});
+            setNavTabCommericalInvoice();
+            fetch('/account/api/commerical_invoices?ordering=-id&sessionKey=' + sessionKey + '&user=' + user + '&format=datatables', {method : "GET"})
+            .then((response) => {
+                return response.json();
+            })
+            .then((data) => {
+                htmx.ajax("GET", "/account/commerical_invoice_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-"+ee, swap:"afterbegin"});
+                window.history.pushState({}, '', "/account/commerical_invoice_update/" + data["data"][0]["id"] + "/");
+            });
+        };
+    });
+
+    $("#widgetNote").on('click',function(e){
+         $("#widgetNote").remove();
+         $("#widgetBlock").prepend(
+                `<div class="col-12 col-md-3 mb-2 notesWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row p-0 border border-1 shadow-1 drag">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeNotesWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                            <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 ms-2 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader">Note Manager</div>
+                                                    </div>
+                                                <div class="col-md-12 mt-3" style="max-height: 400px;overflow-x: auto;">
+                                                    <div class="accordion accordion-borderless border border-1 border-secondary-subtle notes" id="accordionFlushExampleX">
+                                                        <div class="accordion-item">
+                                                            <h2 class="accordion-header addNote" id="flush-headingOneX">
+                                                              <button data-mdb-collapse-init class="accordion-button text-white addNote" type="button" data-mdb-toggle="collapse"
+                                                                data-mdb-target="#flush-collapseOneX" aria-expanded="true" aria-controls="flush-collapseOneX">
+                                                                Add Note
+                                                              </button>
+                                                            </h2>
+                                                            <div id="flush-collapseOneX" class="accordion-collapse collapse"
+                                                              aria-labelledby="flush-headingOneX" data-mdb-parent="#accordionFlushExampleX">
+                                                              <div class="accordion-body">
+                                                                <input type="text" placeholder="Add a note.." class="w-100"> <br>
+                                                                <textarea name="AddNote" id="" cols="18" rows="4" class="mt-2"></textarea> <br>
+                                                                <button type="submit"  value="Add" class="btn-sm btn btn-danger" id="add">Add</button>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        <div class="accordion-item">
+                                                          <h2 class="accordion-header" id="flush-headingTwoX">
+                                                            <button data-mdb-collapse-init class="accordion-button" type="button" data-mdb-toggle="collapse"
+                                                              data-mdb-target="#flush-collapseTwoX" aria-expanded="false" aria-controls="flush-collapseTwoX">
+                                                              First note
+                                                            </button>
+                                                          </h2>
+                                                          <div id="flush-collapseTwoX" class="accordion-collapse collapse"
+                                                            aria-labelledby="flush-headingTwoX" data-mdb-parent="#accordionFlushExampleX">
+                                                            <div class="accordion-body">
+                                                              Placeholder content for this accordion, which is intended to demonstrate the
+                                                              <code>.accordion-flush</code> class. This is the first item's accordion body.
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                        <div class="accordion-item">
+                                                          <h2 class="accordion-header" id="flush-headingThreeX">
+                                                            <button data-mdb-collapse-init class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                                                              data-mdb-target="#flush-collapseThreeX" aria-expanded="false" aria-controls="flush-collapseThreeX">
+                                                              Second Note
+                                                            </button>
+                                                          </h2>
+                                                          <div id="flush-collapseThreeX" class="accordion-collapse collapse" aria-labelledby="flush-headingThreeoX"
+                                                            data-mdb-parent="#accordionFlushExampleX">
+                                                            <div class="accordion-body">
+                                                              Placeholder content for this accordion, which is intended to demonstrate the
+                                                              <code>.accordion-flush</code> class. This is the second item's accordion body.
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                );
+
+            $('.removeNotesWidget').on('click', function () {
+            $('.notesWidget div').remove();
+            });
+
+    });
+
+    $("#widgetCalendar").on('click',function(e){
+          $("#widgetCalendar").remove();
+          $("#widgetBlock").prepend(
+            ` <div class="col-12 col-md-6 mb-2 calendarWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row p-2 border border-1 shadow-1 drag">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeCalendarWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 485px;">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="text-start fs-5 widgetHeader">Calendar</div>
+                                                </div>
+                                                <div class="col-md-12" style="height: 300px;">
+                                                    <div class="container" style="align-items: center;">
+                                                        <div class="calendar" id="calendar-2" data-mdb-monday-first="true" style="perspective: 1000;transition: .9s;transform-style: preserve-3d;">
+                    
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>` );
+            //MDB Calendar'ların çalışması için
+            var calendars = $(".calendar");
+            for (var i = 0; i < calendars.length; i++) {
+            var calendar = calendars[i];
+            new Calendar(calendar);
+            };
+
+        $('.removeCalendarWidget').on('click', function(){
+        $('.calendarWidget div').remove();
+        });
+
+        });
+    
+    $("#widgetCharts").on('click',function(e){
+            $("#widgetCharts").remove();
+            $("#widgetBlock").prepend(
+                `<div class="col-12 col-md-6 mb-2 chartWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row p-2 border border-1 shadow-1 drag">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeChartWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 485px;">
+                                            <div class="row mobileChart">
+                                                <div class="col-md-12">
+                                                    <div class="text-start fs-5 widgetHeader">Charts</div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="row p-2">
+                                                        <div id="carouselExampleInterval" class="carousel slide" data-mdb-ride="carousel">
+                                                        <div class="carousel-inner">
+                                                            <div class="carousel-item active" data-mdb-interval="10000">
+                                                                <canvas id="mixedChart" class="d-block w-100" style="height: 400px!important;"></canvas>
+                                                            </div>
+                                                            <div class="carousel-item" data-mdb-interval="2000">
+                                                                <canvas id="scatterChart" class="d-block w-100" style="height: 200px!important;"></canvas>
+                                                            </div>
+                                                            <div class="carousel-item">
+                                                                <canvas id="barChart" class="d-block w-100" style="height: 200px!important;"></canvas>
+                                                            </div>
+                                                        </div>
+                                                        <button class="carousel-control-prev text-dark" data-mdb-target="#carouselExampleInterval" type="button" data-mdb-slide="prev">
+                                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Previous</span>
+                                                        </button>
+                                                        <button class="carousel-control-next text-dark" data-mdb-target="#carouselExampleInterval" type="button" data-mdb-slide="next">
+                                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                            <span class="visually-hidden">Next</span>
+                                                        </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
+                );
+
+        $('.removeChartWidget').on('click', function(){
+        $('.chartWidget div').remove();
+        });
+
+            
+
+    });
+
+    $("#widgetExchanges").on('click',function(e){
+        $("#widgetExchanges").remove();
+        $("#widgetBlock").prepend( `<div class="col-12 col-md-3 mb-2 exchangeRatesWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row p-0 border border-1 shadow-1 drag">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeExchangeWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 ms-2 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader">Exchange Rates</div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                        <table class="table table-striped table-hover dataTable no-footer">
+                                                            <thead>
+                                                                <tr style="background:#9d2235;">
+                                                                    <th class="text-white">CURRENCY</th>
+                                                                    <th class="text-white">FOREX BUYING</th>
+                                                                    <th class="text-white">FOREX SELLING</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt=""> USD</td>
+                                                                    <td>₺ {{exchange.usd_fb}}</td>
+                                                                    <td>₺ {{exchange.usd_fs}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><img src="{% static 'images/flags/european-union.png' %}" height="30px" class="m-1"alt=""> EUR</td>
+                                                                    <td>₺ {{exchange.eur_fb}}</td>
+                                                                    <td>₺ {{exchange.eur_fs}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> GBP</td>
+                                                                    <td>₺ {{exchange.gbp_fb}}</td>
+                                                                    <td>₺ {{exchange.gbp_fs}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><img src="{% static 'images/flags/qatar.png' %}" height="30px" class="m-1"alt=""> QAR</td>
+                                                                    <td></td>
+                                                                    <td></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> JPY</td>
+                                                                    <td>₺ {{exchange.jpy_fb}}</td>
+                                                                    <td>₺ {{exchange.jpy_fs}}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+
+        $('.removeExchangeWidget').on('click', function(){
+        $('.exchangeRatesWidget div').remove();
+        });
+
+    });
+
+    $("#widgetWordCLock").on('click',function(e){
+        $("#widgetWordCLock").remove();
+        $("#widgetBlock").prepend( ` <div class="col-12 col-md-3 mb-2 wordCLockWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row border border-1 shadow-1 drag p-0">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeWordClock">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                            <div class="row">
+                                                <div class="col-md-12 ms-2 mt-3">
+                                                    <div class="text-start fs-5 widgetHeader">Word Clock</div>
+                                                </div>
+                                                <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                    <table class="table table-striped table-hover dataTable no-footer" id="timeTable" onload="updateTime()">
+                                                        <thead>
+                                                            <tr style="background:#9d2235;">
+                                                                <th class="text-white">COUNTRY</th>
+                                                                <th class="text-white">CLOCK</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt=""> New York</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeNewYork"></span>  
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/germany.png' %}" height="30px" class="m-1"alt=""> Germany</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeGermany"></span>  
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> London</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeLondon"></span>  
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/south-korea.png' %}" height="30px" class="m-1"alt=""> Korea</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeSeoul"></span>  
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/chinese-flag.png' %}" height="30px" class="m-1"alt=""> Chinese</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeBeijing"></span>  
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/canada.png' %}" height="30px" class="m-1"alt=""> Canada</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeCanada"></span>  
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> Tokyo</td>
+                                                                <td>
+                                                                    <img src="/static/images/icons/dashboard/clock.png" style="width: 30px;height: 30px;" alt="">
+                                                                    <span class="ms-2" id="timeTokyo"></span>  
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+        
+        $('.removeWordClock').on('click', function(){
+        $('.wordCLockWidget div').remove();
+        });
+
+    });
+
+    $("#widgetExpo").on('click',function(e){
+        $("#widgetExpo").remove();
+        $("#widgetBlock").prepend( `<div class="col-12 col-md-3 mb-2 expoWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row border border-1 shadow-1 drag" style="overflow: scroll;">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeExpoWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader ms-2">Expo Calendar</div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                        <table class="table table-striped table-hover dataTable no-footer">
+                                                            <thead>
+                                                                <tr style="background:#9d2235;">
+                                                                    <th class="text-white">EXPO VENUE</th>
+                                                                    <th class="text-white">EXPO NAME</th>
+                                                                    <th class="text-white">EXPO DATE</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-location-dot me-2" style="color: #c01c28;font-size: medium;"></i>Poly World Trade Center, Guangzhou, Çin</td>
+                                                                    <td>INMEX China</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>9 Aralık 2023 / 11 Aralık 2023</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-location-dot me-2" style="color: #c01c28;font-size: medium;"></i>Messe Wien, Viyana, Avusturya</td>
+                                                                    <td>ICE International Charter Expo</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>6 Aralık 2023 / 8 Aralık 2023</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-location-dot me-2" style="color: #c01c28;font-size: medium;"></i>West Concourse, Florida, ABD, Orlando, A.B.D.</td>
+                                                                    <td>Surf Expo Orlando</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>10 Ocak 2024 / 12 Ocak 2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-location-dot me-2" style="color: #c01c28;font-size: medium;"></i>Georgia World Congress Center, Atlanta, USA, Atlanta, A.B.D.</td>
+                                                                    <td>Atlanta Boat Show</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>11 Ocak 2024 / 14 Ocak 2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-location-dot me-2" style="color: #c01c28;font-size: medium;"></i>Messe Düsseldorf, Düsseldorf, Almanya</td>
+                                                                    <td>Boot Dusseldorf</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>20 Ocak 2024 / 28 Ocak 2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-location-dot me-2" style="color: #c01c28;font-size: medium;"></i> Royal Phuket Marina Exhibition Phuket, Tayland</td>
+                                                                    <td>Thailand Yacht Show</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>7 Şubat 2024 / 10 Şubat 2024</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+        
+    $('.removeExpoWidget').on('click', function(){
+        $('.expoWidget div').remove();
+    });
+
+    });
+
+    $("#widgetProject").on('click',function(e){
+        $("#widgetProject").remove();
+        $("#widgetBlock").prepend( `<div class="col-12 col-md-6 mb-2 projectWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row border border-1 shadow-1 drag" style="overflow: scroll;">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeProjectWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader ms-2">Due Projects</div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                        <table class="table table-striped table-hover dataTable no-footer">
+                                                            <thead>
+                                                                <tr style="background:#9d2235;">
+                                                                    <th class="text-white">OFFER DATE</th>
+                                                                    <th class="text-white">OFFER NO</th>
+                                                                    <th class="text-white">CUSTOMER</th>
+                                                                    <th class="text-white">PERIOD</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>19.12.2023</td>
+                                                                    <td>ESS-023-00000002</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>5 Days<i class="fa-solid fa-triangle-exclamation fs-3 ms-2" style="color: #c45058;"></i></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>16.11.2023</td>
+                                                                    <td>ESS-023-00000001</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>15 Days<i class="fa-solid fa-circle-exclamation fs-4 ms-2" style="color: #195a23;"></i></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>18.11.2023</td>
+                                                                    <td>SESS-023-00000003</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>20 Days<i class="fa-solid fa-circle-exclamation fs-4 ms-2" style="color: #195a23;"></i></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>19.12.2023</td>
+                                                                    <td>ESS-023-00000002</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>10 Days<i class="fa-solid fa-circle-exclamation fs-4 ms-2" style="color: #195a23;"></i></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td ><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>16.11.2023</td>
+                                                                    <td>ESS-023-00000001</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>5 Days<i class="fa-solid fa-triangle-exclamation fs-3 ms-2" style="color: #c45058;"></i></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>18.11.2023</td>
+                                                                    <td>SESS-023-00000003</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>20 Days<i class="fa-solid fa-circle-exclamation fs-4 ms-2" style="color: #195a23;"></i></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>19.12.2023</td>
+                                                                    <td>ESS-023-00000002</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>10 Days<i class="fa-solid fa-circle-exclamation fs-4 ms-2" style="color: #195a23;"></i></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+
+    $('.removeProjectWidget').on('click', function(){
+        $('.projectWidget div').remove();
+    });
+
+    });
+
+    $("#widgetPersonal").on('click',function(e){
+        $("#widgetPersonal").remove();
+        $("#widgetBlock").prepend( `<div class="col-12 col-md-6 mb-2 personalWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row border border-1 shadow-1 drag" style="overflow: scroll;">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removePersonalWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader ms-2">Personal Permissions</div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                        <table class="table table-striped table-hover dataTable no-footer">
+                                                            <thead>
+                                                                <tr style="background:#9d2235;">
+                                                                    <th class="text-white">EMPLOYEE ON LEAVE</th>
+                                                                    <th class="text-white">REASON FOR PERMISSINON</th>
+                                                                    <th class="text-white">PERMISSINON START</th>
+                                                                    <th class="text-white">PERMISSION END</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-user fs-6 me-2" style="color: #c01c28;"></i>Elif Tuba Korkmaz</td>
+                                                                    <td>Doğum İzni</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>05.01.2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td ><i class="fa-solid fa-user fs-6 me-2" style="color: #c01c28;"></i>Koray Zorlu</td>
+                                                                    <td>Rapor</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>01.01.2024</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>05.01.2024</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-user fs-6 me-2" style="color: #c01c28;"></i>Dilan Çağlayan</td>
+                                                                    <td>Süt İzni</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>02.01.2024</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>05.01.2024</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+
+    $('.removePersonalWidget').on('click', function(){
+        $('.personalWidget div').remove();
+    });
+
+    });
+
+    $("#widgetPurchase").on('click',function(e){
+        $("#widgetPurchase").remove();
+        $("#widgetBlock").prepend( `<div class="col-12 col-md-6 mb-2 purchaseWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row border border-1 shadow-1 drag" style="overflow: scroll;">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removePurchaseWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader ms-2">Purchase Order</div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                        <table class="table table-striped table-hover dataTable no-footer">
+                                                            <thead>
+                                                                <tr style="background:#9d2235;">
+                                                                    <th class="text-white">ORDER DUE DATE</th>
+                                                                    <th class="text-white">SUPPLIER</th>
+                                                                    <th class="text-white">PURCHASE NO</th>
+                                                                    <th class="text-white">INQUIRY NO</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>ESO-023-00000001</td>
+                                                                    <td>ESI-023-00000001</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>ESO-023-00000001</td>
+                                                                    <td>ESI-023-00000001</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td>ESMS - Engineering Solutions & Marine Solutions</td>
+                                                                    <td>ESO-023-00000001</td>
+                                                                    <td>ESI-023-00000001</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+
+    $('.removePurchaseWidget').on('click', function(){
+        $('.purchaseWidget div').remove();
+    });
+
+    });
+
+    $("#widgetAnnual").on('click',function(e){
+        $("#widgetAnnual").remove();
+        $("#widgetBlock").prepend( `<div class="col-12 col-md-6 mb-2 annualWidget">
+                            <div class="row p-2">
+                                <div class="col-md-12">
+                                    <div class="row border border-1 shadow-1 drag" style="overflow: scroll;">
+                                        <div class="col-md-12" style="display: flex;justify-content: end;">
+                                            <button class="btn btn-tertiary p-2 removeAnnualWidget">
+                                                <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-md-12" style="height: 500px;">
+                                                <div class="row">
+                                                    <div class="col-md-12 mt-3">
+                                                        <div class="text-start fs-5 widgetHeader ms-2">Annual Leave</div>
+                                                    </div>
+                                                    <div class="col-md-12 mt-4 p-0" style="max-height: 400px;overflow-x: auto;">
+                                                        <table class="table table-striped table-hover dataTable no-footer">
+                                                            <thead>
+                                                                <tr style="background:#9d2235;">
+                                                                    <th class="text-white">EMPLOYEE</th>
+                                                                    <th class="text-white">ANNUAL LEAVE START</th>
+                                                                    <th class="text-white">ANNUAL LEAVE END</th>
+                                                                    <th class="text-white">REMAINING ANNUAL LEAVE</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-user fs-6 me-2" style="color: #c01c28;"></i>Elif Tuba Korkmaz</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>05.01.2024</td>
+                                                                    <td>5 Days</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-user fs-6 me-2" style="color: #c01c28;"></i>Koray Zorlu</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>05.01.2024</td>
+                                                                    <td>1 Days</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><i class="fa-solid fa-user fs-6 me-2" style="color: #c01c28;"></i>Dilan Çağlayan</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>30.12.2023</td>
+                                                                    <td><i class="fa-solid fa-calendar-days me-2" style="color: #c01c28;font-size: medium;"></i>05.01.2024</td>
+                                                                    <td>10 Days</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+
+    $('.removeAnnualWidget').on('click', function(){
+        $('.annualWidget div').remove();
+    });
+
+    });
+
+
+
+    //Widget kapatma butonu
+    $(document).on('click', '.removeNotesWidget', function(){
+         $('.notesWidget div').remove();
+     });
+
+    $('.removeCalendarWidget').on('click', function(){
+         $('.calendarWidget div').remove();
+    });
+
+    $('.removeChartWidget').on('click', function(){
+         $('.chartWidget div').remove();
+    });
+
+    $('.removeExpoWidget').on('click', function(){
+         $('.expoWidget div').remove();
+    });
+
+    $('.removeExchangeWidget').on('click', function(){
+        $('.exchangeRatesWidget div').remove();
+    });
+
+    $('.removeWordClock').on('click', function(){
+        $('.wordCLockWidget div').remove();
+    });
+
+    $('.removeProjectWidget').on('click', function(){
+        $('.projectWidget div').remove();
+    });
+
+    $('.removePersonalWidget').on('click', function(){
+        $('.personalWidget div').remove();
+    });
+
+    $('.removeExpoWidget').on('click', function(){
+        $('.expoWidget div').remove();
+    });
+
+    $('.removePurchaseWidget').on('click', function(){
+        $('.purchaseWidget div').remove();
+    });
+
+    $('.removeAnnualWidget').on('click', function(){
+        $('.annualWidget div').remove();
+    });
+
+   
+
+                 
+                    
+
+                    
+
+    
+
+</script>
+
+
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/user/dashboard/page.js' %}"></script>
+
+{% endblock javascript %}

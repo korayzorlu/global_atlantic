@@ -1,0 +1,318 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      New Payment
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+  <form action="/account/payment_add/" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+        <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <!-- <button class="tableTopButtons inTableButtons" id="createIncomingInvoiceButton" type="submit" name="saveButton"><i class="fa-solid fa-floppy-disk" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save"></i></button> -->
+        <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body" style="box-shadow:none; padding:0;">
+
+
+            <div class="row mb-4 ms-2" style="border-radius:0;margin:2px;padding-top:15px;">
+
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.type}}
+                                <label for="textFormOutline" class="form-label select-label">Type</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.amount}}
+                                <label for="textFormOutline" class="form-label">Amount</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.currency}}
+                                <label for="textFormOutline" class="form-label select-label">Currency</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline datepicker">
+                                {{form.paymentDate}}
+                                <label for="textFormOutline" class="form-label">Date</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.customer}}
+                                <label for="textFormOutline" class="form-label select-label">Current</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.description}}
+                                <label for="textFormOutline" class="form-label">Description</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9" id="treetable-inform-{{elementTagSub}}-{{elementTagId}}">
+                    <div class="row mb-1">
+                        <div class="col-md-12 mb-3 text-center">
+                            <i class="fa-solid fa-file-invoice" style="font-size:5rem;"></i>
+                        </div>
+                    </div>
+                    <div class="row mb-1">
+                        <div class="col-md-12 mb-3 text-center">
+                            <h4>NO DATA</h4>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row mb-4" style="border-radius:0;margin:2px;padding-top:15px;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{user.profile.sourceCompany.formalName}}" readonly>
+                            <label for="textFormOutline" class="form-label select-label">Recipient</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-outline">
+                            {% comment %} <select id="selectBank" class="select" name"sourceBank" data-mdb-filter="true">
+                                {% for bank in sourceBanks %}
+                                    {% if bank.currency.code == "USD" %}
+                                        <option value="{{bank.id}}" name="{{bank.ibanNo}}" selected>{{bank.bankName}}</option>
+                                    {% else %}
+                                        <option value="{{bank.id}}" name="{{bank.ibanNo}}">{{bank.bankName}}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select> {% endcomment %}
+                            {{form.sourceBank}}
+                            <label for="textFormOutline" class="form-label select-label">Bank</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutlineIBAN" class="form-control form-control-sm" value="{{defaultSourceBank.ibanNo}}" readonly>
+                            <label for="textFormOutlineIBAN" class="form-label select-label">IBAN</label>
+                        </div>
+                    </div>
+                </div>
+                {% comment %} {% if sourceBanks %}
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-outline">
+                                <select id="selectBank" class="select" data-mdb-filter="true">
+                                    {% for bank in sourceBanks %}
+                                        {% if bank.currency.code == "USD" %}
+                                            <option value="{{bank.id}}" name="{{bank.ibanNo}}" selected>{{bank.bankName}}</option>
+                                        {% else %}
+                                            <option value="{{bank.id}}" name="{{bank.ibanNo}}">{{bank.bankName}}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <label for="textFormOutline" class="form-label select-label">Bank</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <div class="form-outline">
+                                <input type="text" id="textFormOutlineIBAN" class="form-control form-control-sm" value="-" readonly>
+                                <label for="textFormOutlineIBAN" class="form-label select-label">IBAN</label>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %} {% endcomment %}
+
+            </div>
+
+
+
+
+      </div>
+      
+  </form>
+</div>
+
+
+
+<script>
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "new";
+    var pageUrl = "/account/payment_add/";
+    var sessionKey = "{{sessionKey}}";
+    var user = "{{user.id}}";
+    $('#id_type option').each(function(){
+        if($(this).val() == "outt"){
+            $(this).prop("disabled", true);
+        };
+    
+    });
+    $('#id_customer').on('change', function sdsd() {
+        var companyInformId = $(this).val();
+        console.log(companyInformId);
+        htmx.ajax('GET', "/account/payment_current_add/c_" + companyInformId + "&" + "in", {target : "#treetable-inform-{{elementTagSub}}-{{elementTagId}}", "push-url" : "true"});
+    });
+    $('#id_type').on('change', function() {
+        var paymentType = $(this).val();
+        console.log(paymentType);
+        document.getElementById("treetable-inform-{{elementTagSub}}-{{elementTagId}}").innerHTML = "";
+        if(paymentType == "in"){
+            $('#id_customer').prop("disabled", false);
+            $('#id_customer').on('change', function sdsd() {
+                var companyInformId = $(this).val();
+                console.log(companyInformId);
+                htmx.ajax('GET', "/account/payment_current_add/c_" + companyInformId + "&" + "in", {target : "#treetable-inform-{{elementTagSub}}-{{elementTagId}}", "push-url" : "true"});
+            });
+        }else if(paymentType == "out"){
+            $('#id_customer').prop("disabled", false);
+            $('#id_customer').on('change', function sdsd() {
+                var companyInformId = $(this).val();
+                console.log(companyInformId);
+                htmx.ajax('GET', "/account/payment_current_add/c_" + companyInformId + "&" + "out", {target : "#treetable-inform-{{elementTagSub}}-{{elementTagId}}", "push-url" : "true"});
+            });
+        }else{
+            $('#id_customer').prop("disabled", true);
+        };
+        //$('#id_type').prop("disabled", true);
+        
+    });
+
+    
+
+    //$("#textFormOutlineIBAN").val($("#selectBank").find("option:selected").attr("name"));
+
+    $('#id_sourceBank').on('change', function() {
+        //$("#textFormOutlineIBAN").val($(this).find("option:selected").attr("name"));
+        var sourceBankId = $(this).val();
+        $.ajax({
+            url: '/source/api/banks',
+            data: {'id': sourceBankId},
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                $.each(data, function(i, bank) {
+                    $("#textFormOutlineIBAN").val(bank.ibanNo);
+                });
+            }
+        });
+
+    });
+
+    
+    $("#form-{{elementTag}}-new").submit(function (event) {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        event.preventDefault();
+    
+        var formData = $(this).serializeArray();
+        var custometId = $('#id_customer').val();
+    
+        $.ajax({
+        type: "POST",
+        url: "/account/payment_add/",  // Formunuzun işleneceği view'ın URL'si
+        data: formData,
+        success: function (response, status, xhr) {
+            // Başarılı yanıt geldiğinde mesajı görüntüleyin
+            if (xhr.status === 204) {
+                setTimeout(function() {
+            
+                    let navTagSub = $("#navTag-{{elementTag}}-new");
+                    let tabPaneSub = $("#tabPane-{{elementTag}}-new");
+                
+                    navTagSub.prev().children("a").addClass("active");
+                    
+                    navTagSub.prev().children("a").children("button").show();
+                    
+                    $("#table-{{elementTag}}").DataTable().columns.adjust();
+    
+                    navTagSub.remove();
+                    tabPaneSub.remove();
+    
+                    $("#table-payment").DataTable().ajax.reload(function() {
+                        htmx.process("#table-payment");
+                    }, false);
+    
+    
+                    fetch('/account/api/payments?ordering=-id&sessionKey={{sessionKey}}&user={{user.id}}&customer__id=' + custometId + '&format=datatables', {method : "GET"})
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((data) => {
+                        console.log(data["data"]);
+                        htmx.ajax("GET", "/account/payment_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                        window.history.pushState({}, '', "/account/payment_update/" + data["data"][0]["id"] + "/");
+                    });
+            
+                    setTimeout(function() {
+                    $("body").busyLoad("hide", {
+                        animation: "fade"
+                    });
+                    }, 500);
+            
+                }, 500);
+            }
+        },
+        error: function (xhr, status, error) {
+            //spinner durdurur
+            $("body").busyLoad("hide", {
+                animation: "fade"
+                });
+            // Hata durumunda mesajı görüntüleyin
+            //$("#message-container-{{elementTag}}-new").html('<div id="message-container-inside-{{elementTag}}-new"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+        }
+        });
+        
+    
+        
+    
+    });
+
+
+    
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/account/payment/add.js' %}"></script>
+
+
+{% endblock javascript %}
+

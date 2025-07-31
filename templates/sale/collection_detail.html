@@ -1,0 +1,79 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" data-mdb-collapse-init type="button" data-mdb-toggle="collapse" data-mdb-target="#accordionItem-{{collection.id}}" aria-expanded="false" aria-controls="accordionItem-{{collection.id}}">
+                {{collection.purchaseOrder.purchaseOrderNo}}
+            </button>
+        </h2>
+        <div id="accordionItem-{{collection.id}}" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+            <div class="accordion-body">
+    
+                <div class="row">
+                    <div class="col-md-9 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collection.purchaseOrder.inquiry.supplier}}" readonly>
+                            <label for="textFormOutline" class="form-label">Supplier</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collection.purchaseOrder.inquiry.supplier.city}}" readonly>
+                            <label for="textFormOutline" class="form-label">Supplier Place</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collection.trackingNo}}" readonly>
+                            <label for="textFormOutline" class="form-label">Tracking No</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collection.country}}" readonly>
+                            <label for="textFormOutline" class="form-label select-label">Country</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{collection.port}}" readonly>
+                            <label for="textFormOutline" class="form-label">Port</label>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var collectionId = "{{collection.id}}";
+    var orderTrackingId = "{{collection.orderTracking.id}}";
+    var pageUrl = "/sale/collection_update/{{elementTagId}}/"
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+
+    
+</script>

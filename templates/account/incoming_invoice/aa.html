@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Document</title>
+
+    {% if request.user.profile.theme == "light" %}
+        <link id="themeLinkMDB" rel="stylesheet" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/css/mdb-custom.min.css' %}">
+        <link id="themeLink" rel="stylesheet" href="{% static 'css/style.css' now 'U'%}">
+    {% elif request.user.profile.theme == "dark" %}
+        <link id="themeLinkMDB" rel="stylesheet" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/css/mdb-custom-dark.min.css' %}">
+        <link id="themeLink" rel="stylesheet" href="{% static 'css/style-dark.css' now 'U'%}">
+    {% else %}
+        <link id="themeLinkMDB" rel="stylesheet" href="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-8.1.0/css/mdb-custom.min.css' %}">
+        <link id="themeLink" rel="stylesheet" href="{% static 'css/style.css' now 'U'%}">
+    {% endif %}
+</head>
+
+<block>
+
+    {% block pdf %}{% endblock pdf %}
+
+</block>
+
+
+
+
+</html>

@@ -1,0 +1,1009 @@
+
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+{% include 'includes/control/htmx_control.html' %}
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    .home-section{overflow:hidden!important;}
+    
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        {% comment %} <i class="fa-solid fa-building me-2"></i> {% endcomment %}
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+    <!-- Tabs navs Sub-->
+    <ul class="nav nav-pills sortable-list d-flex" style="background-color: #f1f2f7" id="tabNavSub-{{elementTag}}" data-mdb-sortable="sortable" role="tablist" style="margin-bottom: 0 !important;">
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-table">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-table" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-table" role="tab" aria-controls="tabPane-{{elementTag}}-table" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                SOA
+            </a>
+        </li>
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-soaFullHistory">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-soaFullHistory" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-soaFullHistory" role="tab" aria-controls="tabPane-{{elementTag}}-soaFullHistory" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                SOA Full History
+            </a>
+        </li>
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-soaCustomerList">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-soaCustomerList" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-soaCustomerList" role="tab" aria-controls="tabPane-{{elementTag}}-soaCustomerList" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                SOA Customer List
+            </a>
+        </li>
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-soaSupplierList">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-soaSupplierList" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-soaSupplierList" role="tab" aria-controls="tabPane-{{elementTag}}-soaSupplierList" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                SOA Supplier List
+            </a>
+        </li>
+        {% comment %} <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-soaCustomerHistory">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-soaCustomerHistory" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-soaCustomerHistory" role="tab" aria-controls="tabPane-{{elementTag}}-soaCustomerHistory" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                SOA Customer Hitory
+            </a>
+        </li> {% endcomment %}
+        {% comment %} <li class="nav-item d-none" role="presentation" id="navTag-{{elementTag}}-soaCustomerList">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-soaCustomerList" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-soaCustomerList" role="tab" aria-controls="tabPane-{{elementTag}}-soaCustomerList" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                SOA Customer List
+            </a>
+        </li> {% endcomment %}
+    </ul>
+    <!-- Tabs navs Sub-->
+
+    <!-- Tabs content -->
+    <div class="tab-content" id="tabContSub-{{elementTag}}" hx-target="this">
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-table" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-table">
+
+            <div class="globalBoxes">
+                <div class="box tableBox tableBox-{{elementTag}}" style="transition: all 1s ease;">
+                    {% comment %} <div class="topButtonBox">
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_add' %}" hx-target="#addUpdateDataDialogXl" style=""><i class="fa-solid fa-plus"></i></a>
+                        <a class="deleteData tableTopButtons" href="#" style=""><i class="fa-solid fa-trash"></i></a>
+                        <a class="tableTopButtons" href="#" style=""><i class="fa-solid fa-print"></i></a>
+                        <a class="tableTopButtons" href="{% url 'card:company_bulk_add_excel' %}" style=""><i class="fa-solid fa-file-arrow-down"></i></a>
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_bulk_add' %}" hx-target="#addUpdateDataDialog-r" style=""><i class="fa-solid fa-file-arrow-up"></i></a>
+                    </div> {% endcomment %}
+                    <div class="row">
+                        <div class="col-md-9">
+                            <table id="table-{{elementTag}}" class="table table-striped table-hover table-bordered dataTable no-footer" data-mdb-max-height="460" data-mdb-fixed-header="true" style="transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#003865;">
+                                        {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTag}}" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                        <th class="text-white">Select</th>
+                                        <th class="text-white">Line</th>
+                                        <th class="text-white">ID</th>
+                                        <th class="text-white">Company Name</th>
+                                        <th class="text-white">Debt</th>
+                                        <th class="text-white">Credit</th>
+                                        <th class="text-white">Balance</th>
+                                        <th class="text-white">Currency</th>
+                                        <th class="text-white">Currency</th>
+                                        <th class="text-white">Debt TRY</th>
+                                        <th class="text-white">Credit TRY</th>
+                                        <th class="text-white">Balance TRY</th>
+                                        <th class="text-white">Company ID</th>
+                                        <th class="text-white">Company Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center">
+                                    <span>&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaTotal" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">TOTAL</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">DEBT</th>
+                                                <th class="text-white">CREDIT</th>
+                                                <th class="text-white">BALANCE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>USD</td>
+                                                <td id="USDDebtTotal" class="text-end"></td>
+                                                <td id="USDCreditTotal" class="text-end"></td>
+                                                <td id="USDBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>EUR</td>
+                                                <td id="EURDebtTotal" class="text-end"></td>
+                                                <td id="EURCreditTotal" class="text-end"></td>
+                                                <td id="EURBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>GBP</td>
+                                                <td id="GBPDebtTotal" class="text-end"></td>
+                                                <td id="GBPCreditTotal" class="text-end"></td>
+                                                <td id="GBPBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>QAR</td>
+                                                <td id="QARDebtTotal" class="text-end"></td>
+                                                <td id="QARCreditTotal" class="text-end"></td>
+                                                <td id="QARBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>RUB</td>
+                                                <td id="RUBDebtTotal" class="text-end"></td>
+                                                <td id="RUBCreditTotal" class="text-end"></td>
+                                                <td id="RUBBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>JPY</td>
+                                                <td id="JPYDebtTotal" class="text-end"></td>
+                                                <td id="JPYCreditTotal" class="text-end"></td>
+                                                <td id="JPYBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>TRY</td>
+                                                <td id="TRYDebtTotal" class="text-end"></td>
+                                                <td id="TRYCreditTotal" class="text-end"></td>
+                                                <td id="TRYBalanceTotal" class="text-end"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaCurrency" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">EXCHANGE RATES</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">FOREX BUYING</th>
+                                                <th class="text-white">FOREX SELLING</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt=""> USD</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/european-union.png' %}" height="30px" class="m-1"alt=""> EUR</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> GBP</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/qatar.png' %}" height="30px" class="m-1"alt=""> QAR</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/russia.png' %}" height="30px" class="m-1"alt=""> RUB</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> JPY</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+
+                <div id="addFormBlock-{{elementTag}}" hx-target="this" class="box addForm-{{elementTag}}" style="box-shadow:none;padding-top:65px;transition: all 1s ease;">
+                    
+                </div>
+                
+            </div>
+
+        </div>
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-soaFullHistory" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-soaFullHistory" style="background:#fff;">
+            <div class="globalBoxes">
+                <div class="box tableBox tableBox-{{elementTag}}-soaFullHistory" style="transition: all 1s ease;">
+                    {% comment %} <div class="topButtonBox">
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_add' %}" hx-target="#addUpdateDataDialogXl" style=""><i class="fa-solid fa-plus"></i></a>
+                        <a class="deleteData tableTopButtons" href="#" style=""><i class="fa-solid fa-trash"></i></a>
+                        <a class="tableTopButtons" href="#" style=""><i class="fa-solid fa-print"></i></a>
+                        <a class="tableTopButtons" href="{% url 'card:company_bulk_add_excel' %}" style=""><i class="fa-solid fa-file-arrow-down"></i></a>
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_bulk_add' %}" hx-target="#addUpdateDataDialog-r" style=""><i class="fa-solid fa-file-arrow-up"></i></a>
+                    </div> {% endcomment %}
+                    <div class="row">
+                        <div class="col-md-9">
+                            <table id="table-{{elementTag}}-soaFullHistory" class="table table-striped table-hover table-bordered dataTable no-footer" data-mdb-max-height="460" data-mdb-fixed-header="true" style="transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#003865;">
+                                        {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTag}}" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                        <th class="text-white">Select</th>
+                                        <th class="text-white">Line</th>
+                                        <th class="text-white">ID</th>
+                                        <th class="text-white">Date</th>
+                                        <th class="text-white">Process</th>
+                                        <th class="text-white">Company Name</th>
+                                        <th class="text-white">Invoice/Payment No</th>
+                                        <th class="text-white">Debt</th>
+                                        <th class="text-white">Credit</th>
+                                        <th class="text-white">Currency</th>
+                                        <th class="text-white">Currency</th>
+                                        <th class="text-white">Amount TRY</th>
+                                        <th class="text-white">Company ID</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center">
+                                    <span>&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaTotal" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">TOTAL</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">DEBT</th>
+                                                <th class="text-white">CREDIT</th>
+                                                <th class="text-white">BALANCE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>USD</td>
+                                                <td id="USDDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="USDCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="USDBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>EUR</td>
+                                                <td id="EURDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="EURCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="EURBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>GBP</td>
+                                                <td id="GBPDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="GBPCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="GBPBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>QAR</td>
+                                                <td id="QARDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="QARCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="QARBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>RUB</td>
+                                                <td id="RUBDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="RUBCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="RUBBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>JPY</td>
+                                                <td id="JPYDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="JPYCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="JPYBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>TRY</td>
+                                                <td id="TRYDebtTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="TRYCreditTotal-soaFullHistory" class="text-end"></td>
+                                                <td id="TRYBalanceTotal-soaFullHistory" class="text-end"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaTotal" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">EXCHANGE RATES</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">FOREX BUYING</th>
+                                                <th class="text-white">FOREX SELLING</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt=""> USD</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/european-union.png' %}" height="30px" class="m-1"alt=""> EUR</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> GBP</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/qatar.png' %}" height="30px" class="m-1"alt=""> QAR</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/russia.png' %}" height="30px" class="m-1"alt=""> RUB</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> JPY</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+
+                <div id="addFormBlock-{{elementTag}}" hx-target="this" class="box addForm-{{elementTag}}" style="box-shadow:none;padding-top:65px;transition: all 1s ease;">
+                    
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-soaCustomerList" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-soaCustomerList" style="background:#fff;">
+            <div class="globalBoxes">
+                <div class="box tableBox tableBox-{{elementTag}}-soaCustomerList" style="transition: all 1s ease;">
+                    {% comment %} <div class="topButtonBox">
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_add' %}" hx-target="#addUpdateDataDialogXl" style=""><i class="fa-solid fa-plus"></i></a>
+                        <a class="deleteData tableTopButtons" href="#" style=""><i class="fa-solid fa-trash"></i></a>
+                        <a class="tableTopButtons" href="#" style=""><i class="fa-solid fa-print"></i></a>
+                        <a class="tableTopButtons" href="{% url 'card:company_bulk_add_excel' %}" style=""><i class="fa-solid fa-file-arrow-down"></i></a>
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_bulk_add' %}" hx-target="#addUpdateDataDialog-r" style=""><i class="fa-solid fa-file-arrow-up"></i></a>
+                    </div> {% endcomment %}
+                    <div class="row">
+                        <div class="col-md-9">
+                            <table id="table-{{elementTag}}-soaCustomerList" class="table table-striped table-hover table-bordered dataTable no-footer" data-mdb-max-height="460" data-mdb-fixed-header="true" style="transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#003865;">
+                                        {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTag}}" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                        <th class="text-white">Select</th>
+                                        <th class="text-white">Line</th>
+                                        <th class="text-white">ID</th>
+                                        <th class="text-white">Customer</th>
+                                        <th class="text-white">Billing Name</th>
+                                        <th class="text-white">Invoice No</th>
+                                        <th class="text-white">Project</th>
+                                        <th class="text-white">Vessel</th>
+                                        <th class="text-white">IMO</th>
+                                        <th class="text-white">Invoice Date</th>
+                                        <th class="text-white">Payment Date</th>
+                                        <th class="text-white">Amount</th>
+                                        <th class="text-white">Total Payment</th>
+                                        <th class="text-white">Balance</th>
+                                        <th class="text-white">Curr.</th>
+                                        <th class="text-white">Exch. Rate</th>
+                                        <th class="text-white">TRY Balance</th>
+                                        <th class="text-white">Project No</th>
+                                        <th class="text-white">Offer No</th>
+                                        <th class="text-white">Customer ID</th>
+                                        <th class="text-white">Group</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center">
+                                    <span>&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaCustomerTotal" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">TOTAL</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">AMOUNT</th>
+                                                <th class="text-white">TOTAL PAYMENT</th>
+                                                <th class="text-white">BALANCE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>USD</td>
+                                                <td id="USDTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="USDPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="USDBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>EUR</td>
+                                                <td id="EURTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="EURPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="EURBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>GBP</td>
+                                                <td id="GBPTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="GBPPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="GBPBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>QAR</td>
+                                                <td id="QARTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="QARPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="QARBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>RUB</td>
+                                                <td id="RUBTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="RUBPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="RUBBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>JPY</td>
+                                                <td id="JPYTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="JPYPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="JPYBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>TRY</td>
+                                                <td id="TRYTotalPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="TRYPaidPrice-soaCustomerList" class="text-end"></td>
+                                                <td id="TRYBalance-soaCustomerList" class="text-end"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaTotal" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">EXCHANGE RATES</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">FOREX BUYING</th>
+                                                <th class="text-white">FOREX SELLING</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt=""> USD</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/european-union.png' %}" height="30px" class="m-1"alt=""> EUR</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> GBP</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/qatar.png' %}" height="30px" class="m-1"alt=""> QAR</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/russia.png' %}" height="30px" class="m-1"alt=""> RUB</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> JPY</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+
+                <div id="addFormBlock-{{elementTag}}" hx-target="this" class="box addForm-{{elementTag}}" style="box-shadow:none;padding-top:65px;transition: all 1s ease;">
+                    
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-soaSupplierList" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-soaSupplierList" style="background:#fff;">
+            <div class="globalBoxes">
+                <div class="box tableBox tableBox-{{elementTag}}-soaSupplierList" style="transition: all 1s ease;">
+                    {% comment %} <div class="topButtonBox">
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_add' %}" hx-target="#addUpdateDataDialogXl" style=""><i class="fa-solid fa-plus"></i></a>
+                        <a class="deleteData tableTopButtons" href="#" style=""><i class="fa-solid fa-trash"></i></a>
+                        <a class="tableTopButtons" href="#" style=""><i class="fa-solid fa-print"></i></a>
+                        <a class="tableTopButtons" href="{% url 'card:company_bulk_add_excel' %}" style=""><i class="fa-solid fa-file-arrow-down"></i></a>
+                        <a class="tableTopButtons" hx-get="{% url 'card:company_bulk_add' %}" hx-target="#addUpdateDataDialog-r" style=""><i class="fa-solid fa-file-arrow-up"></i></a>
+                    </div> {% endcomment %}
+                    <div class="row">
+                        <div class="col-md-9">
+                            <table id="table-{{elementTag}}-soaSupplierList" class="table table-striped table-hover table-bordered dataTable no-footer" data-mdb-max-height="460" data-mdb-fixed-header="true" style="transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#003865;">
+                                        {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTag}}" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                        <th class="text-white">Select</th>
+                                        <th class="text-white">Line</th>
+                                        <th class="text-white">ID</th>
+                                        <th class="text-white">Seller</th>
+                                        <th class="text-white">PO</th>
+                                        <th class="text-white">Invoice No</th>
+                                        <th class="text-white">Project</th>
+                                        <th class="text-white">Invoice Date</th>
+                                        <th class="text-white">Payment Date</th>
+                                        <th class="text-white">Amount</th>
+                                        <th class="text-white">Total Payment</th>
+                                        <th class="text-white">Balance</th>
+                                        <th class="text-white">Curr.</th>
+                                        <th class="text-white">Exch. Rate</th>
+                                        <th class="text-white">TRY Balance</th>
+                                        <th class="text-white">Project No</th>
+                                        <th class="text-white">Purchasing Prject No</th>
+                                        <th class="text-white">Customer ID</th>
+                                        <th class="text-white">Group</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+                                
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="row">
+                                <div class="col-md-12 mb-3 text-center">
+                                    <span>&nbsp;</span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaSupplierTotal" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">TOTAL</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">AMOUNT</th>
+                                                <th class="text-white">TOTAL PAYMENT</th>
+                                                <th class="text-white">BALANCE</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>USD</td>
+                                                <td id="USDTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="USDPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="USDBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>EUR</td>
+                                                <td id="EURTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="EURPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="EURBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>GBP</td>
+                                                <td id="GBPTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="GBPPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="GBPBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>QAR</td>
+                                                <td id="QARTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="QARPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="QARBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>RUB</td>
+                                                <td id="RUBTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="RUBPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="RUBBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>JPY</td>
+                                                <td id="JPYTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="JPYPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="JPYBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>TRY</td>
+                                                <td id="TRYTotalPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="TRYPaidPrice-soaSupplierList" class="text-end"></td>
+                                                <td id="TRYBalance-soaSupplierList" class="text-end"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12" style="max-width: 500px;overflow-x: auto;">
+                                    <table id="table-{{elementTagSub}}-soaCurrency" class="table table-striped table-bordered table-hover dataTable no-footer">
+                                        <thead>
+                                            <tr style="background:#9d2235;">
+                                                <th class="text-white text-white text-center fw-bold" colspan="4">EXCHANGE RATES</th>
+                                            </tr>
+                                            <tr style="background:#003865;">
+                                                <th class="text-white">CURRENCY</th>
+                                                <th class="text-white">FOREX BUYING</th>
+                                                <th class="text-white">FOREX SELLING</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-states.png' %}" height="30px" class="m-1"alt=""> USD</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                                <td>₺ {{usd.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/european-union.png' %}" height="30px" class="m-1"alt=""> EUR</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                                <td>₺ {{eur.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/united-kingdom.png' %}" height="30px" class="m-1"alt=""> GBP</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                                <td>₺ {{gbp.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/qatar.png' %}" height="30px" class="m-1"alt=""> QAR</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                                <td>₺ {{qar.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/russia.png' %}" height="30px" class="m-1"alt=""> RUB</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                                <td>₺ {{rub.forexBuying}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td><img src="{% static 'images/flags/japan.png' %}" height="30px" class="m-1"alt=""> JPY</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                                <td>₺ {{jpy.forexBuying}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                
+
+                <div id="addFormBlock-{{elementTag}}" hx-target="this" class="box addForm-{{elementTag}}" style="box-shadow:none;padding-top:65px;transition: all 1s ease;">
+                    
+                </div>
+                
+            </div>
+        </div>
+
+    </div>
+
+</div>
+{% comment %} <script src="{% static 'js/celery_progress/celery_progress.js' %}"></script> {% endcomment %}
+<script>
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "table";
+    var pageUrl = "/account/soa_data/"
+
+    var usd = "{{usd.forexBuying}}";
+    var eur = "{{eur.forexBuying}}";
+    var gbp = "{{gbp.forexBuying}}";
+    var qar = "{{qar.forexBuying}}";
+    var rub = "{{rub.forexBuying}}";
+    var jpy = "{{jpy.forexBuying}}";
+
+    $("#navTagLink-{{elementTag}}-table").on("shown.bs.tab", function(e){
+        $("#table-{{elementTag}}").DataTable().columns.adjust();
+    });
+    $("#navTagLink-{{elementTag}}-soaFullHistory").on("shown.bs.tab", function(e){
+        $("#table-{{elementTag}}-soaFullHistory").DataTable().columns.adjust();
+    });
+    $("#navTagLink-{{elementTag}}-soaCustomerHistory").on("shown.bs.tab", function(e){
+        $("#table-{{elementTag}}-soaCustomerHistory").DataTable().columns.adjust();
+    });
+    $("#navTagLink-{{elementTag}}-soaCustomerList").on("shown.bs.tab", function(e){
+        $("#table-{{elementTag}}-soaCustomerList").DataTable().columns.adjust();
+    });
+    $("#navTagLink-{{elementTag}}-soaSupplierList").on("shown.bs.tab", function(e){
+        $("#table-{{elementTag}}-soaSupplierList").DataTable().columns.adjust();
+    });
+
+    //CURRENT TOTAL TABLE
+    $("#table-{{elementTagSub}}-soaTotal tbody").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+
+    fetch('/account/api/current_totals/')
+    .then(response => response.json())
+    .then(data => {
+
+      // Gelen verileri HTML içinde göster
+      data.forEach(item => {
+        //SOA
+        $("#USDDebtTotal").text(item.USD.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#USDCreditTotal").text(item.USD.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#USDBalanceTotal").text(item.USD.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#EURDebtTotal").text(item.EUR.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#EURCreditTotal").text(item.EUR.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#EURBalanceTotal").text(item.EUR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#GBPDebtTotal").text(item.GBP.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#GBPCreditTotal").text(item.GBP.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#GBPBalanceTotal").text(item.GBP.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#QARDebtTotal").text(item.QAR.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#QARCreditTotal").text(item.QAR.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#QARBalanceTotal").text(item.QAR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#RUBDebtTotal").text(item.RUB.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#RUBCreditTotal").text(item.RUB.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#RUBBalanceTotal").text(item.RUB.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#JPYDebtTotal").text(item.JPY.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#JPYCreditTotal").text(item.JPY.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#JPYBalanceTotal").text(item.JPY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#TRYDebtTotal").text(item.TRY.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#TRYCreditTotal").text(item.TRY.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#TRYBalanceTotal").text(item.TRY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        //SOA FULL
+        $("#USDDebtTotal-soaFullHistory").text(item.USD.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#USDCreditTotal-soaFullHistory").text(item.USD.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#USDBalanceTotal-soaFullHistory").text(item.USD.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#EURDebtTotal-soaFullHistory").text(item.EUR.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#EURCreditTotal-soaFullHistory").text(item.EUR.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#EURBalanceTotal-soaFullHistory").text(item.EUR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#GBPDebtTotal-soaFullHistory").text(item.GBP.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#GBPCreditTotal-soaFullHistory").text(item.GBP.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#GBPBalanceTotal-soaFullHistory").text(item.GBP.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#QARDebtTotal-soaFullHistory").text(item.QAR.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#QARCreditTotal-soaFullHistory").text(item.QAR.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#QARBalanceTotal-soaFullHistory").text(item.QAR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#RUBDebtTotal-soaFullHistory").text(item.RUB.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#RUBCreditTotal-soaFullHistory").text(item.RUB.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#RUBBalanceTotal-soaFullHistory").text(item.RUB.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#JPYDebtTotal-soaFullHistory").text(item.JPY.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#JPYCreditTotal-soaFullHistory").text(item.JPY.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#JPYBalanceTotal-soaFullHistory").text(item.JPY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+        $("#TRYDebtTotal-soaFullHistory").text(item.TRY.debt.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#TRYCreditTotal-soaFullHistory").text(item.TRY.credit.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        $("#TRYBalanceTotal-soaFullHistory").text(item.TRY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+      });
+
+      $("#table-{{elementTagSub}}-soaTotal tbody").busyLoad("hide", {
+        animation: "fade"
+      });
+
+    })
+    .catch(error => {
+        $("#table-{{elementTagSub}}-soaTotal td").each(function() {
+            $(this).text("-");
+        });
+        
+        console.error('API Hatası:', error);
+
+        $("#table-{{elementTagSub}}-soaTotal tbody").busyLoad("hide", {
+            animation: "fade"
+        });
+    });
+
+    //Customer TOTAL TABLE
+    $("#table-{{elementTagSub}}-soaCustomerTotal tbody").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+
+    fetch('/account/api/send_invoice_totals/')
+    .then(response => response.json())
+    .then(data => {
+
+         // Gelen verileri HTML içinde göster
+        data.forEach(item => {
+            $("#USDTotalPrice-soaCustomerList").text(item.USD.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#USDPaidPrice-soaCustomerList").text(item.USD.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#USDBalance-soaCustomerList").text(item.USD.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#EURTotalPrice-soaCustomerList").text(item.EUR.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#EURPaidPrice-soaCustomerList").text(item.EUR.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#EURBalance-soaCustomerList").text(item.EUR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#GBPTotalPrice-soaCustomerList").text(item.GBP.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#GBPPaidPrice-soaCustomerList").text(item.GBP.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#GBPBalance-soaCustomerList").text(item.GBP.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#QARTotalPrice-soaCustomerList").text(item.QAR.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#QARPaidPrice-soaCustomerList").text(item.QAR.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#QARBalance-soaCustomerList").text(item.QAR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#RUBTotalPrice-soaCustomerList").text(item.RUB.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#RUBPaidPrice-soaCustomerList").text(item.RUB.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#RUBBalance-soaCustomerList").text(item.RUB.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#JPYTotalPrice-soaCustomerList").text(item.JPY.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#JPYPaidPrice-soaCustomerList").text(item.JPY.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#JPYBalance-soaCustomerList").text(item.JPY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#TRYTotalPrice-soaCustomerList").text(item.TRY.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#TRYPaidPrice-soaCustomerList").text(item.TRY.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#TRYBalance-soaCustomerList").text(item.TRY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        });
+        $("#table-{{elementTagSub}}-soaCustomerTotal tbody").busyLoad("hide", {
+            animation: "fade"
+        });
+    
+
+    })
+    .catch(error => {
+        $("#table-{{elementTagSub}}-soaCustomerTotal td").each(function() {
+            $(this).text("-");
+        });
+        
+        console.error('API Hatası:', error);
+
+        $("#table-{{elementTagSub}}-soaCustomerTotal tbody").busyLoad("hide", {
+            animation: "fade"
+        });
+    });
+
+    //Supplier TOTAL TABLE
+    $("#table-{{elementTagSub}}-soaSupplierTotal tbody").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+
+    fetch('/account/api/incoming_invoice_totals/')
+    .then(response => response.json())
+    .then(data => {
+
+         // Gelen verileri HTML içinde göster
+        data.forEach(item => {
+            $("#USDTotalPrice-soaSupplierList").text(item.USD.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#USDPaidPrice-soaSupplierList").text(item.USD.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#USDBalance-soaSupplierList").text(item.USD.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#EURTotalPrice-soaSupplierList").text(item.EUR.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#EURPaidPrice-soaSupplierList").text(item.EUR.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#EURBalance-soaSupplierList").text(item.EUR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#GBPTotalPrice-soaSupplierList").text(item.GBP.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#GBPPaidPrice-soaSupplierList").text(item.GBP.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#GBPBalance-soaSupplierList").text(item.GBP.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#QARTotalPrice-soaSupplierList").text(item.QAR.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#QARPaidPrice-soaSupplierList").text(item.QAR.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#QARBalance-soaSupplierList").text(item.QAR.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#RUBTotalPrice-soaSupplierList").text(item.RUB.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#RUBPaidPrice-soaSupplierList").text(item.RUB.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#RUBBalance-soaSupplierList").text(item.RUB.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#JPYTotalPrice-soaSupplierList").text(item.JPY.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#JPYPaidPrice-soaSupplierList").text(item.JPY.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#JPYBalance-soaSupplierList").text(item.JPY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+
+            $("#TRYTotalPrice-soaSupplierList").text(item.TRY.total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#TRYPaidPrice-soaSupplierList").text(item.TRY.paid.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+            $("#TRYBalance-soaSupplierList").text(item.TRY.balance.toLocaleString('tr-TR', { minimumFractionDigits: 2 }));
+        });
+        $("#table-{{elementTagSub}}-soaSupplierTotal tbody").busyLoad("hide", {
+            animation: "fade"
+        });
+    
+
+    })
+    .catch(error => {
+        $("#table-{{elementTagSub}}-soaSupplierTotal td").each(function() {
+            $(this).text("-");
+        });
+        
+        console.error('API Hatası:', error);
+
+        $("#table-{{elementTagSub}}-soaSupplierTotal tbody").busyLoad("hide", {
+            animation: "fade"
+        });
+    });
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/account/soa/list.js' %}"></script>
+
+{% endblock javascript %}
+

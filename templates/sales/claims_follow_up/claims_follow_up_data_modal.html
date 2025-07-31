@@ -1,0 +1,37 @@
+{% load static i18n %}
+{% block modals %}
+
+<div id="modal_claim_follow_up_update_modal" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">CLAIM COMPLETION</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="claim_follow_up_result_form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in claim_follow_up_result_form %}
+                        <div class="form-group col-lg-12">
+                            <label>{{field.label}}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endfor %}
+                     
+                    </div>
+                    <fieldset class="card-footer border-top w-100 text-right">
+                        <button id="update_claim_info" type="submit" class="btn btn-primary btn-block">
+                            {% trans 'Update' %}
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

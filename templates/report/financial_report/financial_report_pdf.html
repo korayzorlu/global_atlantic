@@ -1,0 +1,109 @@
+{% load static %}
+
+<form hx-post="{{request.path}}" class="modal-content form-container border" id="form-{{elementTag}}-" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Export Reports</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row p-2 pt-2">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        Filter Date Range
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-md-12 p-2">
+                        <div class="form-outline datepicker" id="startDatePicker">
+                            <input type="text" id="startDate" class="form-control form-control-sm">
+                            <label for="startDate" class="form-label">Start Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-12 p-2">
+                        <div class="form-outline datepicker" id="endatePicker">
+                            <input type="text" id="endDate" class="form-control form-control-sm">
+                            <label for="endDate" class="form-label">End Date</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <div class="col-md-6 me-auto">
+            <div class="row">
+                <div class="col-md-10 d-flex" style="align-items:center;">
+                    <div class="progress w-100 m-0 d-none" id="exportProgressBarFRBlock">
+                        <div id="exportProgressBarFR" class="progress-bar bg-danger" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+                <div class="col-md-1 d-flex" style="align-items:center;">
+                    <span class="d-none" id="percentCountFR">0%</span>
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-danger bg-blue-esms me-auto ms-4 d-none" type="button" id="downloadFRPdf">Download</button>
+                </div>
+            </div>
+        </div>
+        <button class="btn btn-secondary bg-red-esms text-white" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger bg-blue-esms" type="button" id="exportFRPdf">Export</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/report/financial_report_pdf/";
+    var user = "{{user.id}}";
+
+    //$("#table-purchaseOrderPartPdf").DataTable().columns.adjust();
+
+    $("#exportFRPdf").on("click", function(){
+        $(this).prop("disabled",true);
+
+        $("#exportProgressBarFRBlock").removeClass("d-none");
+        $("#percentCountFR").removeClass("d-none");
+
+        //window.location.href = "/sale/purchase_order_download_excel?po=" + orderConfirmationSwitchFR + "&ot=" + orderTrackingSwitchFR + "&i=" + invoicedSwitchFR + "&start=" + $('#startDate').val() + "&end=" + $('#endDate').val() + "&c=" + selectedCompanies;
+        //addUpdateDataModalXl.hide();
+
+        htmx.ajax("POST", "/report/financial_report_export_pdf?&start=" + $('#startDate').val() +
+                                                                "&end=" + $('#endDate').val()
+        );
+
+        
+
+    });
+    
+
+    var day = new Date().getDate()
+    var month = new Date().getMonth() + 1
+    var year = new Date().getFullYear()
+
+    $('#startDate').val(day + "/" + month + "/" + year)
+    $('#endDate').val(day + "/" + month + "/" + year)
+
+    {% comment %} $('#startDatePicker').on("valueChanged.mdb.datepicker", function(e) {
+        // get value from first datepicker and set it as minimum date in a second datepicker
+        console.log(e);
+        console.log($('#startDate').val());
+    });	 {% endcomment %}
+
+
+    //$('#companyListFR').select2();
+
+    
+
+</script>
+
+{% block javascript %}
+<script src="{% static 'js/report/financial_report/filter.js' %}"></script>
+{% endblock javascript %}

@@ -1,0 +1,339 @@
+{% extends "./registration/password_reset_root.html" %}
+{% load i18n static %}
+{% load static %}
+
+{% block title %} Landing Page {% endblock %}
+{% block back_button %}{% url 'user:landing_page' %}{% endblock %}
+
+
+{% block content %}
+<!-- Content area -->
+<link rel="stylesheet" href="{% static 'css/landing_page/landing_page.css' %}">
+<script src="https://kit.fontawesome.com/136a4e8ae3.js" crossorigin="anonymous"></script>
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog modal-login">
+        <div class="modal-content">
+            <div class="avatar">
+                <img src="{% static 'images/landing/esms-logo-light.png' %}" alt="">
+            </div>
+            <div class="header">
+                <h5 class="modal-title">
+                    Sign in to Micho
+                </h5>
+                <button type="button" class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="body">
+                <form class="form-validate" method="POST" action="" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {% comment %} form based errors {% endcomment %}
+                    {% if form.errors and not form.non_field_errors %}
+                    <p class="errornote">
+                        {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}
+                        {% else %}{% trans "Please correct the errors below." %}{% endif %}
+                    </p>
+                    {% endif %}
+
+                    {% if form.non_field_errors %}
+                    {% for error in form.non_field_errors %}
+                    <p class="errornote text-danger">
+                        {{ error }}
+                    </p>
+                    {% endfor %}
+                    {% endif %}
+
+                    {% comment %} field based errors {% endcomment %}
+                    {{ form.username.errors }}
+                    <label for="username" class="form-label text-white">Username or email address</label>
+                    <div class="form-group form-group-feedback form-group-feedback-left">
+                        <input type="text" class="form-control" placeholder="Username" name="username" autofocus=""
+                            autocapitalize="none" autocomplete="username" maxlength="150" required="" id="username">
+                    </div>
+                    {% comment %} field based errors {% endcomment %}
+                    {{ form.password.errors }}
+                    <div class="span-wrapper">
+                        <label for="password" class="form-label text-white">Password</label>
+                        <a style="margin-bottom: 7px;" tabindex="0" href="{% url 'user:password_reset' %}">Forgot
+                            password?</a>
+                    </div>
+                    <div class="form-group form-group-feedback form-group-feedback-left">
+                        <input type="password" class="form-control" placeholder="Password" name="password"
+                            autocomplete="current-password" required="" id="password">
+                    </div>
+                    <div class="text-right">
+                        <label class="custom-control custom-checkbox m-0" style="user-select: none; display: inline;">
+                            <input type="checkbox" name="remember" id="rememberMe" class="custom-control-input"
+                                checked="">
+                            <span class="custom-control-label" style="padding-top: 1px;">Remember Me</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="btn submit w-100">Submit</button>
+                </form>
+            </div>
+            <div class="footer">
+                <p class="_58mv">By clicking the Register button, you agree to our data<a href="kvkk.html"
+                        id="privacy-link" target="_blank" rel="nofollow"> Policy</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End HTML -->
+
+<div class="content-inner">
+    <!-- Page header -->
+    <div class="description">
+        <div class="page-header">
+            <div class="page-header-content container header-elements-md-inline">
+                <div class="d-flex">
+                    <div class="page-title">
+                        <h1 class="font-weight-semibold">MichoApp</h1>
+                        <p>Your Digital Partner in <span>Marine Industry.</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /page header -->
+
+    <!-- Content area -->
+
+    
+    
+
+    <div class="main" id="about">
+        
+        <div class="row p-2 d-flex justify-content-center mb-5 text-center">
+            <div class="col-md-3">
+                <img src="/static/images/landing/esms-logo-light.png" alt="" style="height:100px;">
+            </div>
+        </div>
+
+        <div class="row p-2 d-flex justify-content-center mb-5">
+
+            <div class="col-md-10">
+                <div class="card text-white text-center" style="background-color:rgba(18, 127, 164, 0.0);">
+                    <div class="card-body">
+                      <h5 class="card-title">About MichoApp</h5>
+                      <p class="card-text">It is a web-based ERP software created specifically for the company's needs. It enables the company to carry out its operations planning and management processes and to analyze these processes. It provides the management and recording of the demand and offer processes until the supply of the parts needed for the maintenance and repair of the ships. </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row d-flex justify-content-center mb-5">
+            <div class="col-md-12 w-75" style="height:2px;background: linear-gradient(90deg, rgba(2,18,43,1) 8%, rgba(12,48,87,1) 16%, rgba(18,127,164,0.5) 24%);"></div>
+        </div>
+
+        <div class="row p-2 d-flex justify-content-center mb-5">
+
+            <div class="col-md-10">
+                <div class="card text-white text-center" style="background-color:rgba(18, 127, 164, 0.0);">
+                    <div class="card-body">
+                      <h5 class="card-title">MichoApp Usage Areas</h5>
+                      <p class="card-text">Quick access to all information about the desired parts is provided. to each piece defined QR Thanks to the codes, information about the parts can be shared in different departments (workshop, shipyard, etc.). available. Improved interface at which stage the created projects are thanks to easy to follow.  </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row d-flex justify-content-center mb-5">
+            <div class="col-md-12 w-75" style="height:2px;background: linear-gradient(90deg, rgba(2,18,43,1) 8%, rgba(12,48,87,1) 16%, rgba(18,127,164,0.5) 24%);"></div>
+        </div>
+
+        <div class="row p-2 d-flex justify-content-center">
+
+            <div class="col-md-10">
+                <div class="card text-white text-center" style="background-color:rgba(18, 127, 164, 0.0);">
+                    <div class="card-body">
+                      <h5 class="card-title">MichoApp Advantages</h5>
+                      <p class="card-text">Web-based MichoApp, which eliminates the need for servers, is a high-end enterprise resource planning and process management services to you by eliminating venue and platform conditions offers. With its flexible working opportunity in production and logistics, its structure that increases efficiency and profitability institutions It saves from great burdens and carries it one step further with new generation technology.   </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="row d-flex justify-content-center mb-5">
+            <div class="col-md-12 w-75" style="height:2px;background: linear-gradient(90deg, rgba(2,18,43,1) 8%, rgba(12,48,87,1) 16%, rgba(18,127,164,0.5) 24%);"></div>
+        </div>
+
+        <div class="row p-2 d-flex justify-content-center">
+
+            <div class="col-md-10">
+                <div class="card text-white text-center" style="background-color:rgba(18, 127, 164, 0.0);">
+                    <div class="card-body">
+                      <h5 class="card-title">MichoApp Advantages</h5>
+                      <p class="card-text">Web-based MichoApp, which eliminates the need for servers, is a high-end enterprise resource planning and process management services to you by eliminating venue and platform conditions offers. With its flexible working opportunity in production and logistics, its structure that increases efficiency and profitability institutions It saves from great burdens and carries it one step further with new generation technology.   </p>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+    <footer class="text-center text-lg-start" style="border-top: 1px solid rgba(18, 127, 164, 0.5) !important;">
+        <!-- Grid container -->
+        <div class="container">
+          <!--Grid row-->
+          <div class="row">
+            <!--Grid column-->
+            <div class="col-lg-4 col-md-12 mb-1 mb-md-0">
+              <div class="d-flex flex-1 align-items-center justify-content-center m-0">
+                <img src="{% static 'images/landing/NTG-Logo.png' %}" height="100" alt="">
+              </div>
+              <ul class="navbar-nav flex-row d-flex justify-content-center mt-0">
+                <li class="nav-item">
+                    <a class="linkedin navbar-nav-link" target="_blank"
+                        href="https://www.linkedin.com/company/novutechnologygroup/mycompany/?viewAsMember=true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <i class="fa-brands fa-linkedin-in" style="color: #f6f5f4;font-size: large;"></i>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="twitter navbar-nav-link" target="_blank" href="https://twitter.com/novutechnology">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <i class="fa-brands fa-twitter" style="color: #f6f5f4;font-size: large;"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="instagram navbar-nav-link" target="_blank" href="https://www.instagram.com/novutechnologygroup/">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <i class="fa-brands fa-instagram" style="color: #f6f5f4;font-size: large;"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="youtube navbar-nav-link" target="_blank"
+                        href="https://www.youtube.com/channel/UCd3LQXBlwaIdHaWxW6Gdfmg">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <i class="fa-brands fa-youtube" style="color: #f6f5f4;font-size: large;"></i>
+                    </a>
+                </li>
+            </ul>
+            </div>
+            <!--Grid column-->
+      
+            <!--Grid column-->
+            <div class="col-lg-8 col-md-12 mb-1 mb-md-0 mt-5">
+                <p class="mb-1" style="font-size: small;color: #fff;text-align: end;"><i class="fas fa-home"></i> Aydıntepe Mahallesi Sahil Bulvarı Caddesi Denizciler Ticaret Merkezi 57/C Tuzla/İstanbul </p>
+                <p style="font-size: small;color: #fff;text-align: end;">
+                  <i class="fas fa-envelope"></i>
+                  info@novutechnologies.com
+                  <i class="fas fa-phone"></i> 
+                  +90 216 330 8246 
+                </p>
+            </div>
+            <!--Grid column-->
+
+          </div>
+          <!--Grid row-->
+        </div>
+        <!-- Grid container -->
+      
+        <!-- Copyright -->
+        <div class="text-center p-2 text-white" style="background-color: #127fa480;font-size: small;">
+            © 2024 MichoApp / All rights reserved - Novu Technology Group 
+        </div>
+      <!-- Copyright -->
+    </footer>
+
+    <!-- Footer -->
+    <!-- <div id="footer" class="navbar navbar-expand-xl navbar-light navbar-static p-2 align-items-center">
+        <div class="d-flex flex-1 align-items-center justify-content-center">
+            <img src="{% static 'images/landing/NTG-Logo.png' %}" height="65" alt="">
+        </div>
+
+        <div class="contact d-flex w-auto border-top border-top-light-100 border-top-xl-0 order-1 order-xl-0">
+            <p>
+                <i class="icon-home4 mr-1"></i>
+                Aydıntepe Mahallesi Sahil Bulvarı Caddesi Denizciler Ticaret Merkezi 57/C Tuzla/İstanbul 
+            </p>
+            <p>
+                <i class="icon-envelop2 mr-1"></i>
+                info@novutechnologies.com
+            </p>
+            <p>
+                <i class="icon-phone2 mr-1"></i>
+                +90 216 330 82 46 
+            </p>
+
+        </div>
+
+        <div class="d-flex w-100 flex-xl-1 justify-content-center align-items-center order-0 order-xl-1">
+            <ul class="navbar-nav navbar-nav-underline flex-row text-nowrap mx-auto">
+                <li class="nav-item">
+                    <a class="linkedin navbar-nav-link" target="_blank"
+                        href="https://www.linkedin.com/company/novutechnologygroup/mycompany/?viewAsMember=true">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <img width="25" src="{% static 'images/landing/linkedin.svg' %}" alt="">
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="twitter navbar-nav-link" target="_blank" href="https://twitter.com/novutechnology">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <img width="25" src="{% static 'images/landing/twitter.svg' %}" alt="">
+
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="instagram navbar-nav-link" target="_blank" href="https://www.instagram.com/novutechnologygroup/">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <img width="25" src="{% static 'images/landing/instagram.svg' %}" alt="">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="youtube navbar-nav-link" target="_blank"
+                        href="https://www.youtube.com/channel/UCd3LQXBlwaIdHaWxW6Gdfmg">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <img width="25" src="{% static 'images/landing/youtube.svg' %}" alt="">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div> -->
+    <!-- /footer -->
+
+    <!-- /content area -->
+
+    <script src="{% static 'js/landing_page/validate.min.js' %}"></script>
+    <script type="module" src="{% static 'js/landing_page/landing_page.js' %}"></script>
+
+    {% block javascript %}
+    {% if form.non_field_errors %}
+    <script>
+        document.getElementById("loginButton").click();
+    </script>
+    {% endif %}
+    {% endblock javascript %}
+
+    <!-- /content area -->
+    {% endblock %}

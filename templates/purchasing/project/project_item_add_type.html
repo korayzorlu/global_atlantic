@@ -1,0 +1,81 @@
+<form hx-post="{{ request.path }}" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagSub}}-item-type" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Select item type</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="row p-1">
+                    <a class="col-md-12 text-center p-3 border bg-blue-esms text-white choiceBoxBLue"
+                    hx-get="/purchasing/project_item_add/p_{{project.id}}"
+                    hx-target="#addUpdateDataDialogXl"
+                    style="cursor:pointer;">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <img src="/static/images/icons/sidebar/car-parts.svg"
+                                class="" alt="" width="60" height="60" style="filter: brightness(0) invert(1);">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                Part
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row p-1">
+                    <a class="col-md-12 text-center p-3 border bg-blue-esms text-white choiceBoxBLue" href="#">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <img src="/static/images/icons/sidebar/customer-service.svg"
+                                class="" alt="" width="60" height="60" style="filter: brightness(0) invert(1);">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                Service
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="row p-1">
+                    <a class="col-md-12 text-center p-3 border bg-blue-esms text-white choiceBoxBLue" href="#">
+                        <div class="row mb-3">
+                            <div class="col-md-12">
+                                <img src="/static/images/icons/sidebar/expenses.svg"
+                                class="" alt="" width="60" height="60" style="filter: brightness(0) invert(1);">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                Expense
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var pageUrl = "/purhasing/project_item_add_type/{{elementTagId}}/"
+    var sessionKey = "{{sessionKey}}";
+    
+    $(".choiceBoxBLue").on("click", function(){
+        addUpdateDataModal.hide();
+    });
+   
+</script>

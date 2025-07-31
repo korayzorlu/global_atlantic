@@ -1,0 +1,16 @@
+{% load static %}
+
+{% block buttonmapeditremove %}
+<div class="align-self-md-center actionButtons">
+    <a class="button-map" data-toggle="modal" data-target="#modal_map">
+        <img src="{% static 'images/icons/map.svg' %}">
+    </a>
+    <a href="{{edit_url}}" class="button-edit">
+        <img src="{% static 'images/icons/edit.svg' %}">
+    </a>
+    <a href="{{delete_url}}" class="button-remove">
+        <img src="{% static 'images/icons/cancel.svg' %}">
+    </a>
+</div>
+
+{% endblock %}

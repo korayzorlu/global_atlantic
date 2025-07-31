@@ -1,0 +1,114 @@
+[
+    {
+        "model": "sales.reason",
+        "pk": 1,
+        "fields": {       
+            "name": "High Price"   
+        }
+    },
+    {
+        "model": "sales.reason",
+        "pk": 2,
+        "fields": {     
+            "name": "Low Quality"
+        }
+    },
+    {
+        "model": "sales.reason",
+        "pk": 3,
+        "fields": {     
+            "name": "Delayed Order"
+        }
+    },
+    {
+        "model": "sales.reason",
+        "pk": 4,
+        "fields": {     
+            "name": "No Need"
+        }
+    },
+    {
+        "model": "sales.reason",
+        "pk": 5,
+        "fields": {     
+            "name": "Pending Order"
+        }
+    },
+    {
+        "model": "sales.claimreason",
+        "pk": 1,
+        "fields": {       
+            "name": "Wrong Part"   
+        }
+    },
+    {
+        "model": "sales.claimreason",
+        "pk": 2,
+        "fields": {     
+            "name": "Mismatched Part"
+        }
+    },
+    {
+        "model": "sales.claimreason",
+        "pk": 3,
+        "fields": {     
+            "name": "Customer Provided Incomplete Information"
+        }
+    },
+    {
+        "model": "sales.claimreason",
+        "pk": 4,
+        "fields": {     
+            "name": "Problems After Using (Material Quality etc.)"
+        }
+    },
+    {
+        "model": "sales.claimreason",
+        "pk": 5,
+        "fields": {     
+            "name": "Damaged Part"
+        }
+    },
+    {
+        "model": "sales.claimreason",
+        "pk": 6,
+        "fields": {     
+            "name": "Other Reasons"
+        }
+    },
+    {
+        "model": "sales.claimresult",
+        "pk": 1,
+        "fields": {       
+            "name": "RESS"   
+        }
+    },
+    {
+        "model": "sales.claimresult",
+        "pk": 2,
+        "fields": {     
+            "name": "RSS"
+        }
+    },
+    {
+        "model": "sales.claimresult",
+        "pk": 3,
+        "fields": {     
+            "name": "PR"
+        }
+    },
+    {
+        "model": "sales.claimresult",
+        "pk": 4,
+        "fields": {     
+            "name": "CGUC"
+        }
+    },
+    {
+        "model": "sales.claimresult",
+        "pk": 5,
+        "fields": {     
+            "name": "Damaged Part"
+        }
+    }
+]

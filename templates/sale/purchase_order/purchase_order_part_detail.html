@@ -1,0 +1,94 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.inquiryPart}}" readonly>
+            <label for="textFormOutline" class="form-label">Part</label>
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.inquiryPart.requestPart.part.description}}" readonly>
+            <label for="textFormOutline" class="form-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline">
+              <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.quantity}}" readonly>
+              <label for="textFormOutline" class="form-label">Quantity</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline">
+              <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.unitPrice}}" readonly>
+              <label for="textFormOutline" class="form-label">Unit Price</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+            <div class="form-outline">
+              <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.totalPrice}}" readonly>
+              <label for="textFormOutline" class="form-label">Total Price</label>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-outline">
+              <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.availability}}" readonly>
+              <label for="textFormOutline" class="form-label">Availability</label>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="form-outline">
+              <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{purchaseOrderPart.availabilityType}}" readonly>
+              <label for="textFormOutline" class="form-label select-label">Availability Type</label>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="form-outline">
+              {{form.orderType}}
+              <label for="textFormOutline" class="form-label select-label">Order Type</label>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="form-outline">
+              {{form.quality}}
+              <label for="textFormOutline" class="form-label select-label">Quality</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Save</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+ 
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var purchaseOrderPartId = "{{purchaseOrderPart.id}}";
+    var purchaseOrderId = "{{purchaseOrderPart.purchaseOrder.id}}";
+    var pageUrl = "/sale/purchaseOrder_part_update/{{elementTagId}}/"
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+
+    
+</script>

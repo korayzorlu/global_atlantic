@@ -1,0 +1,102 @@
+@-webkit-keyframes animateTeam {
+  0% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  20% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  30% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  40% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  50% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  60% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  70% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  80% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  100% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+}
+
+@keyframes animateTeam {
+  0% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  20% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  30% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  40% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  50% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  60% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  70% {
+    -webkit-transform: translateY(0px);
+            transform: translateY(0px);
+  }
+  80% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+  100% {
+    -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+  }
+}
+
+#iconTeam {
+  position: relative;
+  background: transparent;
+}
+
+#iconTeam::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: url("../../../images/icons/onehand.svg");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  -webkit-animation: animateTeam 5s linear infinite;
+          animation: animateTeam 5s linear infinite;
+}
+
+@media screen and (max-width: 768px) {
+  #iconTeam {
+    display: none;
+  }
+}
+/*# sourceMappingURL=team_add.css.map */

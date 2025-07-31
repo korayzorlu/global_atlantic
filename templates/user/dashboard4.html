@@ -1,0 +1,371 @@
+{% extends 'layout/dashboard_layout.html' %}
+
+{% load static %}
+
+{% block body %}
+
+<!-- <style>
+    #sortable-grid .sortable-item {
+        width: 125px;
+        height: 125px;
+        margin: 15px;
+        display: flex;
+        justify-content: center;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+</style> -->
+
+<li class="nav-item ms-1 p-1" role="presentation" id="dashboardNavTag">
+    <a class="nav-link mainNavLink border border-1 rounded-0 border-secondary-subtle" id="dashboardNavTagLink" data-mdb-toggle="tab" href="#dashboardTabPane" role="tab" aria-controls="dashboardTabPane" aria-selected="true" >
+        <i class="fa-solid fa-table me-2"></i>
+        {{tag}}
+    </a>
+</li>
+
+<!-- Tab -->
+<div class="tab-pane mainTabPane fade" id="dashboardTabPane" role="tabpanel" aria-labelledby="dashboardNavTagLink">
+    <!-- Global Boxes -->
+    <div class="globalBoxes">
+        <!-- Box -->
+        <div class="box">
+            <!-- Overview Boxes -->
+            <div class="overview-boxes row mb-3">
+                <!-- Card Başlangıç -->
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Profile</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    {% if user.profile.image %}
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <img src="{{user.profile.image.url}}" style="width:auto;max-height:80px;border-radius:50%;" class="text-center">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <img src="/static/images/icons/no-image.png" style="max-width:44px;border-radius:50%;" class="text-center">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Name: </strong>{{user.first_name}} {{user.last_name}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Position: </strong>{{user.profile.position}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Phone: </strong>{{user.profile.phone}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Bonus: </strong>$0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" hx-get="{% url 'user:user_profile' request.user %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true">Profile <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Last Projects</div>
+                            </div>
+                            {% for request in requests|slice:":4" %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500">{{request.created_date.date|date:'d.m.Y'}} - </span><a href="#" style="text-decoration:underline;">{{request.requestNo}}</a></div>
+                                </div>
+                            {% endfor %}
+                            {% if requests|length < 4 %}
+                                {% for i in ''|center:emptyLineRequestCounter %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" data-mdb-ripple-color="dark" hx-get="{% url 'sale:request_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Pending Invoices</div>
+                            </div>
+                            {% for approvalInvoice in approvalInvoices|slice:":4" %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div>{{approvalInvoice.project.projectNo}} </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="text-truncate" style="max-width: 200px">{{approvalInvoice.quotation.inquiry.theRequest.customer}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if approvalInvoices|length < 4 %}
+                                {% for i in ''|center:emptyLineOCCounter %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" hx-get="{% url 'account:order_in_process_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalInvoices|length}}</span> <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Pending Approval</div>
+                            </div>
+                            {% for approvalQuotation in approvalQuotations|slice:":4" %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <span class="text-red-500">{{approvalQuotation.quotationDate|date:'d.m.Y'}} - </span>
+                                        <a hx-get="{% url 'sale:manager_approval_update_in_dashboard' approvalQuotation.id %}" hx-target="#addUpdateDataDialogXl" style="text-decoration:underline;">{{approvalQuotation.quotationNo}}</a>
+                                        <span class="text-truncate" style="max-width: 150px"> - {{approvalQuotation.inquiry.theRequest.project.user.first_name}} {{approvalQuotation.inquiry.theRequest.project.user.last_name}}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if approvalQuotations|length < 4 %}
+                                {% for i in ''|center:emptyLineMACounter %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" hx-get="{% url 'sale:manager_approval_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalQuotations|length}}</span> <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Son -->
+            </div>
+            <!-- Overview Boxes End -->
+
+            <!-- test -->
+            <div class="row moveArea">
+                <div class="col-md-10">
+                    <div id="widgetBlock" data-mdb-sortable="sortable" class="row sortable-list g-2" data-mdb-connected-list="#widgetMenu">
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 1
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 2
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 3
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 4
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 5
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 7
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 8
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 9
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 10
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 11
+                            </div>
+                        </div>
+                        <div class="sortable-item col-md-3" data-mdb-container=".moveArea">
+                            <div class="border border-primary" style="height:300px;">
+                                Item 12
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-2">
+
+                        <div id="widgetMenu" data-mdb-sortable="sortable" class="row sortable-list" data-mdb-connected-list="#widgetBlock">
+                            <div id="widgetItem6" class="sortable-item col-md-12" data-mdb-container="#widgetMenu" data-mdb-animation-duration="50" data-mdb-disabled="true">
+                                <div class="border border-primary" style="height:100px;">
+                                    Item 6
+                                </div>
+                            </div>
+                            <div id="widgetItem7" class="sortable-item col-md-12" data-mdb-container=".moveArea" data-mdb-disabled="true">
+                                <div class="border border-primary" style="height:100px;">
+                                    Item 7
+                                </div>
+                            </div>
+                            <div id="widgetItem8" class="sortable-item col-md-12" data-mdb-container=".moveArea" data-mdb-disabled="true">
+                                <div class="border border-primary" style="height:100px;">
+                                    Item 8
+                                </div>
+                            </div>
+                            <div id="widgetItem9" class="sortable-item col-md-12" data-mdb-container=".moveArea" data-mdb-disabled="true">
+                                <div class="border border-primary" style="height:100px;">
+                                    Item 9
+                                </div>
+                            </div>
+                            <div id="widgetItem10" class="sortable-item col-md-12" data-mdb-container=".moveArea" data-mdb-disabled="true">
+                                <div class="border border-primary" style="height:100px;">
+                                    Item 10
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+            
+            <!-- test End -->
+
+        </div>
+        <!-- Box End -->
+    </div>
+    <!-- GLobal Boxes End -->
+</div>
+<!-- Tab End -->
+
+
+
+
+<!-- <button type="button" id="openWidgetMenu" class="btn btn-primary btn-floating" style="position: absolute;display: block; top:85vh;right: 10px;z-index: 9999999;animation: 1s ease 0s 1 normal none running fadeIn;">
+    <i class="fa-solid fa-grip"></i>
+</button> -->
+
+<script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/js/modules/charts.min.js' %}"></script>
+<script>
+    var elementTag = "{{elementTag}}";
+    
+    $(".home-section").css({"overflow" : "hidden"});
+    //$("#tabCont").css({"overflow" : "scroll", "height" : "100vh"});
+    $("#dashboardTabPane").css({"overflow" : "scroll"});
+
+    $(".mainNavLink").removeClass("active");
+    $(".mainTabPane").removeClass("show active");
+
+    $("#tabNav").append($("#dashboardNavTag"));
+    $("#tabCont").append($("#dashboardTabPane"));
+    $("#dashboardNavTagLink").addClass("active");
+    $("#dashboardTabPane").addClass("show active");
+
+    $(".mainNavLink:not(.active)").children("button").hide();
+
+    $("#dashboardNavTagLink").on("shown.bs.tab", function(e){
+        $(e.relatedTarget).children("button").hide();
+        $(".home-section").css({"overflow" : "auto"});
+        history.pushState({}, null, "/user");
+    });
+    
+    //htmx.ajax('GET', "/note/note_dashboard_data", "#noteBlock");
+
+    //cookies = new URLSearchParams(document.cookie.replaceAll("&", "%26").replaceAll("; ","&"))
+    
+    //if(cookies.get("companyTab") == "true"){
+    //    htmx.ajax('GET', "/card/card_data", "#tabCont");
+    //};
+    
+    $("#widgetItem6").on('exit.mdb.sortable',function(e){
+        $("#widgetItem6").attr("mdb-disabled") = "false";
+    });
+
+    
+
+    $("#widgetItem6").on('click',function(e){
+        
+
+        $("#widgetItem6").remove();
+        $("#widgetBlock").prepend(`
+            <div id="widgetItem6" class="sortable-item col-md-3" data-mdb-container="#widgetBlock" data-mdb-animation-duration="50">
+                <div class="border border-primary bg-red-100" style="height:300px;">
+                    Item 6
+                </div>
+            </div>
+        `);
+            
+        new DragAndDrop.Sortable(document.getElementById("widgetItem6"));
+        new DragAndDrop.Draggable(document.getElementById("widgetItem6"));
+        
+    });
+
+
+    
+   
+
+    $("#btnAddProject").button().on('click', function(){
+        $("#project-dialog").dialog({width:500,resizable:false,modal:true,
+        buttons:{
+            "Add new Project":function(){
+                var projectName=$("#new-project").val();
+                var replaceName =projectName.split(" ").join("_");
+                $("<li><a href='#"+replaceName+"'>"+projectName+"</a><li>")
+                .appendTo("#main");
+                $("<ol id='"+replaceName+"'></ol>").appendTo("#projects");
+                $("#projects").tabs("refresh");
+                var tabCount = $("#projects.ui-tabs-nav li").length;
+                $("#projects").tabs("option","active",tabCount-1);
+                
+                $("#new-project").val("");
+                $(this).dialog("close");
+            },
+            "Cancel":function(){
+                $("#new-project").val("");
+                $(this).dialog("close");
+            }
+        }});
+    });
+
+
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/user/dashboard/page.js' %}"></script>
+
+{% endblock javascript %}

@@ -1,0 +1,29 @@
+.disabledVesselWrapper {
+  position: relative;
+}
+.disabledVesselWrapper .disabledVessel {
+  border-radius: 0.1875rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url(../../../images/icons/shipwreck.svg);
+  background-repeat: no-repeat;
+  background-size: 300px;
+  background-position-y: 100px;
+  background-position-x: 50%;
+}
+.disabledVesselWrapper .disabledVessel h1 {
+  color: #eee;
+  font-size: 6vw;
+  position: absolute;
+  width: 100%;
+  height: 100px;
+  top: 450px;
+  text-align: center;
+}/*# sourceMappingURL=vessel_detail.css.map */

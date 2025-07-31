@@ -1,0 +1,4 @@
+table th:first-child,
+table td:first-child {
+  display: none;
+}/*# sourceMappingURL=supplier_data.css.map */

@@ -1,0 +1,200 @@
+<form hx-post="{{ request.path }}" class="modal-content form-container border" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <button type="button" class="btn-close ms-auto p-2" data-bs-dismiss="modal" aria-label="Close"></button>
+
+    <div class="modal-body">
+        <div class="row mb-3">
+            <div class="col-md-6 mb-4 mb-md-0 text-md-start">
+              <p class="mb-0 fs-6"><strong>Customer: </strong>{{quotation.inquiry.theRequest.customer}}</p>
+              <p class="mb-0 fs-6"><strong>Vessel: </strong>{{quotation.inquiry.theRequest.vessel}}</p>
+              <p class="mb-0 fs-6"><strong>Maker: </strong>{{parts.0.inquiryPart.requestPart.part.maker}}</p>
+              <p class="mb-0 fs-6"><strong>Type: </strong>{{parts.0.inquiryPart.requestPart.part.type}}</p>
+            </div>
+            <div class="col-md-6 mb-4 mb-md-0 text-md-start">
+                <p class="mb-0 fs-6"><strong>Project: </strong>{{quotation.project}}</p>
+                <p class="mb-0 fs-6"><strong>Quotation No: </strong>{{quotation.quotationNo}}</p>
+                <p class="mb-0 fs-6"><strong>Cust. Ref.: </strong></p>
+                <p class="mb-0 fs-6"><strong>Date: </strong>{{quotation.quotationDate|date:'d.m.Y'}}</p>
+                <p class="mb-0 fs-6"><strong>Currency: </strong>{{quotation.currency.code}}</p>
+            </div>
+        </div>
+
+        <div class="table-responsive mb-4">
+            <table class="table table-borderless table-striped">
+              <thead>
+                <tr>
+                  <th><strong>Part</strong></th>
+                  <th><strong>Description</strong></th>
+                  <th><strong>Quantity</strong></th>
+                  <th><strong>Unit</strong></th>
+                  <th><strong>% P</strong></th>
+                  <th><strong>Unit Price</strong></th>
+                  <th><strong>Sub Total</strong></th>
+                  <th><strong>% Discout</strong></th>
+                  <th><strong>Final Total Price</strong></th>
+                  <th><strong>Inquiry No</strong></th>
+                  <th><strong>Seller</strong></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for part in parts %}
+                    <tr>
+                        <td>{{part.inquiryPart.requestPart.part.partNo}}</td>
+                        <td>{{part.inquiryPart.requestPart.part.description}}</td>
+                        <td>{{part.quantity}}</td>
+                        <td>{{part.inquiryPart.requestPart.part.unit}}</td>
+                        <td>{{part.profit}}</td>
+                        <td>{{quotation.currency.symbol}} {{part.unitPrice2|floatformat:2}}</td>
+                        <td>{{quotation.currency.symbol}} {{part.totalPrice2|floatformat:2}}</td>
+                        <td>{{part.discount}}</td>
+                        <td>{{quotation.currency.symbol}} {{part.totalPrice3|floatformat:2}}</td>
+                        <td>{{part.inquiryPart.inquiry}}</td>
+                        <td>{{part.inquiryPart.inquiry.supplier}}</td>
+                    </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-9 mb-4 mb-md-0">
+
+                {% comment %} <div class="accordion accordion-sm" id="accordionFlushExampleX">
+                    <div class="accordion-item">
+                      <h2 class="accordion-header" id="flush-headingOneX">
+                        <button class="accordion-button btn btn-sm btn-tertiary collapsed p-2 text-capitalize" type="button" data-mdb-toggle="collapse"
+                          data-mdb-target="#flush-collapseOneX" aria-expanded="true" aria-controls="flush-collapseOneX">
+                          <i class="fas fa-magnifying-glass-dollar fa-sm me-2 opacity-70"></i>Inquiry Comparison
+                        </button>
+                      </h2>
+                      <div id="flush-collapseOneX" class="accordion-collapse collapse"
+                        aria-labelledby="flush-headingOneX" data-mdb-parent="#accordionFlushExampleX">
+                        <div class="accordion-body">
+                            {% for inquiry in inquirires %}
+                            <div class="row mb-3">
+                                <div class="col-md-12">
+                                    fdgsg
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                      </div>
+                    </div>
+                </div> {% endcomment %}
+
+                <!-- Button triggers collapse -->
+                <a class="btn btn-sm btn-dark text-capitalize" data-mdb-toggle="collapse" href="#collapseWithScrollbar" role="button" aria-expanded="false" aria-controls="collapseExample">
+                    <i class="fa-solid fa-magnifying-glass-dollar me-2"></i> Inquiry Comparison <i class="fa-solid fa-angle-down ml-2"></i>
+                </a>
+                
+                <!-- Collapsed content -->
+                <div class="collapse mt-3 scroll-section" id="collapseWithScrollbar"  style="max-height: 400px;overflow-y:auto;">
+                    {% for inquiry in inquirires %}
+                        <div class="row mb-3 border-bottom">
+                            <div class="col-md-12">
+
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        {% if inquiry == quotation.inquiry %}
+                                            İnquiry No: <span class="bg-green-200 text-wrap p-1 rounded-2">{{inquiry.inquiryNo}}</span>
+                                        {% else %}
+                                            İnquiry No: <span>{{inquiry.inquiryNo}}</span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-md-6">
+                                        Supplier: {{inquiry.supplier}}
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <div class="col-md-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-borderless table-striped">
+                                              <thead>
+                                                <tr>
+                                                  <th><strong>Part</strong></th>
+                                                  <th><strong>Quantity</strong></th>
+                                                  <th><strong>Unit</strong></th>
+                                                  <th><strong>Unit Price</strong></th>
+                                                  <th><strong>Total Price</strong></th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {% for inquiryPart in inquiryParts %}
+                                                    {% if inquiryPart.0.inquiry == inquiry %}
+                                                        {% for inquiryPartIn in inquiryPart %}
+                                                            <tr>
+                                                                <td>{{inquiryPartIn.requestPart.part.partNo}}</td>
+                                                                <td>{{inquiryPartIn.quantity}}</td>
+                                                                <td>{{inquiryPartIn.requestPart.part.unit}}</td>
+                                                                <td>{{quotation.currency.symbol}} {{inquiryPartIn.unitPrice|floatformat:2}}</td>
+                                                                <td>{{quotation.currency.symbol}} {{inquiryPartIn.totalPrice|floatformat:2}}</td>
+                                                            </tr>
+                                                        {% endfor %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                              </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+            <div class="col-md-3 mb-4 mb-md-0">
+                <ul class="list-unstyled text-end">
+                    <li><p class="mb-0"><strong>Sub Total: </strong>{{quotation.currency.symbol}} {{total|floatformat:2}}</p></li>
+                    <li><p class="mb-0"><strong>Tax: </strong>{{quotation.currency.symbol}} 0.00</p></li>
+                    <li><p class="mb-0"><strong>Total: </strong>{{quotation.currency.symbol}} {{total|floatformat:2}}</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-12 mb-4 mb-md-0">
+                <p class="mb-0"><strong>Note: </strong>{{form.note}}</p>
+            </div>
+        </div>
+
+        <div class="row justify-content-end">
+            <div class="col-md-2 mb-4 mb-md-0">
+                <div class="row p-1">
+                    <button class="btn btn-danger" type="submit" name="notConfirmButton">
+                        <i class="fas fa-circle-xmark me-3"></i>Not Approve
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-2 mb-4 mb-md-0">
+                <div class="row p-1">
+                    <button class="btn btn-success" type="submit" name="confirmButton">
+                        <i class="fas fa-circle-check me-3"></i>Approve
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
+    {% comment %} <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-danger" type="submit" name="notConfirmButton">
+            <i class="fas fa-circle-xmark me-3"></i>Not Confirm
+        </button>
+        <button class="btn btn-success" type="submit" name="confirmButton">
+            <i class="fas fa-circle-check me-3"></i>Confirm
+        </button>
+    </div> {% endcomment %}
+</form>
+
+
+
+
+
+

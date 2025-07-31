@@ -1,0 +1,232 @@
+{% load static i18n %} {% block aside %}
+<!-- Main sidebar -->
+<div class="sidebar sidebar-light sidebar-main sidebar-fixed sidebar-expand-md">
+    <!-- Sidebar content -->
+    <div class="sidebar-content side_menu_animation">
+        <!-- User menu -->
+        <div class="sidebar-user">
+            <div class="card-body">
+                <div class="media">
+                    <div class="mr-3">
+                        <a href="{% url 'user:profile_page' %}">
+                            {% if request.user.profile.image %}
+                            <img src="{{ request.user.profile.image.url }}" alt="avatar"
+                                class="rounded-circle profile-image" width="38" height="38">
+                            {% else %}
+                            <img src="{% static 'images/icons/enchanted.svg' %}" alt="avatar"
+                                class="rounded-circle profile-image" width="38" height="38">
+                            {% endif %}
+                        </a>
+                    </div>
+
+                    <div class="media-body">
+                        <div class="media-title font-weight-semibold">{{ request.user.username }}</div>
+                        <div class="font-size-xs opacity-50">
+                            {{ request.user.get_full_name }}
+                        </div>
+                    </div>
+                    <div class="ml-3 toggleThemeWrapper align-self-center animation-target pr-1">
+                        {% if request.user.profile.theme == 'light' %}
+                        <div id="toggleTheme">
+                            <img id="toggleIcon" src="{% static 'images/icons/sun.svg' %}"> {% else %}
+                            <div id="toggleTheme">
+                                <img id="toggleIcon" src="{% static 'images/icons/moon.svg' %}"> {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /user menu -->
+
+            <!-- Main navigation -->
+            <div class="card card-sidebar-mobile pb-5">
+                <ul class="nav nav-sidebar" data-nav-type="accordion">
+                    <li class="nav-item">
+                        <a href="{% url 'user:dashboard' %}" class="nav-link">
+                            <i class="icon-home4"></i>
+                            <span class="title">
+                                Dashboard
+                            </span>
+                        </a>
+                    </li>
+                    <li class="nav-item-header">
+                        <div class="text-uppercase font-size-xs line-height-xs">Main</div> <i class="icon-menu" title="Main"></i>
+                    </li>
+
+                    <!-- Card -->
+                    <li class="nav-item nav-item-submenu">
+                        <a href="/user" class="nav-link">
+                            <i class="icon-flag3"></i>
+                            <span class="title">Card</span>
+                        </a>
+                    </li>
+                    <!-- /Card -->
+
+                    <!-- Information -->
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link"><i class="icon-info3"></i>
+                            <span class="title">Information</span>
+                        </a>
+
+                        <ul class="nav nav-group-sub" data-submenu-title="Layouts">
+                            <li class="nav-item"><a href="{% url 'information:customer_data' %}" class="nav-link">{% trans 'Customer' %}</a></li>
+                            <li class="nav-item"><a href="{% url 'information:supplier_data' %}" class="nav-link">{% trans 'Supplier' %}</a></li>
+                            <li class="nav-item"><a href="{% url 'information:vessel_data' %}" class="nav-link">{% trans 'Vessel' %}</a></li>
+                            <li class="nav-item"><a href="{% url 'information:contact_person_data' %}" class="nav-link">{% trans 'Contact Person' %}</a></li>
+                        </ul>
+                    </li>
+                    <!-- /Information -->
+                    <!-- Sales -->
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link"><i class="icon-wallet"></i> <span class="title">Sales</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Starter kit">
+                             <li class="nav-item">
+                                 <a href="{% url 'sales:order_status' %}" class="nav-link">{% trans "Order Status" %}</a>
+                             </li>
+                            <li class="nav-item"><a href="{%url 'sales:claims_follow_up' %}" class="nav-link">{% trans "Claims Follow Up"%}</a></li>
+                            <li class="nav-item"><a href="{%url 'sales:not_confirmed_quotation' %}" class="nav-link">{% trans "Not Confirmed Quotation" %}</a></li>
+                            <li class="nav-item">
+                                <a href="{% url 'sales:sales_data' %}" class="nav-link">{% trans "Sales Projects" %}</a>
+                            </li>
+                            <li class="nav-item-divider"></li>
+                            <li class="nav-item nav-item-submenu">
+                                <a href="#" class="nav-link">Data</a>
+                                <ul class="nav nav-group-sub">
+                                    <li class="nav-item"><a href="{% url 'parts:maker_data' %}" class="nav-link">Maker</a></li>
+                                    <li class="nav-item"><a href="{% url 'parts:manufacturer_data' %}" class="nav-link">Manufacturer</a></li>
+                                    <li class="nav-item"><a href="{% url 'parts:part_data' %}" class="nav-link">Part</a>
+                                    </li>
+                                    <li class="nav-item"><a href="{% url 'parts:related_set_data' %}" class="nav-link">Set</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Human Resource -->
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link"><i class="icon-collaboration"></i>
+                            <span class="title">{% trans 'Human Resource' %}</span>
+                        </a>
+                        <ul class="nav nav-group-sub">
+                            <li class="nav-item">
+                                <a href="{% url 'hr:user_data' %}" class="nav-link">{% trans 'User' %}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'hr:employee_type_data' %}" class="nav-link">{% trans 'Employee Type'%}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'hr:team_data' %}" class="nav-link">{% trans 'Team' %}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{% url 'hr:department_data' %}" class="nav-link">{% trans 'Department' %}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- /Human Resource -->
+                    <!-- Admin -->
+
+
+                    <li class="nav-item nav-item-submenu">
+                        <a href="#" class="nav-link"><i class="icon-cog3"></i> <span
+                                class="title">{% trans 'Admin' %}</span></a>
+
+                        <ul class="nav nav-group-sub" data-submenu-title="Icons">
+                            <li class="nav-item">
+                                <a href="{% url 'hr:the_company_detail' %}" class="nav-link">{% trans 'Company' %}</a>
+                            </li>
+                                
+                            <li class="nav-item">
+                                <a href="{% url 'hr:record_data' %}" class="nav-link">{% trans 'Record' %}</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- /Admin -->
+
+
+                    <!-- /Sales -->
+                    <!-- Sales -->
+                    <!-- <li class="nav-item nav-item-submenu">
+                    <a href="#" class="nav-link"><i class="icon-store2"></i> <span class="title">Marketing</span></a>
+                    <ul class="nav nav-group-sub" data-submenu-title="Starter kit">
+                        <li class="nav-item"><a href="#" class="nav-link">Marketing Status</a></li>
+                        <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link">Survey</a>
+                            <ul class="nav nav-group-sub">
+                                <li class="nav-item"><a href="#" class="nav-link">Templates</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Surveys</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a href="#" class="nav-link">Meetings</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Social Media & Mailing</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Customer Support</a></li>
+                        <li class="nav-item"><a href="#" class="nav-link">Lead Generation</a></li>
+                        <li class="nav-item-divider"></li>
+                        <li class="nav-item nav-item-submenu">
+                            <a href="#" class="nav-link">Data</a>
+                            <ul class="nav nav-group-sub">
+                                <li class="nav-item"><a href="#" class="nav-link">Online Marketing Data</a></li>
+                                <li class="nav-item"><a href="#" class="nav-link">Potential Customers</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
+                </li> -->
+                    <!-- /Sales -->
+                    <!-- Daily Cash Flow -->
+                    <!-- <li class="nav-item">
+                    <a href="#" class="nav-link"><i class="icon-calculator2"></i> <span class="title">Daily Cash Flow</span></a>
+                </li> -->
+                    <!-- /Daily Cash Flow -->
+
+                    <!-- Tools -->
+                    <!-- <li class="nav-item-header">
+                    <div class="text-uppercase font-size-xs line-height-xs">Tools</div> <i class="icon-menu"
+                        title="Forms"></i>
+                </li> -->
+                </ul>
+                <div class="card-body">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-coin-dollar icon-2x text-success"></i>
+                        </div>
+                        <div class="media-body text-left">
+                            <h5 class="font-weight-semibold mb-0">{{ currencies.rates.USD }}</h5>
+                            <span class="text-uppercase font-size-sm text-muted">TURKISH LIRA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-coin-euro icon-2x text-warning"></i>
+                        </div>
+
+                        <div class="media-body text-left">
+                            <h5 class="font-weight-semibold mb-0">{{ currencies.rates.EUR }}</h5>
+                            <span class="text-uppercase font-size-sm text-muted">TURKISH LIRA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="media">
+                        <div class="mr-3 align-self-center">
+                            <i class="icon-coin-pound icon-2x text-danger"></i>
+                        </div>
+
+                        <div class="media-body text-left">
+                            <h5 class="font-weight-semibold mb-0">{{ currencies.rates.GBP }}</h5>
+                            <span class="text-uppercase font-size-sm text-muted">TURKISH LIRA</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="media">
+                        <small class="text-left text-muted">{{ currencies.info }}</small>
+                    </div>
+                </div>
+            </div>
+            <!-- /main navigation -->
+        </div>
+        <!-- /sidebar content -->
+    </div>
+    <!-- /main sidebar -->
+    {% endblock %}

@@ -1,0 +1,828 @@
+{% extends 'layout/dashboard_layout.html' %}
+
+{% load static %}
+
+{% block body %}
+
+<li class="nav-item ms-1 p-1" role="presentation" id="dashboardNavTag">
+    <a class="nav-link mainNavLink border border-1 rounded-0 border-secondary-subtle" id="dashboardNavTagLink" data-mdb-toggle="tab" href="#dashboardTabPane" role="tab" aria-controls="dashboardTabPane" aria-selected="true" >
+        <i class="fa-solid fa-table me-2"></i>
+        {{tag}}
+    </a>
+</li>
+
+<!-- Tab -->
+<div class="tab-pane mainTabPane fade" id="dashboardTabPane" role="tabpanel" aria-labelledby="dashboardNavTagLink">
+    <!-- Global Boxes -->
+    <div class="globalBoxes">
+        <!-- Box -->
+        <div class="box">
+            <!-- Overview Boxes -->
+            <div class="overview-boxes row mb-3">
+                <!-- Card Başlangıç -->
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Profile</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    {% if user.profile.image %}
+                                        <div class="row">
+                                            <div class="col-md-12 text-center">
+                                                <img src="{{user.profile.image.url}}" style="width:auto;max-height:80px;border-radius:50%;" class="text-center">
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <img src="/static/images/icons/no-image.png" style="max-width:44px;border-radius:50%;" class="text-center">
+                                    {% endif %}
+                                </div>
+                                <div class="col-md-8">
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Name: </strong>{{user.first_name}} {{user.last_name}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Position: </strong>{{user.profile.position}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Phone: </strong>{{user.profile.phone}}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 text-start"><strong>Bonus: </strong>$0</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" hx-get="{% url 'user:user_profile' request.user %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true">Profile <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Last Projects</div>
+                            </div>
+                            {% for request in requests|slice:":4" %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500">{{request.created_date.date|date:'d.m.Y'}} - </span><a href="#" style="text-decoration:underline;">{{request.requestNo}}</a></div>
+                                </div>
+                            {% endfor %}
+                            {% if requests|length < 4 %}
+                                {% for i in ''|center:emptyLineRequestCounter %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" data-mdb-ripple-color="dark" hx-get="{% url 'sale:request_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Pending Invoices</div>
+                            </div>
+                            {% for approvalInvoice in approvalInvoices|slice:":4" %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div>{{approvalInvoice.project.projectNo}} </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="text-truncate" style="max-width: 200px">{{approvalInvoice.quotation.inquiry.theRequest.customer}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if approvalInvoices|length < 4 %}
+                                {% for i in ''|center:emptyLineOCCounter %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" hx-get="{% url 'account:order_in_process_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalInvoices|length}}</span> <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="row p-2">
+                        <div class="card col-md-12 shadow-4 border border-1 rounded-0 border-secondary-subtle" style="background-color: rgb(187,211,235);">
+                            <div class="row p-2">
+                                <div class="col-md-12 text-start fs-5">Pending Approval</div>
+                            </div>
+                            {% for approvalQuotation in approvalQuotations|slice:":4" %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <span class="text-red-500">{{approvalQuotation.quotationDate|date:'d.m.Y'}} - </span>
+                                        <a hx-get="{% url 'sale:manager_approval_update_in_dashboard' approvalQuotation.id %}" hx-target="#addUpdateDataDialogXl" style="text-decoration:underline;">{{approvalQuotation.quotationNo}}</a>
+                                        <span class="text-truncate" style="max-width: 150px"> - {{approvalQuotation.inquiry.theRequest.project.user.first_name}} {{approvalQuotation.inquiry.theRequest.project.user.last_name}}</span>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            {% if approvalQuotations|length < 4 %}
+                                {% for i in ''|center:emptyLineMACounter %}
+                                <div class="row">
+                                    <div class="col-md-12 text-center"><span class="text-red-500"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                                </div>
+                                {% endfor %}
+                            {% endif %}
+                            <div class="row p-2">
+                                <div class="col-md-12 text-end"><button class="btn btn-sm btn-dark border border-1 rounded-0 border-dark" hx-get="{% url 'sale:manager_approval_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalQuotations|length}}</span> <i class="fa-solid fa-chevron-right"></i></button></div>
+                            </div>
+                            <!-- <i class="bx bxs-cart cart three"></i> -->  
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Son -->
+            </div>
+            <!-- Overview Boxes End -->
+
+            <!-- Widget BAslangıç -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="widgetBlock" data-mdb-sortable="sortable" class="sortable-list d-flex flex-wrap row justify-content-evenly" data-mdb-connected-list="#widgetMenu">
+                        <!-- Widget Items -->
+
+                        <!-- Notes -->
+                        <div class="sortable-item col-md-4 position-relative notes" style="width: 30%;">
+                            <div class="dropdown">
+                            <button class="btn btn-tertiary p-2 position-absolute dropdown-toggle" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-2" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li class="removeNotesWidget"><a class="dropdown-item" href="#">Close Widget</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="background: #f7f7f7;height: 300px;">
+                                <div class="col-md-12">
+                                    <h2 style="text-align: center;">Notes</h2>
+                                    <button id="btnAddProject" style="background-color: rgb(187,211,235);">Add Project</button>
+                                    <div id="projects">
+                                        <ul id="main" class="mt-2">
+                                            <li style="padding: 5px;"><a href="#personal">Personal</a></li>
+                                            <li style="padding: 5px;"><a href="#work">Work</a></li>
+                                        </ul>
+                                    <button id="btnAddTask" style="background-color: rgb(187,211,235);" class="mt-2">Add Task</button>
+                                        <ul id="personal">
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">Doctor Appoinment</li>
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">Call the plumper</li>
+                                        </ul>
+                                        <ul id="work">
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">complete test case document</li>
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">Meet the manager</li>
+                                        </ul>
+                                    </div>
+                        
+                                    <div id="project-dialog" title="Add a project" style="display:none">
+                                        <label for="new-project">Project name: </label><input id="new-project" type="text">
+                                    </div>
+                                    <div id="task-dialog" title="Add a task" style="display:none">
+                                        <label for="new-task">Task name: </label><input id="new-task" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Notes Bitiş -->
+
+                        <!-- Takvim -->
+                        <div class="sortable-item col-md-4 position-relative calendarWidget" style="width: 35%;">
+                            <div class="dropdown">
+                            <button class="btn btn-tertiary dropdown-toggle p-2 position-absolute" data-mdb-dropdown-init aria-expanded="false"  style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removeCalendarWidget" href="#">Close Widget</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="margin: auto;background: #f7f7f7;">
+                            <div class="col-md-12">
+                                <div class="container" style="align-items: center;display: flex;justify-content: center;margin: 0 auto;">
+                                    <div class="calendar mt-4" id="calendar-2" data-mdb-monday-first="true" style="background-color: rgb(187,211,235);border-radius: 4px;perspective: 1000;transition: .9s;transform-style: preserve-3d;">
+
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <!-- Takvim Bitiş -->
+
+                        <!-- Pie Chart -->
+                        <!-- <div class="sortable-item col-md-4 position-relative pie">
+                            <div class="dropdown">
+                            <button class="btn btn-tertiary dropdown-toggle p-2 position-absolute" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removePieWİdget" href="#">Close Widget</a></li>
+                            </ul>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="margin: auto;background: #f7f7f7;">
+                                <div class="col-md-4 box" style="height: 650px;">
+                                    <div class="col-md-12 h-100">
+                                            <canvas
+                                            class="mt-2 h-100"
+                                            data-mdb-chart="pie"
+                                            data-mdb-dataset-label="Traffic"
+                                            data-mdb-labels="['Monday', 'Tuesday' , 'Wednesday' , 'Thursday' , 'Friday' , 'Saturday' , 'Sunday ']"
+                                            data-mdb-dataset-data="[2112, 2343, 2545, 3423, 2365, 1985, 987]"
+                                            data-mdb-dataset-background-color="['rgba(63, 81, 181, 0.5)', 'rgba(77, 182, 172, 0.5)', 'rgba(66, 133, 244, 0.5)', 'rgba(156, 39, 176, 0.5)', 'rgba(233, 30, 99, 0.5)', 'rgba(66, 73, 244, 0.4)', 'rgba(66, 133, 244, 0.2)']"
+                                        ></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  -->
+                        <!-- Pie Chart Bitiş-->
+
+                        <!-- Exchange -->
+                        <div class="sortable-item col-md-4 position-relative exchangeRatesWidget" style="width: 30%;">
+                            <div class="dropdown">
+                            <button class="btn btn-tertiary p-2 position-absolute dropdown-toggle" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removeExchangeWidget" href="#">Close Widget</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="background: #f7f7f7;height: 300px;">
+                                <div class="col-md-12">
+                                    <div class="title mt-4">Exchange Rates</div>
+                                    <div class="row mb-1 mt-4 mb-4">
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img src="{% static 'images/flags/united-states.png' %}" height="28px" class=""alt="">
+                                                        <span>USD: {{exchange.usd}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img src="{% static 'images/flags/european-union.png' %}" height="28px" class=""alt="">
+                                                        <span>EUR: {{exchange.eur}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img src="{% static 'images/flags/united-kingdom.png' %}" height="28px" class=""alt="">
+                                                        <span>GBP: {{exchange.gbp}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12">
+                                                        <img src="{% static 'images/flags/australia.png' %}" height="28px" class=""alt="">
+                                                        <span>AUD: {{exchange.aud}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12">
+                                                        <img src="{% static 'images/flags/canada.png' %}" height="28px" class=""alt="">
+                                                        <span>CAD: {{exchange.cad}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12">
+                                                        <img src="{% static 'images/flags/japan.png' %}" height="28px" class=""alt="">
+                                                        <span>JPY: {{exchange.jpy}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <!-- Exchange End -->
+
+                        <!-- Word Clock -->
+                        <div class="sortable-item col-md-4 position-relative wordCLockWidget" style="width: 30%;">
+                            <div class="dropdown">
+                            <button class="btn btn-tertiary p-2 position-absolute dropdown-toggle" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removeWordClock" href="#">Close Widget</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="height: 300px;background: #f7f7f7;">
+                                <div class="col-md-12">
+                                    <div class="title mt-4">The World Clock </div>
+                                    <div class="row mb-1 mt-4">
+                                        <div class="col-md-4">
+                                            <div class="row mb-3 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/united-states.png' %}" height="28px" class=""alt="">
+                                                    <span>USD: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-3 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/european-union.png' %}" height="28px" class=""alt="">
+                                                    <span>EUR: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-3 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/united-kingdom.png' %}" height="28px" class=""alt="">
+                                                    <span>GBP: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-1 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/australia.png' %}" height="28px" class=""alt="">
+                                                    <span>AUD: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-1 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/canada.png' %}" height="28px" class=""alt="">
+                                                    <span>CAD: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-1 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/japan.png' %}" height="28px" class=""alt="">
+                                                    <span>JPY: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Word Clock End-->
+
+        
+                        <!-- Wİdget Items End -->
+                    </div>
+                </div>
+            </div>
+            <!-- Widget Bİtiş -->
+
+        </div>
+        <!-- Box End -->
+    </div>
+    <!-- GLobal Boxes End -->
+</div>
+<!-- Tab End -->
+
+<!-- Widget Menu -->
+<div class="row shadow-5" id="widgetMenu" style="position: absolute;display: none; top:35vh;right: 20px;z-index: 99;border:1px solid #c8c7ff;background: #fff;border-radius:0.25rem;width: 90px;">
+    <div class="col-md-12 sortable-list" data-mdb-sortable="sortable" data-mdb-connected-list="#widgetBlock" >
+        <div class="row p-2 sortable-item">
+            <div class="col-md-12 p-0 text-center" style="z-index: 999;">
+                <div class="p-1" style="background:#9bb6da;border-radius:0.25rem;border: 1px solid black;">
+                    <i class="fa-solid fa-comments fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Messages</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetNote" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#9bb6da;border-radius:0.25rem;border: 1px solid black;">
+                    <i class="fa-solid fa-note-sticky fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Notes</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetCalendar" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#9bb6da;border-radius:0.25rem;border: 1px solid black;">
+                    <i class="fa-regular fa-calendar-days fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Calendar</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetExchanges" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#9bb6da;border-radius:0.25rem;border: 1px solid black;">
+                    <i class="fa-solid fa-dollar-sign fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Exchanges</p>
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetWordCLock" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#9bb6da;border-radius:0.25rem;border: 1px solid black;">
+                    <i class="fa-solid fa-earth-americas fs-3"></i> 
+                    <p class="mb-0" style="font-size: 0.675rem;">World Tİmes</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetReports" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:#90baf1;border-radius:0.25rem;border: 1px solid black;">
+                    <i class="fa-solid fa-chart-pie fs-3"></i>
+                    <p class="mb-0" style="font-size: 0.675rem;">Reports</p> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+  <!-- Widget Menu End -->
+
+
+<!-- <button type="button" id="openWidgetMenu" class="btn btn-primary btn-floating" style="position: absolute;display: block; top:85vh;right: 10px;z-index: 9999999;animation: 1s ease 0s 1 normal none running fadeIn;">
+    <i class="fa-solid fa-grip"></i>
+</button> -->
+
+<script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/js/modules/charts.min.js' %}"></script>
+<script>
+    var elementTag = "{{elementTag}}";
+    
+    $(".home-section").css({"overflow" : "hidden"});
+    //$("#tabCont").css({"overflow" : "scroll", "height" : "100vh"});
+    $("#dashboardTabPane").css({"overflow" : "scroll"});
+
+    $(".mainNavLink").removeClass("active");
+    $(".mainTabPane").removeClass("show active");
+
+    $("#tabNav").append($("#dashboardNavTag"));
+    $("#tabCont").append($("#dashboardTabPane"));
+    $("#dashboardNavTagLink").addClass("active");
+    $("#dashboardTabPane").addClass("show active");
+
+    $(".mainNavLink:not(.active)").children("button").hide();
+
+    $("#dashboardNavTagLink").on("shown.bs.tab", function(e){
+        $(e.relatedTarget).children("button").hide();
+        $(".home-section").css({"overflow" : "auto"});
+        history.pushState({}, null, "/user");
+    });
+    
+    //htmx.ajax('GET', "/note/note_dashboard_data", "#noteBlock");
+
+    //cookies = new URLSearchParams(document.cookie.replaceAll("&", "%26").replaceAll("; ","&"))
+    
+    //if(cookies.get("companyTab") == "true"){
+    //    htmx.ajax('GET', "/card/card_data", "#tabCont");
+    //};
+
+     $("#widgetNote").on('exit.mdb.sortable',function(e){
+       if ($("#widgetNote").parent().attr('id') == 'widgetMenu'){
+            $(this).resetPosition();
+        } else {
+         $(this).removeClass('row p-2');
+         $(this).parent().addClass('col-md-4');
+         this.innerHTML = '';
+         this.innerHTML = `<div class="dropdown">
+                            <button class="btn btn-tertiary p-2 position-absolute dropdown-toggle" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gears mt-2" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li class="removeNotesWidget"><a class="dropdown-item" href="#">Exit</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1" style="background: #f7f7f7;height: 300px;">
+                                <div class="col-md-12">
+                                    <h2 style="text-align: center;">Notes</h2>
+                                    <button id="btnAddProject" style="background-color: rgb(187,211,235);">Add Project</button>
+                                    <div id="projects">
+                                        <ul id="main" class="mt-2">
+                                            <li style="padding: 5px;"><a href="#personal">Personal</a></li>
+                                            <li style="padding: 5px;"><a href="#work">Work</a></li>
+                                        </ul>
+                                    <button id="btnAddTask" style="background-color: rgb(187,211,235);" class="mt-2">Add Task</button>
+                                        <ul id="personal">
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">Doctor Appoinment</li>
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">Call the plumper</li>
+                                        </ul>
+                                        <ul id="work">
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">complete test case document</li>
+                                            <li style="padding: 5px;"><input type='checkbox' class="me-2">Meet the manager</li>
+                                        </ul>
+                                    </div>
+                        
+                                    <div id="project-dialog" title="Add a project" style="display:none">
+                                        <label for="new-project">Project name: </label><input id="new-project" type="text">
+                                    </div>
+                                    <div id="task-dialog" title="Add a task" style="display:none">
+                                        <label for="new-task">Task name: </label><input id="new-task" type="text">
+                                    </div>
+                                </div>`;
+       }
+    });
+
+      $("#widgetCalendar").on('exit.mdb.sortable',function(e){
+          $(this).removeClass('row p-2');
+          $(this).addClass('col-md-4');
+          this.innerHTML = '';
+          this.innerHTML = `<div class="dropdown">
+                            <button class="btn btn-tertiary dropdown-toggle p-2 position-absolute" data-mdb-dropdown-init aria-expanded="false"  style="right: 15px;">
+                                <i class="fa-solid fa-gears mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removeCalendarWidget" href="#">Exit</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="margin: auto;background: #f7f7f7;">
+                            <div class="col-md-12">
+                                <div class="container" style="align-items: center;display: flex;justify-content: center;margin: 0 auto;">
+                                    <div class="calendar mt-4" style="background-color: rgb(187,211,235);border-radius: 4px;perspective: 1000;transition: .9s;transform-style: preserve-3d;">
+                                
+                              
+                                    </div>
+                                </div>
+                            </div>
+                            </div>`;
+            //MDB Calendar'ların çalışması için
+            var calendars = $(".calendar");
+            for (var i = 0; i < calendars.length; i++) {
+              var calendar = calendars[i];
+              new Calendar(calendar);
+            };
+        });
+    
+     $("#widgetReports").on('exit.mdb.sortable',function(e){
+         if ($("#widgetReports").parent().attr('id') == 'widgetMenu'){
+             $(this).resetPosition();
+         } else {
+             $(this).removeClass('row p-2');
+             $(this).addClass('col-md-4');
+             this.innerHTML = '';
+             this.innerHTML = `<button class="btn btn-primary removePieWİdget p-2 position-absolute" style="right: 30px;background-color: rgb(187,211,235);">
+                                 <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+                             </button>
+                             <div class="row p-2 shadow-4 border border-1" style="margin: auto;background: #f7f7f7;">
+                                 <div class="col-md-4 box" style="height: 650px;">
+                                     <div class="col-md-12 h-100">
+                                             <canvas
+                                             class="mt-2 h-100" id="canvasWidget"
+                                            
+                                             ></canvas>
+                                     </div>
+                                 </div>
+                             </div>`;
+            $(this).css({'z-index' : '9'});
+         } 
+    });
+
+    $("#widgetExchanges").on('exit.mdb.sortable',function(e){
+        $(this).removeClass('row p-2');
+        $(this).addClass('col-md-4');
+        this.innerHTML = '';
+        this.innerHTML = `<div class="dropdown">
+                            <button class="btn btn-tertiary p-2 position-absolute dropdown-toggle" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removeExchangeWidget" href="#">Exit</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="background: #f7f7f7;height: 300px;">
+                                <div class="col-md-12">
+                                    <div class="title mt-4">Exchange Rates</div>
+                                    <div class="row mb-1 mt-4 mb-4">
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img src="{% static 'images/flags/united-states.png' %}" height="28px" class=""alt="">
+                                                        <span>USD: {{exchange.usd}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img src="{% static 'images/flags/european-union.png' %}" height="28px" class=""alt="">
+                                                        <span>EUR: {{exchange.eur}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12 mb-3">
+                                                        <img src="{% static 'images/flags/united-kingdom.png' %}" height="28px" class=""alt="">
+                                                        <span>GBP: {{exchange.gbp}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12">
+                                                        <img src="{% static 'images/flags/australia.png' %}" height="28px" class=""alt="">
+                                                        <span>AUD: {{exchange.aud}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12">
+                                                        <img src="{% static 'images/flags/canada.png' %}" height="28px" class=""alt="">
+                                                        <span>CAD: {{exchange.cad}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="row mb-1 p-1">
+                                                    <div class="col-md-12">
+                                                        <img src="{% static 'images/flags/japan.png' %}" height="28px" class=""alt="">
+                                                        <span>JPY: {{exchange.jpy}} ₺</span>
+                                                    </div>
+                                                </div>
+                                            </div> 
+                                    </div>
+                                </div>
+                                
+                            </div>`;
+    });
+
+    $("#widgetWordCLock").on('exit.mdb.sortable',function(e){
+        $(this).removeClass('row p-2');
+        $(this).addClass('col-md-4');
+        this.innerHTML = '';
+        this.innerHTML = `<div class="dropdown">
+                            <button class="btn btn-tertiary p-2 position-absolute dropdown-toggle" data-mdb-dropdown-init aria-expanded="false" style="right: 15px;">
+                                <i class="fa-solid fa-gear mt-1" style="font-size: 1rem;"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="z-index: 999;">
+                                <li><a class="dropdown-item" href="#">Settings</a></li>
+                                <li><a class="dropdown-item removeWordClock" href="#">Exit</a></li>
+                            </ul>
+                            </div>
+                            <div class="row p-2 shadow-4 border border-1 mb-4" style="height: 300px;background: #f7f7f7;">
+                                <div class="col-md-12">
+                                    <div class="title mt-4">The World Clock </div>
+                                    <div class="row mb-1 mt-4">
+                                        <div class="col-md-4">
+                                            <div class="row mb-3 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/united-states.png' %}" height="28px" class=""alt="">
+                                                    <span>USD: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-3 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/european-union.png' %}" height="28px" class=""alt="">
+                                                    <span>EUR: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-3 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/united-kingdom.png' %}" height="28px" class=""alt="">
+                                                    <span>GBP: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-1 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/australia.png' %}" height="28px" class=""alt="">
+                                                    <span>AUD: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-1 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/canada.png' %}" height="28px" class=""alt="">
+                                                    <span>CAD: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row mb-1 p-1">
+                                                <div class="col-md-12">
+                                                    <img src="{% static 'images/flags/japan.png' %}" height="28px" class=""alt="">
+                                                    <span>JPY: Fri 00:00:00 </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+                                </div>
+                                </div>
+                            </div>`;
+    });
+
+    //Widget kapatma butonu
+     $('.removeNotesWidget').on('click', function(){
+         $('.notes').remove();
+     });
+
+    $('.removeCalendarWidget').on('click', function(){
+         $('.calendarWidget').remove();
+    });
+
+     $('.removePieWİdget').on('click', function(){
+         $('.pie').remove();
+    });
+
+    $('.removeExchangeWidget').on('click', function(){
+        $('.exchangeRatesWidget').remove();
+    });
+
+    $('.removeWordClock').on('click', function(){
+        $('.wordCLockWidget').remove();
+    });
+   
+    //Notes
+    $("#projects").tabs();
+    $("ul").sortable({
+        axis: "x",
+        containment: "#projects"
+    });
+
+    $("ol").sortable({
+        axis: "y",
+        containment: "#projects"
+    });
+
+    $("#btnAddTask").button().on('click', function(){
+        $("#task-dialog").dialog({width:500,resizable:false,modal:true,
+        buttons:{
+            "Add new task":function(){
+                $("#projects").tabs("refresh");
+                var activeTab = $("#projects").tabs("option","active");
+                var title = $("#main>li:nth-child("+(activeTab+1)+")>a").attr("href");
+                var a = $("#new-task").val();
+                $(title).append("<li><input type='checkbox'>"+ a +"</li>");
+               
+            
+                $("#new-task").val("");
+                $(this).dialog("close");
+            },
+            "Cancel":function(){
+                $("#new-task").val("");
+                $(this).dialog("close");
+            }
+        }
+        });
+    });
+
+    $("#btnAddProject").button().on('click', function(){
+        $("#project-dialog").dialog({width:500,resizable:false,modal:true,
+        buttons:{
+            "Add new Project":function(){
+                var projectName=$("#new-project").val();
+                var replaceName =projectName.split(" ").join("_");
+                $("<li><a href='#"+replaceName+"'>"+projectName+"</a><li>")
+                .appendTo("#main");
+                $("<ol id='"+replaceName+"'></ol>").appendTo("#projects");
+                $("#projects").tabs("refresh");
+                var tabCount = $("#projects.ui-tabs-nav li").length;
+                $("#projects").tabs("option","active",tabCount-1);
+                
+                $("#new-project").val("");
+                $(this).dialog("close");
+            },
+            "Cancel":function(){
+                $("#new-project").val("");
+                $(this).dialog("close");
+            }
+        }});
+    });
+
+
+
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/user/dashboard/page.js' %}"></script>
+
+{% endblock javascript %}

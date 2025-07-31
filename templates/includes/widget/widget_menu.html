@@ -1,0 +1,96 @@
+{% load static %}
+
+<!-- Widget Menu -->
+<div class="row" id="widgetMenu" style="position: absolute;display: none; top:50vh;right: 20px;z-index: 99;border-radius:0.25rem;width: 90px;overflow: auto;max-height: 400px;background-color: #003865;">
+    <div class="col-md-12 sortable-list" data-mdb-sortable="sortable" data-mdb-connected-list="#widgetBlock" >
+        <div class="row p-2 sortable-item" id="widgetTrial" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-user-clock fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Trial Process</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetAnnual" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-user-xmark fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Annual Leave</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetPurchase" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-money-bill fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Purchase Order</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetPersonal" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-users fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Personal Permissions</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetNote" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-note-sticky fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Note Manager</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetCalendar" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-regular fa-calendar-days fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Calendar</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetExchanges" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-dollar-sign fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Exchange Rates</p>
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetWordCLock" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-earth-americas fs-4"></i> 
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">World Clock</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetCharts" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-chart-pie fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Charts</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetExpo" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-anchor fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Expo Calendar</p> 
+                </div>
+            </div>
+        </div>
+        <div class="row p-2 sortable-item" id="widgetProject" style="z-index: 999;">
+            <div class="col-md-12 p-0 text-center">
+                <div class="p-1" style="background:white;border-radius:0.25rem;border: 1px solid black;color: black;">
+                    <i class="fa-solid fa-list-check fs-4"></i>
+                    <p class="mb-0 text-black" style="font-size: 0.675rem;">Due Project</p> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Widget Menu End -->

@@ -1,0 +1,15 @@
+<form hx-post="{{ request.path }}" class="modal-content form-container border" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-body">
+        <div class="form-outline">
+            <input type="password" id="typePassword" class="form-control" name="userDocumentPin">
+            <label class="form-label" for="typePassword">PIN</label>
+        </div>
+        <div class="badge bg-danger d-flex mt-2 text-center">Do not share your pin with anyone</div>
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-mdb-dismiss="modal">Cancel</button>
+        <button class="btn btn-dark" type="submit">Access</button>
+    </div>
+</form>

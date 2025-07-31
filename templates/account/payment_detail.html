@@ -1,0 +1,275 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+
+      {{payment.paymentNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 15%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+      <!-- <div style="display: flex;justify-content: end;">
+        <button class="btn btn-tertiary closeTabButton" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+      </div> -->
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{ request.path }}" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="saveButton">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        <button class="tableTopButtons inTableButtons" type="button" name="saveButton">
+            <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+        </button>
+        <!-- <button class="tableTopButtons inTableButtons" id="createIncomingInvoiceButton" type="submit" name="saveButton"><i class="fa-solid fa-floppy-disk" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Save"></i></button> -->
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body" style="box-shadow:none; padding:0;">
+
+
+
+            <div class="row mb-4" style="border-bottom:1px solid #d0d0d0;border-radius:0;margin:2px;padding-top:15px;">
+
+                <div class="col-md-3">
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{payment.get_type_display}}" readonly>
+                                <label for="textFormOutline" class="form-label select-label">Type</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{payment.currency.code}}" readonly>
+                                <label for="textFormOutline" class="form-label select-label">Currency</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline datepicker">
+                                {{form.paymentDate}}
+                                <label for="textFormOutline" class="form-label">Date</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{payment.customer}}" readonly>
+                                <label for="textFormOutline" class="form-label select-label">Current</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{user.profile.sourceCompany.formalName}}" readonly>
+                                <label for="textFormOutline" class="form-label select-label">Recipient</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.sourceBank}}
+                                <label for="textFormOutline" class="form-label select-label">Bank</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12 mb-2">
+                            <div class="form-outline">
+                                {{form.description}}
+                                <label for="textFormOutline" class="form-label">Description</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-9">
+                    <div class="row mb-1">
+                        <div class="col-md-12 overflow-auto" style="max-height:60vh">
+                            <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover dataTable no-footer" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Action</th>
+                                        <th>Project No</th>
+                                        <th>Invoice No</th>
+                                        <th>Invoice Date</th>
+                                        <th>Due Date</th>
+                                        <th>Invoice Total</th>
+                                        <th>Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if payment.type == "in" %}
+                                        {% for invoice in invoices.sendInvoices %}
+                                            {% if invoice.type == "order" %}
+                                                <tr>
+                                                    <td><i class="fa-solid fa-hand-holding-dollar fs-5 text-blue-900"></i> Sale</td>
+                                                    <td>{{invoice.invoice.theRequest.requestNo}}</td>
+                                                    <td>{{invoice.invoice.sendInvoiceNo}}</td>
+                                                    <td>{{invoice.invoice.sendInvoiceDate}}</td>
+                                                    <td>{{invoice.invoice.paymentDate}}</td>
+                                                    <td>{{invoice.invoice.currency.symbol}} {{invoice.invoice.totalPrice|floatformat:2}}</td>
+                                                    <td class="fw-bold">{{invoice.invoice.currency.symbol}} {{invoice.paymentAmount|floatformat:2}}</td>
+                                                </tr>
+                                            {% elif invoice.type == "service" %}
+                                                <tr>
+                                                    <td><i class="fa-solid fa-screwdriver-wrench fs-5 text-cyan-900"></i> Service</td>
+                                                    <td>{{invoice.invoice.offer.offerNo}}</td>
+                                                    <td>{{invoice.invoice.sendInvoiceNo}}</td>
+                                                    <td>{{invoice.invoice.sendInvoiceDate}}</td>
+                                                    <td>{{invoice.invoice.paymentDate}}</td>
+                                                    <td>{{invoice.invoice.currency.symbol}} {{invoice.invoice.totalPrice|floatformat:2}}</td>
+                                                    <td class="fw-bold">{{invoice.invoice.currency.symbol}} {{invoice.paymentAmount|floatformat:2}}</td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% elif payment.type == "out" %}
+                                        {% for invoice in invoices.incomingInvoices %}
+                                            {% if invoice.type == "order" %}
+                                                <tr>
+                                                    <td><i class="fa-solid fa-hand-holding-dollar fs-5 text-blue-900"></i> Sale</td>
+                                                    <td>{{invoice.invoice.theRequest.requestNo}}</td>
+                                                    <td>{{invoice.invoice.incomingInvoiceNo}}</td>
+                                                    <td>{{invoice.invoice.incomingInvoiceDate}}</td>
+                                                    <td>{{invoice.invoice.paymentDate}}</td>
+                                                    <td>{{invoice.invoice.currency.symbol}} {{invoice.invoice.totalPrice|floatformat:2}}</td>
+                                                    <td class="fw-bold">{{invoice.invoice.currency.symbol}} {{invoice.paymentAmount|floatformat:2}}</td>
+                                                </tr>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mb-1">
+                        <div class="col-md-7 mb-3">
+                
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Invoices Total</span>
+                                <input type="text" id="invoicesTotal" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{invoices.sendInvoices.0.invoice.currency.symbol}} {{invoicesTotal}}" style="height:calc(1.66rem + 2px);">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Paid Total</span>
+                                <input type="text" id="remainingTotal" class="form-control fw-bold" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{payment.currency.symbol}} {{payment.amount}}" style="height:calc(1.66rem + 2px);">
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <div class="col-md-8" id="treetable-inform-{{elementTagSub}}-{{elementTagId}}">
+                    
+                </div>
+
+            </div>
+
+            <div class="row mb-4" style="border-radius:0;margin:2px;padding-top:15px;">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{user.profile.sourceCompany.formalName}}" readonly>
+                            <label for="textFormOutline" class="form-label select-label">Recipient</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-outline">
+                            {{form.sourceBank}}
+                            <label for="textFormOutline" class="form-label select-label">Bank</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="form-outline">
+                            <input type="text" id="textFormOutlineIBAN" class="form-control form-control-sm" value="{{defaultSourceBank.ibanNo}}" readonly>
+                            <label for="textFormOutlineIBAN" class="form-label select-label">IBAN</label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+
+      </div>
+      
+  </form>
+</div>
+
+
+
+<script>
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var pageUrl = "/account/payment_update/{{elementTagId}}/";
+    var sessionKey = "{{sessionKey}}";
+    var user = "{{user.id}}";
+
+    $('#id_type option').each(function(){
+        if($(this).val() == "outt"){
+            $(this).prop("disabled", true);
+        };
+
+    });
+    $('#id_customer').on('change', function sdsd() {
+        var companyInformId = $(this).val();
+        console.log(companyInformId);
+        htmx.ajax('GET', "/account/payment_current_add/c_" + companyInformId + "&" + "in", {target : "#treetable-inform-{{elementTagSub}}-{{elementTagId}}", "push-url" : "true"});
+    });
+    $('#id_type').on('change', function() {
+        var paymentType = $(this).val();
+        console.log(paymentType);
+        document.getElementById("treetable-inform-{{elementTagSub}}-{{elementTagId}}").innerHTML = "";
+        if(paymentType == "in"){
+            $('#id_customer').prop("disabled", false);
+            $('#id_customer').on('change', function sdsd() {
+                var companyInformId = $(this).val();
+                console.log(companyInformId);
+                htmx.ajax('GET', "/account/payment_current_add/c_" + companyInformId + "&" + "in", {target : "#treetable-inform-{{elementTagSub}}-{{elementTagId}}", "push-url" : "true"});
+            });
+        }else if(paymentType == "out"){
+            $('#id_customer').prop("disabled", false);
+            $('#id_customer').on('change', function sdsd() {
+                var companyInformId = $(this).val();
+                console.log(companyInformId);
+                htmx.ajax('GET', "/account/payment_current_add/c_" + companyInformId + "&" + "out", {target : "#treetable-inform-{{elementTagSub}}-{{elementTagId}}", "push-url" : "true"});
+            });
+        }else{
+            $('#id_customer').prop("disabled", true);
+        };
+        //$('#id_type').prop("disabled", true);
+        
+    });
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/account/payment/detail.js' %}"></script>
+
+
+{% endblock javascript %}
+

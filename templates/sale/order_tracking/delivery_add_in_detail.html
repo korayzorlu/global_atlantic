@@ -1,0 +1,294 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}-delivery" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" data-mdb-collapse-init type="button" data-mdb-toggle="collapse" data-mdb-target="#accordionItem-new" aria-expanded="false" aria-controls="accordionItem-{{delivery.id}}">
+                New Delivery
+            </button>
+        </h2>
+        <div id="accordionItem-new" class="accordion-collapse collapse" aria-labelledby="headingTwo">
+            <div class="accordion-body">
+
+                <div class="row border-bottom mb-3">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-outline">
+                                {{deliveryAddForm.trackingNo}}
+                                <label for="textFormOutline" class="form-label">Tracking No</label>
+                            </div>
+                        </div>
+                </div>
+                <div class="row border-bottom mb-3">
+                        <div class="col-md-4 border-right">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.port}}
+                                        <label for="selectFormOutline" class="form-label select-label">Port</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.country}}
+                                        <label for="selectFormOutline" class="form-label select-label">Country</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.eta}}
+                                        <label for="textFormOutline" class="form-label">ETA</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.transportationCompany}}
+                                        <label for="textFormOutline" class="form-label">Transportation Com.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.waybillNo}}
+                                        <label for="textFormOutline" class="form-label">Waybill No</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline datepicker">
+                                        {{deliveryAddForm.dispatchDate}}
+                                        <label for="textFormOutline" class="form-label">Dispatch Date</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline datepicker">
+                                        {{deliveryAddForm.deliveryDate}}
+                                        <label for="textFormOutline" class="form-label">Delivery Date</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.insuranceCompany}}
+                                        <label for="textFormOutline" class="form-label">Insurance Com.</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.insuranceFileNo}}
+                                        <label for="textFormOutline" class="form-label">Insurance File No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.agentChar}}
+                                        <label for="selectFormOutline" class="form-label">Agent</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.address}}
+                                        <label for="textFormOutline" class="form-label">Address</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.pic}}
+                                        <label for="textFormOutline" class="form-label">PIC</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.phone}}
+                                        <label for="textFormOutline" class="form-label">Phone</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.weight}}
+                                        <label for="textFormOutline" class="form-label">weight</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.fax}}
+                                        <label for="textFormOutline" class="form-label">Fax</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.dimensions}}
+                                        <label for="textFormOutline" class="form-label">Dimensions</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.email}}
+                                        <label for="textFormOutline" class="form-label">Mail</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="row border-bottom mb-3">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.sellingTransportation}}
+                                        <label for="textFormOutline" class="form-label">Selling Transportation</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.sellingTransportationCurrency}}
+                                        <label for="textFormOutline" class="form-label select-label">Currency</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.sellingPacking}}
+                                        <label for="textFormOutline" class="form-label">Selling Packing</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.sellingPackingCurrency}}
+                                        <label for="textFormOutline" class="form-label select-label">Currency</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-8 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.sellingInsurance}}
+                                        remaining </div>
+                                <div class="col-md-4 mb-3">
+                                    <div class="form-outline">
+                                        {{deliveryAddForm.sellingInsuranceCurrency}}
+                                        <label for="textFormOutline" class="form-label select-label">Currency</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+                <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <div class="form-outline">
+                                {{deliveryAddForm.note}}
+                                <label for="textFormOutline" class="form-label">Delivery Note</label>
+                            </div>
+                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <div class="d-grid gap-2">
+                        <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}-delivery" type="submit">Add</button>
+                      </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <div class="d-grid gap-2">
+                        <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}-delivery" type="button">Close</button>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var deliveryId = "{{delivery.id}}";
+    var orderTrackingId = "{{delivery.orderTracking.id}}";
+    var pageUrl = "/sale/delivery_add_in_detail/ot_" + elementTagId + "/";
+    var addSubDataHxGet = "/sale/delivery_add_in_detail/iot" + elementTagId + "/";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}-delivery").click(function() {
+        $("#form-{{elementTagSub}}-{{elementTagId}}-delivery").remove();
+        
+    });
+
+    $("#form-{{elementTagSub}}-{{elementTagId}}-delivery").submit(function (event) {
+        let ee = elementTag;
+        let ei = elementTagId;
+        let u = pageUrl
+
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        event.preventDefault();
+
+        setTimeout(function() {
+            
+            let navTagSub = $("#navTag-" + ee + "-" + ei);
+            let tabPaneSub = $("#tabPane-" + ee + "-" + ei);
+
+            navTagSub.remove();
+            tabPaneSub.remove();
+
+            let tabContSub = $("#tabContSub-" + ee);
+
+            htmx.ajax("GET", "/sale/order_tracking_update/" + elementTagId + "/", {target:"#tabContSub-orderTracking", swap:"afterbegin"});
+            window.history.pushState({}, '', "/sale/order_tracking_update/" + elementTagId + "/");
+    
+            setTimeout(function() {
+                $("body").busyLoad("hide", {
+                    animation: "fade"
+                });
+            }, 1500);
+    
+        }, 2000);
+      
+    });
+
+    
+    
+</script>

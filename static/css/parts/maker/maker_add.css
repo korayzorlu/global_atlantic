@@ -1,0 +1,123 @@
+@-webkit-keyframes animateGear {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  /* Finish changes by here */
+  10% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(300deg);
+            transform: rotate(300deg);
+  }
+  30% {
+    -webkit-transform: rotate(300deg);
+            transform: rotate(300deg);
+  }
+  40% {
+    -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+  }
+  50% {
+    -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+  }
+  60% {
+    -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+  }
+  70% {
+    -webkit-transform: rotate(250deg);
+            transform: rotate(250deg);
+  }
+  80% {
+    -webkit-transform: rotate(250deg);
+            transform: rotate(250deg);
+  }
+  90% {
+    -webkit-transform: rotate(250deg);
+            transform: rotate(250deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
+@keyframes animateGear {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  /* Finish changes by here */
+  10% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(300deg);
+            transform: rotate(300deg);
+  }
+  30% {
+    -webkit-transform: rotate(300deg);
+            transform: rotate(300deg);
+  }
+  40% {
+    -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+  }
+  50% {
+    -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+  }
+  60% {
+    -webkit-transform: rotate(150deg);
+            transform: rotate(150deg);
+  }
+  70% {
+    -webkit-transform: rotate(250deg);
+            transform: rotate(250deg);
+  }
+  80% {
+    -webkit-transform: rotate(250deg);
+            transform: rotate(250deg);
+  }
+  90% {
+    -webkit-transform: rotate(250deg);
+            transform: rotate(250deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+}
+
+#iconMaker {
+  position: relative;
+  background: transparent;
+}
+
+#iconMaker::before {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: url("../../../images/icons/gear.svg");
+  top: 50%;
+  left: 50%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  -webkit-filter: brightness(1.2);
+          filter: brightness(1.2);
+  -webkit-animation: animateGear 5s linear infinite;
+          animation: animateGear 5s linear infinite;
+}
+
+@media screen and (max-width: 768px) {
+  #iconMaker {
+    display: none;
+  }
+}
+/*# sourceMappingURL=maker_add.css.map */

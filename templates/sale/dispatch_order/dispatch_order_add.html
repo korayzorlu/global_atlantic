@@ -1,0 +1,214 @@
+{% load static %}
+
+<form method="post" action="/dispatch_order_add/ot_{{orderTracking.id}}/" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-add-2" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Create Dispatch Order</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row p-2 pt-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        {{orderTracking.project.projectNo}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="table-{{elementTagSub}}-{{quotationPart.quotation.id}}-sourcePart" class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width:5%;">Select</th>
+                                <th scope="col" style="width:25%;">Part No</th>
+                                <th scope="col" style="width:65%;">Description</th>
+                                <th scope="col" style="width:5%;">Quantity</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for part in parts %}
+                                    <tr>
+                                        {% if part.dispatched %}
+                                            <td><input class="form-check-input collectionPart-{{part.id}}" type="checkbox" value="{{part.id}}" disabled name="collectionPart" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        {% else %}
+                                            <td><input class="form-check-input collectionPart-{{part.id}}" type="checkbox" value="{{part.id}}" name="collectionPart" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        {% endif %}
+                                        <td class="text-start ps-1 pe-1">{{part.purchaseOrderPart.inquiryPart.requestPart.part.partNo}}</td>
+                                        <td class="text-start ps-1 pe-1">{{part.purchaseOrderPart.inquiryPart.requestPart.part.description}}</td>
+                                        <td class="ps-1 pe-1"><input class="form-control form-control-sm" type="text" id="input-{{elementTagSub}}-quantity-{{part.id}}" value="{{part.remaining}}"/></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit">Create</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var orderConfirmationId = "{{orderConfirmation.id}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/sale/dispatchase_order_add/ot_{{orderTracking.id}}/";
+    var user = "{{user.id}}";
+
+    $("#form-{{elementTag}}-{{elementTagId}}-add-2").submit(function (event) {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        event.preventDefault();
+
+        var formData = $(this).serializeArray();
+    
+        $.ajax({
+            type: "POST",
+            url: "/sale/dispatch_order_add/ot_{{orderTracking.id}}/",  // Formunuzun işleneceği view'ın URL'si
+            data: formData,
+            success: function (response, status, xhr) {
+                // Başarılı yanıt geldiğinde mesajı görüntüleyin
+                if (xhr.status === 204) {
+                    setTimeout(function() {
+                    
+                        let navTagSub = $("#navTag-{{elementTag}}-{{elementTagId}}");
+                        let tabPaneSub = $("#tabPane-{{elementTag}}-{{elementTagId}}");
+                    
+                        navTagSub.prev().children("a").addClass("active");
+                        
+                        navTagSub.prev().children("a").children("button").show();
+                        $("#table-{{elementTag}}").DataTable().columns.adjust();
+                        
+                        navTagSub.remove();
+                        tabPaneSub.remove();
+
+                        addUpdateDataModalL.hide();
+
+                        $("#table-dispatchOrder").DataTable().ajax.reload(function() {
+                            htmx.process("#table-dispatchOrder");
+                        }, false);
+
+                        if($("#navTag-dispatchOrder").length > 0){
+                            $("#navTagLink-orderTracking").removeClass("active");
+                            $("#tabPane-orderTracking").removeClass("active show");
+                            $("#navTagLink-dispatchOrder").addClass("active");
+                            $("#tabPane-dispatchOrder").addClass("active show");
+
+                            fetch('/sale/api/dispatch_orders?ordering=-id&user={{user.id}}&orderTracking__id={{elementTagId}}&format=datatables', {method : "GET"})
+                            .then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                if(data["data"].length > 1){
+                                    $("#tabNavSub-dispatchOrder .nav-link").removeClass("active");
+                                    $("#tabContSub-dispatchOrder .tab-pane").removeClass("active show");
+                                    $("#navTagLink-dispatchOrder-table").addClass("active");
+                                    $("#tabPane-dispatchOrder-table").addClass("active show");
+
+                                    $("#table-dispatchOrder").DataTable().ajax.reload(function() {
+                                        htmx.process("#table-dispatchOrder");
+                                        for(let i = 0; i < data["data"].length; i++){
+                                          $("#table-dispatchOrder").DataTable().rows().every(function() {
+                                            var rowNode = this.node();
+                                            var rowData = this.data();
+                                            if (rowData["id"] == data["data"][i]["id"]) {
+                                                $(rowNode).css("background-color", "#fdde6c");
+                                                $(rowNode).css("font-weight", "bold");
+                                            }
+                                          });
+                                        };
+                                    }, false);
+                                }else{
+                                    htmx.ajax("GET", "/sale/dispatch_order_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                                    window.history.pushState({}, '', "/sale/dispatch_order_update/" + data["data"][0]["id"] + "/");
+                                };
+                            });
+                        }else{
+                            htmx.ajax("GET", "/sale/dispatch_order_data", {target:"#tabCont", swap:"afterbegin"});
+                            setNavTabDispatchOrder();
+                            fetch('/sale/api/dispatch_orders?ordering=-id&user={{user.id}}&orderTracking__id={{elementTagId}}&format=datatables', {method : "GET"})
+                            .then((response) => {
+                                return response.json();
+                            })
+                            .then((data) => {
+                                if(data["data"].length > 1){
+                                    $("#tabNavSub-dispatchOrder .nav-link").removeClass("active");
+                                    $("#tabContSub-dispatchOrder .tab-pane").removeClass("active show");
+                                    $("#navTagLink-dispatchOrder-table").addClass("active");
+                                    $("#tabPane-dispatchOrder-table").addClass("active show");
+
+                                    $("#table-dispatchOrder").DataTable().ajax.reload(function() {
+                                        htmx.process("#table-dispatchOrder");
+                                        for(let i = 0; i < data["data"].length; i++){
+                                          $("#table-dispatchOrder").DataTable().rows().every(function() {
+                                            var rowNode = this.node();
+                                            var rowData = this.data();
+                                            if (rowData["id"] == data["data"][i]["id"]) {
+                                                $(rowNode).css("background-color", "#fdde6c");
+                                                $(rowNode).css("font-weight", "bold");
+                                            }
+                                          });
+                                        };
+                                    }, false);
+                                }else{
+                                    htmx.ajax("GET", "/sale/dispatch_order_update/" + data["data"][0]["id"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                                    window.history.pushState({}, '', "/sale/dispatch_order_update/" + data["data"][0]["id"] + "/");
+                                };
+                            });
+                        };
+                
+                    setTimeout(function() {
+                        $("body").busyLoad("hide", {
+                        animation: "fade"
+                        });
+                    }, 500);
+                
+                    }, 500);
+                    $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-check-circle me-1"></i>Saved!</div>');
+                    // Mesajı belirli bir süre sonra gizle
+                    setTimeout(function() {
+                    $("#message-container-inside-{{elementTag}}-{{elementTagId}}-add-2").fadeOut("slow");
+                    }, 500); // 3000 milisaniye (3 saniye) sonra mesaj kaybolacak
+                }
+            },
+            error: function (xhr, status, error) {
+                //spinner durdurur
+                $("body").busyLoad("hide", {
+                    animation: "fade"
+                });
+                // Hata durumunda mesajı görüntüleyin
+                $("#message-container-{{elementTag}}-{{elementTagId}}-add-2").html('<div id="message-container-inside-{{elementTag}}-{{elementTagId}}-add-2"><i class="fas fa-xmark-circle me-1"></i>At least one part must be selected!</div>');
+            }
+        });
+      
+  
+      
+  
+    });
+
+</script>
+
+{% block javascript %}
+
+
+<script src="{% static 'js/sale/dispatch_order/add.js' %}"></script>
+
+{% endblock javascript %}

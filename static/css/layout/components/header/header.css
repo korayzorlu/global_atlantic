@@ -1,0 +1,22 @@
+.navbar-brand a {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.navbar-brand a img {
+  height: 45px;
+}
+
+@media (max-width: 855px) {
+  .navbar-brand {
+    flex: 1;
+    min-width: 1px !important;
+  }
+  .navbar-brand a img {
+    margin-right: 1.25rem;
+    position: static;
+  }
+  .navbar-brand a h5 {
+    display: none;
+  }
+}/*# sourceMappingURL=header.css.map */

@@ -1,0 +1,133 @@
+{% load static %}
+{% if request.path == "/dashboard/" %}
+    <style>.sidebarv2 ul li a.dashboard{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/card/card_data/" %}
+    <style>.sidebarv2 ul li a.orders{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/products/" %}
+    <style>.sidebarv2 ul li a.products{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/materials/" %}
+    <style>.sidebarv2 ul li a.materials{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/expenses/" %}
+    <style>.sidebarv2 ul li a.expenses{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/finances/" or request.path == "/loans/" %}
+    <style>.sidebarv2 ul li a.finances{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/reports/"%}
+    <style>.sidebarv2 ul li a.reports{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/user/categories/" %}
+    <style>.sidebarv2 ul li a.categories{color: #11101d;background: #ff6961;}</style>
+{% elif request.path == "/user/settings/" or request.path == "/user/settings/account/" or request.path == "/user/settings/marketplace/" or request.path == "/user/settings/shop/" %}
+    <style>.sidebarv2 ul li a.settings{color: #11101d;background: #ff6961;}</style>
+{% endif %}
+<div class="sidebarContainer">
+    <div class="sidebarv2">
+        <div class="logo_content">
+            <div class="logo">
+                <!-- <i class='bx bxl-c-plus-plus'></i> -->
+                <i class='icon'></i>
+                <!-- <div class="logo_name">
+                    Maxima
+                </div> -->
+            </div>
+            <i class='fa-solid fa-bars' id="btnmenu"></i>
+        </div>
+        <ul class="nav_list" style="list-style-type: none; padding-left: 0px;">
+            <!-- <li>
+                <i class='bx bx-search' ></i>
+                <input type="text" placeholder="Ara">
+                <span class="tooltipv2">Ara</span>
+            </li> -->
+            <li>
+                <a href="{% url 'user:dashboard' %}" class="dashboard">
+                    <i class="fa-solid fa-grip"></i>
+                    <span class="links_name">Dashboard</span>
+                </a>
+                <span class="tooltipv2">Dashboard</span>
+            </li>
+            <li>
+                <a href="" class="orders">
+                    <i class="fa-solid fa-clipboard"></i>
+                    <span class="links_name">Cards</span>
+                </a>
+                <span class="tooltipv2">Cards</span>
+            </li>
+            <li>
+                <a href="" class="materials">
+                    <i class="fa-solid fa-layer-group"></i>
+                    <span class="links_name">Parts</span>
+                </a>
+                <span class="tooltipv2">Parts</span>
+            </li>
+            <li>
+                <a href="" class="expenses">
+                    {% comment %} <div class="plus" style="position: absolute; margin-top: -25px;">
+                        <i class='fas fa-crown' style="font-size: 12px; color: #Fae29c;"></i>
+                    </div> {% endcomment %}
+                    <i class="fa-solid fa-address-card"></i>
+                    <span class="links_name">HR</span>
+                </a>
+                <span class="tooltipv2">HR</span>
+            </li>
+            <li>
+                <a href="" class="finances">
+                    <i class="fa-solid fa-coins"></i>
+                    <span class="links_name">Finance</span>
+                </a>
+                <span class="tooltipv2">Finance</span>
+            </li>
+            <li>
+                <a href="" class="reports">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span class="links_name">Report</span>
+                </a>
+                <span class="tooltipv2">Reports</span>
+            </li>
+            <li>
+                <a href="">
+                    <i class="fa-solid fa-comments"></i>
+                    <span class="links_name">Messages</span>
+                </a>
+                <span class="tooltipv2">Messages</span>
+            </li>
+            <li>
+                <a href="">
+                    <i class="fa-solid fa-user"></i>
+                    <span class="links_name">Employee</span>
+                </a>
+                <span class="tooltipv2">Employee</span>
+            </li>
+            <li>
+                <a href="" class="settings">
+                    <i class="fa-solid fa-gear"></i>
+                    <span class="links_name">Settings</span>
+                </a>
+                <span class="tooltipv2">Settings</span>
+            </li>
+        </ul>
+        <div class="profile_content">
+            <div class="profile">
+                <div class="profile_details">
+                    {% if request.user.profile.image %}
+                    <img src="{{ request.user.profile.image.url }}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image" height="34">
+                    {% else %}
+                    <img src="{% static 'images/icons/enchanted.svg' %}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image" height="34">
+                    {% endif %}
+                    <div class="name_job">
+                        <div class="name">{{request.user}}</div>
+                        <div class="job">
+                            {{ request.user.employee.user_category }}
+                        </div>
+                    </div>
+                </div>
+                <a class="logoutButton" title="Çıkış Yap" data-bs-toggle="modal" data-bs-target="#logoutModalCenter">
+                    <i class='bx bx-log-out' id="log_out"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    
+</script>

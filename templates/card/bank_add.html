@@ -1,0 +1,102 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<form action="/card/bank_add_in_detail_company/c_{{elementTagId}}/" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-3 mb-3">
+          <div class="form-outline">
+            {{form.bankName}}
+            <label for="textFormOutline" class="form-label">Bank Name</label>
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-outline">
+              {{form.accountNo}}
+              <label for="textFormOutline" class="form-label">Account No</label>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="form-outline">
+              {{form.ibanNo}}
+              <label for="textFormOutline" class="form-label">IBAN No</label>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-outline">
+              {{form.swiftNo}}
+              <label for="textFormOutline" class="form-label">Swift No</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+  var detailRefererPathSub = "{{refererPath}}";
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  
+  $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+      console.log("{{elementTagSub}}-{{elementTagId}}");
+      console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}-bank")
+      $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+      
+  });
+
+  $("#form-companyBank-" + elementTagId).submit(function (event) {
+    event.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: "/card/bank_add_in_detail_company/c_" + elementTagId + "/",  // Formunuzun işleneceği view'ın URL'si
+        data: $(this).serialize(),
+        success: function (response, status, xhr) {
+            // Başarılı yanıt geldiğinde mesajı görüntüleyin
+            if (xhr.status === 204) {
+                $("body").busyLoad("show", {
+                    animation: false,
+                    spinner: "pulsar",
+                    maxSize: "150px",
+                    minSize: "150px",
+                    text: "Loading ...",
+                    background: "rgba(69, 83, 89, 0.6)",
+                    color: "#455359",
+                    textColor: "#fff"
+                });
+                $("#table-companyPerson-" + elementTagId + "-bank").DataTable().ajax.reload(function(){
+                  htmx.process("#table-companyPerson-" + elementTagId + "-bank");
+                },false);
+                $("#table-companyPerson-" + elementTagId + "-bank").DataTable().on( 'draw.dt', function () {
+                  htmx.process("#table-companyPerson-" + elementTagId + "-bank");
+                  $("body").busyLoad("hide", {
+                    animation: "fade"
+                  });
+                });
+                history.pushState({}, null, detailRefererPathSub);
+            };
+        },
+        error: function (xhr, status, error) {
+            // Hata durumunda mesajı görüntüleyin
+            //$("#message-container-" + ee + "-" + ei).html('<div id="message-container-inside-' + ee + '-' + ei +'"><i class="fas fa-xmark-circle me-1"></i>' + error + '</div>');
+        }
+    });
+  });
+
+  
+</script>
+

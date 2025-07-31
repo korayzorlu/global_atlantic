@@ -1,0 +1,298 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      New Project
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+  <form action="/sale/request_add/" method="post" class="modal-content form-container border mainAddForm" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body" style="box-shadow:none; padding:0;">
+
+        <!-- Tabs navs -->
+        <!-- <ul class="nav nav-pills mb-3 ms-2" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+            <a class="nav-link active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                Info
+            </a>
+          </li>
+        </ul> -->
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+        <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add" style="border-radius:0;padding-top:15px;padding-bottom: 5px;">
+
+            <div class="row mb-4 me-2">
+              <div class="row ms-2">
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.customer}}
+                    <label for="{{form.customer.field.widget.attrs.id}}" class="form-label select-label">Customer</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.vessel}}
+                    <label for="{{form.vessel.field.widget.attrs.id}}" class="form-label select-label">Vessel</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row ms-2">
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.person}}
+                    <label for="{{form.person.field.widget.attrs.id}}" class="form-label select-label">Customer Contact</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.vesselPerson}}
+                    <label for="{{form.vesselPerson.field.widget.attrs.id}}" class="form-label select-label">Vessel Contact</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row ms-2">
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.maker}}
+                    <label for="{{form.maker.field.widget.attrs.id}}" class="form-label select-label">Maker</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.makerType}}
+                    <label for="{{form.makerType.field.widget.attrs.id}}" class="form-label select-label">Type</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row ms-2">
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline datepicker">
+                    {{form.requestDate}}
+                    <label for="{{form.requestDate.field.widget.attrs.id}}" class="form-label">Date</label>
+                  </div>
+                </div>
+                <div class="col-md-6 mb-2">
+                  <div class="form-outline">
+                    {{form.customerRef}}
+                    <label for="{{form.customerRef.field.widget.attrs.id}}" class="form-label">Customer Ref.</label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+        </div>
+        <!-- Tabs content -->
+
+      </div>
+      
+  </form>
+</div>
+
+
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var pageUrl = "/sale/request_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  // Company seçildiğinde AJAX isteği yaparak Vessel ve Person'ları günceller
+  $('#{{form.customer.field.widget.attrs.id}}').on('change', function() {
+    var companyInformId = $(this).val();
+    console.log(companyInformId);
+    $("#select-wrapper-{{form.customer.field.widget.attrs.id}} .form-label.select-fake-value").text("");
+    $.ajax({
+        url: '/card/api/vessels',
+        data: {'company__id': companyInformId},
+        dataType: 'json',
+        success: function(data) {
+            console.log("vessels");
+            console.log(data);
+            console.log("vessels-end");
+            $('#{{form.vessel.field.widget.attrs.id}}').empty();
+            $('#{{form.vessel.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, vessel) {
+                $('#{{form.vessel.field.widget.attrs.id}}').append($('<option>').val(vessel.id).text(vessel.name));
+            });
+        }
+    });
+    $.ajax({
+      url: '/card/api/persons',
+      data: {'company': companyInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          $('#{{form.person.field.widget.attrs.id}}').empty();
+          $('#{{form.person.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+          $.each(data, function(i, person) {
+              $('#{{form.person.field.widget.attrs.id}}').append($('<option>').val(person.id).text(person.name));
+          });
+      }
+    });
+  });
+
+  $('#{{form.vessel.field.widget.attrs.id}}').on('change', function() {
+    var vesselInformId = $(this).val();
+    $("#select-wrapper-{{form.customer.field.widget.attrs.id}} .form-label.select-fake-value").text("");
+    $.ajax({
+      url: '/card/api/vessels',
+      data: {'id': vesselInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          //$('#id_customer').empty();
+          $.each(data, function(i, vessel) {
+              //$('#id_customer').append($('<option>').val(vessel.company.id).text(vessel.company.name));
+              //$('#id_customer').val(vessel.company.id);
+              $('#formOutline-{{form.customer.field.widget.attrs.id}} option[value=' + vessel.company.id + ']').attr('selected', 'selected'); 
+              
+          });
+          //$('#id_customer').trigger("change");
+      }
+    });
+    $.ajax({
+      url: '/card/api/persons',
+      data: {'vessel': vesselInformId},
+      dataType: 'json',
+      success: function(data) {
+          console.log(data);
+          $('#{{form.vesselPerson.field.widget.attrs.id}}').empty();
+          $('#{{form.vesselPerson.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+          $.each(data, function(i, person) {
+              $('#{{form.vesselPerson.field.widget.attrs.id}}').append($('<option>').val(person.id).text(person.name));
+          });
+      }
+    });
+  });
+
+  // Maker seçildiğinde AJAX isteği yaparak Type'ları günceller
+  $('#{{form.maker.field.widget.attrs.id}}').on('change', function() {
+    var makerInformId = $(this).val();
+    $.ajax({
+        url: '/data/api/maker_types',
+        data: {'maker': makerInformId},
+        dataType: 'json',
+        success: function(data) {
+            $('#{{form.makerType.field.widget.attrs.id}}').empty();
+            $('#{{form.makerType.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, type) {
+                $('#{{form.makerType.field.widget.attrs.id}}').append($('<option>').val(type.id).text(type.type));
+            });
+            $("#{{form.makerType.field.widget.attrs.id}}").trigger("change");
+        }
+    });
+  });
+
+
+  $("#form-{{elementTag}}-new").submit(function (event) {
+    //spinner başlatır
+    $("body").busyLoad("show", {
+        animation: false,
+        spinner: "pulsar",
+        maxSize: "150px",
+        minSize: "150px",
+        text: "Loading ...",
+        background: "rgba(69, 83, 89, 0.6)",
+        color: "#455359",
+        textColor: "#fff"
+    });
+    event.preventDefault();
+
+    var formData = $(this).serializeArray();
+
+    $.ajax({
+      type: "POST",
+      url: "/sale/request_add/",  // Formunuzun işleneceği view'ın URL'si
+      data: formData,
+      success: function (response, status, xhr) {
+          // Başarılı yanıt geldiğinde mesajı görüntüleyin
+          console.log(xhr);
+          if (xhr.status === 204) {
+              setTimeout(function() {
+          
+                let navTagSub = $("#navTag-{{elementTag}}-new");
+                let tabPaneSub = $("#tabPane-{{elementTag}}-new");
+            
+                navTagSub.prev().children("a").addClass("active");
+                
+                navTagSub.prev().children("a").children("button").show();
+                
+                $("#table-{{elementTag}}").DataTable().columns.adjust();
+
+                navTagSub.remove();
+                tabPaneSub.remove();
+
+                $("#table-request").DataTable().ajax.reload(function() {
+                  htmx.process("#table-request");
+                }, false);
+
+                fetch('/sale/api/requests?ordering=-id&sessionKey={{sessionKey}}&project__user={{user.id}}&format=datatables', {method : "GET"})
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log(data["data"]);
+                    htmx.ajax("GET", "/sale/request_update/" + data["data"][0]["pk"] + "/", {target:"#tabContSub-{{elementTag}}", swap:"afterbegin"});
+                    window.history.pushState({}, '', "/sale/request_update/" + data["data"][0]["pk"] + "/");
+                });
+          
+                setTimeout(function() {
+                  $("body").busyLoad("hide", {
+                    animation: "fade"
+                  });
+                }, 500);
+          
+              }, 500);
+          }
+      },
+      error: function (xhr, status, error) {
+          //spinner durdurur
+          $("body").busyLoad("hide", {
+              animation: "fade"
+            });
+          console.log(error);
+      }
+    });
+    
+
+    
+
+  });
+
+
+
+  
+
+
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/request/add.js' %}"></script>
+
+{% endblock javascript %}
+

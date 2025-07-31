@@ -1,0 +1,60 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="row border-bottom">
+        <div class="col-md-6 mb-3">
+            <div class="form-outline">
+                {{form.amount}}
+                <label for="textFormOutline" class="form-label">Amount</label>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-outline">
+                {{form.currency}}
+                <label for="textFormOutline" class="form-label select-label">Currency</label>
+            </div>
+        </div>
+        <div class="col-md-2 mb-3">
+            <div class="form-outline">
+                {{form.payment_type}}
+                <label for="textFormOutline" class="form-label select-label">Payment Type</label>
+            </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var additionalPaymentId = "{{additionalPayment.id}}";
+    var profileId = "{{user.profile.id}}";
+    var pageUrl = "/hr/additional_payment_add_in_detail/u_" + profileId + "/";
+    var addSubDataHxGet = "/hr/additional_payment_add_in_detail/u_" + profileId + "/";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+    
+    
+</script>
+

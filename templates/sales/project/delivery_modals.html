@@ -1,0 +1,409 @@
+{% load static i18n %}
+{% block modals %}
+<!-- Modal add delivery -->
+<div id="modal_delivery_add" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content " style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Add Delivery</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+                <ul class="nav nav-tabs nav-tabs-solid nav-justified border rounded ">
+                    <li class="nav-item"><a href="#delivery-tab1" class="nav-link rounded-left active" data-toggle="tab">Supplier to Vessel</a></li>
+                    <li class="nav-item"><a href="#delivery-tab2" class="nav-link" data-toggle="tab">Supplier to Customer</a></li>
+                    <li class="nav-item"><a href="#delivery-tab3" class="nav-link" data-toggle="tab">Supplier to Warehouse</a></li>
+                    <li class="nav-item"><a href="#delivery-tab4" class="nav-link" data-toggle="tab">Warehouse to Vessel</a></li>
+                    <li class="nav-item"><a href="#delivery-tab5" class="nav-link" data-toggle="tab">Warehouse to Customer</a></li>
+                   
+                </ul>
+
+                <div class="tab-content">
+                    <div class="tab-pane fade show active" id="delivery-tab1" data-type="STV">
+                        <form>
+                            <div class="row">
+                            {% for field in delivery_forms_fresh.STV %}
+                                <div class="form-group col-lg-4">
+                                    <label>{{field.label}}</label>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                            </div>
+                            <fieldset class="card-footer border-top w-30% text-right">
+                                <button type="submit" class="btn btn-primary btn-block ">
+                                    {% trans 'Create' %}
+                                </button>
+                            </fieldset>
+                        </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="delivery-tab2" data-type="STC">
+                        <form>
+                        <div class="row">
+                            {% for field in delivery_forms_fresh.STC %}
+                                <div class="form-group col-lg-4">
+                                    <label>{{field.label}}</label>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <fieldset class="card-footer border-top w-30% text-right">
+                            <button type="submit" class="btn btn-primary btn-block ">
+                                {% trans 'Create' %}
+                            </button>
+                        </fieldset>
+                    </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="delivery-tab3" data-type="STW">
+                        <form>
+                        <div class="row">
+                            {% for field in delivery_forms_fresh.STW %}
+                                <div class="form-group col-lg-4">
+                                    <label>{{field.label}}</label>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <fieldset class="card-footer border-top w-30% text-right">
+                            <button type="submit" class="btn btn-primary btn-block ">
+                                {% trans 'Create' %}
+                            </button>
+                        </fieldset>
+                    </form>
+                    </div>
+
+                    <div class="tab-pane fade" id="delivery-tab4" data-type="WTV">
+                        <form>
+                        <div class="row">
+                            {% for field in delivery_forms_fresh.WTV %}
+                                <div class="form-group col-lg-4">
+                                    <label>{{field.label}}</label>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <fieldset class="card-footer border-top w-30% text-right">
+                            <button type="submit" class="btn btn-primary btn-block ">
+                                {% trans 'Create' %}
+                            </button>
+                        </fieldset>
+                    </form>
+                    </div>
+                    <div class="tab-pane fade" id="delivery-tab5" data-type="WTC">
+                        <form>
+                        <div class="row">
+                            {% for field in delivery_forms_fresh.WTC %}
+                                <div class="form-group col-lg-4">
+                                    <label>{{field.label}}</label>
+                                    {{ field }}
+                                    {{ field.errors }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                        <fieldset class="card-footer border-top w-30% text-right">
+                            <button type="submit" class="btn btn-primary btn-block ">
+                                {% trans 'Create' %}
+                            </button>
+                        </fieldset>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--------------------------------------------------------------------------------------------------------------------------------------------->
+
+<!--Transportation modal below-->
+
+<div id="modal_transportation_add" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Transportation</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+
+             <!--details here-->
+             <div class="tab-pane fade show active" id="solid-rounded-bordered-justified-tab1">
+                 <form>
+                 <table >
+                     <tr>
+                         <th></th>
+                         <th >Expense</th>
+                         <th>Charged Amount</th>
+                     </tr>
+                     <tr>
+                        <td class="col-lg-4">Insurance and Inland Haulage</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.insurance_and_inland_haulage_expense }}</td>
+                        <td >{{ delivery_charges_forms_fresh.transportation.insurance_and_inland_haulage_charged_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-4">Extra</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.extra_expense }}</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.extra_charged_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-4">Other</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.other_expense }}</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.other_charged_amount }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-lg-4">Atr</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.atr_expense }}</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.atr_charged_amount }}</td>
+                    </tr>
+                    <tr>
+                        <td class="col-lg-4">Certificate</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.certificate_expense }}</td>
+                        <td>{{ delivery_charges_forms_fresh.transportation.certificate_charged_amount }}</td>
+                    </tr>
+                     <br>
+                     <tr>
+                        <td class="col-lg-4">Currency</td>
+                        <td>{{  delivery_charges_forms_fresh.transportation.currency  }}</td>
+                    </tr>
+
+                 </table>
+                 <fieldset class="card-body border-top w-100 text-center">
+                    <button type="submit" class="btn btn-sm btn-success save-transportation">{% trans 'Save' %}</button>   
+                </fieldset>
+            </form>
+                <div class="row">
+                {% comment %}
+                {% for field in delivery_charges_forms_fresh.transportation %}
+                    <div class="form-group col-lg-4">
+                        <label>{{field.label}}</label>
+                        {{ field }}
+                        {{ field.errors }}
+                    </div>
+                {% endfor %}
+                {% endcomment %}
+                </div>
+            </div>
+             <!--details above-->
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Transportation modal above-->
+
+<!--Tax modal below-->
+<div id="modal_tax_add" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Tax</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-pane fade show active" id="solid-rounded-bordered-justified-tab1">
+                    <form>
+                    <table >
+                        <tr>
+                            <th></th>
+                            <th >Expense</th>
+                            <th>Charged Amount</th>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Customs</td>
+                            <td>{{ delivery_charges_forms_fresh.tax.customs_expense }}</td>
+                            <td >{{ delivery_charges_forms_fresh.tax.customs_charged_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Surtax</td>
+                            <td>{{ delivery_charges_forms_fresh.tax.surtax_expense }}</td>
+                            <td >{{ delivery_charges_forms_fresh.tax.surtax_charged_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Currency</td>
+                            <td>{{  delivery_charges_forms_fresh.tax.currency  }}</td>
+                        </tr>
+                      </table>
+                      <fieldset class="card-body border-top w-100 text-center">
+                        <button type="submit" class="btn btn-sm btn-success save-tax">{% trans 'Save' %}</button>   
+                    </fieldset>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Tax modal above-->
+
+<!--Insurance modal below-->
+<div id="modal_insurance_add" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Insurance</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-pane fade show active" id="solid-rounded-bordered-justified-tab1">
+                    <form>
+                    <table >
+                        <tr>
+                            <th></th>
+                            <th >Expense</th>
+                            <th>Charged Amount</th>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Insurance</td>
+                            <td>{{ delivery_charges_forms_fresh.insurance.insurance_expense }}</td>
+                            <td >{{ delivery_charges_forms_fresh.insurance.insurance_charged_amount }}</td>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Currency</td>
+                            <td>{{  delivery_charges_forms_fresh.insurance.currency  }}</td>
+                        </tr>
+                        </table>
+                        <fieldset class="card-body border-top w-100 text-center">
+                            <button type="submit" class="btn btn-sm btn-success save-insurance">{% trans 'Save' %}</button>   
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Insurance modal above-->
+
+<!--Customs modal below-->
+<div id="modal_customs_add" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Customs</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-pane fade show active" id="solid-rounded-bordered-justified-tab1">
+                    <form>
+                    <table >
+                        <tr>
+                            <th></th>
+                            <th >Expense</th>
+                            <th>Charged Amount</th>
+                        </tr>
+                        <tr>
+                            <th class="col-lg-4">Customs Commission</th>
+                            <th >{{delivery_charges_forms_fresh.customs.customs_commission_expense}}</th>
+                            <th>{{delivery_charges_forms_fresh.customs.customs_commission_charged_amount}}</th>
+                        </tr>
+                        <tr>
+                            <th class="col-lg-4">Delivery Order</th>
+                            <th >{{delivery_charges_forms_fresh.customs.delivery_order_expense}}</th>
+                            <th>{{delivery_charges_forms_fresh.customs.delivery_order_charged_amount}}</th>
+                        </tr>
+                        <tr>
+                            <th class="col-lg-4">Warehouse</th>
+                            <th >{{delivery_charges_forms_fresh.customs.warehouse_expense}}</th>
+                            <th>{{delivery_charges_forms_fresh.customs.warehouse_charged_amount}}</th>
+                        </tr>
+                        <tr>
+                            <th class="col-lg-4">Labour</th>
+                            <th >{{delivery_charges_forms_fresh.customs.labour_expense}}</th>
+                            <th>{{delivery_charges_forms_fresh.customs.labour_charged_amount}}</th>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Currency</td>
+                            <td>{{  delivery_charges_forms_fresh.customs.currency  }}</td>
+                        </tr>
+                    </table>
+                    <fieldset class="card-body border-top w-100 text-center">
+                        <button type="submit" class="btn btn-sm btn-success save-customs">{% trans 'Save' %}</button>   
+                    </fieldset>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Customs modal above-->
+
+<!--Packing modal below-->
+<div id="modal_packing_add" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Packing</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tab-pane fade show active" id="solid-rounded-bordered-justified-tab1">
+                    <form>
+                    <table >
+                        <tr>
+                            <th></th>
+                            <th >Expense</th>
+                            <th>Charged Amount</th>
+                        </tr>
+                        <tr>
+                            <th class="col-lg-4">Packing</th>
+                            <th >{{delivery_charges_forms_fresh.packing.packing_expense}}</th>
+                            <th>{{delivery_charges_forms_fresh.packing.packing_charged_amount}}</th>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-4">Currency</td>
+                            <td>{{  delivery_charges_forms_fresh.packing.currency  }}</td>
+                        </tr>
+                 </table>
+                 <fieldset class="card-body border-top w-100 text-center">
+                    <button type="submit" class="btn btn-sm btn-success save-packing">{% trans 'Save' %}</button>   
+                </fieldset>
+            </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Packing modal above-->
+
+
+<!-- Claims Follow Up Modal-->
+<div id="modal_claim_follow_up" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Create Claim Follow Up </h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="claims_follow_up_start_form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in claims_follow_up_start_form %}
+                        <div class="form-group col-lg-12">
+                            <label>{{field.label}}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endfor %}
+                     
+                    </div>
+                    <fieldset class="card-footer border-top w-100 text-right">
+                        <button id="create_order_confirmation" type="submit" class="btn btn-primary btn-block">
+                            {% trans 'Create' %}
+                        </button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /Claims Follow Up Modal-->
+<!-- /modal -->
+{% endblock %}

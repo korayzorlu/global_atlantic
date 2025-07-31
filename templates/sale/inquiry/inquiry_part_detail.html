@@ -1,0 +1,70 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+      <div class="row border-bottom">
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{inquiryPart.requestPart}}" readonly>
+            <label for="textFormOutline" class="form-label">Part</label>
+          </div>
+        </div>
+        <div class="col-md-4 mb-3">
+          <div class="form-outline">
+            <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{inquiryPart.requestPart.part.description}}" readonly>
+            <label for="textFormOutline" class="form-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{ form.quantity }}
+            <label for="textFormOutline" class="form-label">Quantity</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="form-outline">
+            {{form.unitPrice}}
+            <label for="textFormOutline" class="form-label">UnitPrice</label>
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="form-outline">
+            {{form.availability}}
+            <label for="textFormOutline" class="form-label">Availability</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Save</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+
+ 
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var inquiryPartId = "{{inquiryPart.id}}";
+    var inquiryId = "{{inquiryPart.quotation.id}}";
+    var pageUrl = "/sale/quotation_part_update/{{elementTagId}}/"
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+
+    
+</script>

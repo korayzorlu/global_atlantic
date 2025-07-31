@@ -1,0 +1,496 @@
+{% load static %}
+{% load payment_choice_filter%}
+{%load currency %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order Confirmation PDF</title>
+    <style>
+        @page {
+            size: a4 portrait;
+
+            @frame header_frame {
+                /* Static frame */
+                -pdf-frame-content: header_content;
+                left: 25pt;
+                right: 25pt;
+                top: 25pt;
+            }
+
+            @frame content_frame {
+                /* Content Frame */
+                left: 25pt;
+                top: 225pt;
+            }
+        }
+
+        /* Normal */
+        @font-face {
+            font-family: "Arial";
+            src: url('arial.ttf');
+        }
+
+
+        /* Bold */
+        @font-face {
+            font-family: "Arial Bold";
+            src: url('arial-bold.ttf');
+        }
+
+        body {
+            font-family: "Arial";
+        }
+
+        .table1 h1 {
+          margin-right:0;
+          padding-right: 0;
+          font-size: 3em;
+          font-weight: 400;
+          letter-spacing: 5px;
+          margin-bottom: 0;
+          padding-bottom: 0;
+        }
+
+        .table1 h5{
+            color: gray;
+            padding-top: 0;
+            margin-top: 0;
+            font-weight: 400;
+            letter-spacing: 4.5px;
+        }
+
+
+        
+      
+        .date{
+            margin-right: 0;
+            margin-top: 0;
+            padding-top: 0;
+            width: 25%;
+          
+        }
+
+        .stageheadline{
+            text-align: center;
+            font-weight: 400;
+            color: #7db9e4;
+            font-size: 2em;
+        }
+ 
+        .table3data1{
+            vertical-align: middle;
+            border:gray 1px solid;
+        }
+
+        .table3data2{
+           vertical-align: middle;
+           padding-left: 1em;
+        }
+
+        .table4{
+            border:gray 1px solid;
+            vertical-align: middle;
+        }
+       
+        .table3row{
+            padding-top: 5px;
+        }
+
+        .table5row{
+            padding-top:5px;
+            padding-left: 5px;
+        }
+
+        .table3row1{
+            padding-left: 5px;
+        }
+
+       
+       
+        .table3dt{
+            background-color: #D3D3D3;
+        }
+
+        .table5dt{
+          background-color: #D3D3D3;
+        }
+
+        .table5{
+            margin-top: 15px;
+        }
+        
+        .table7{
+            margin-top: 15px;
+            border: gray 1px solid;
+        }
+
+        .table7row1{
+            padding-top: 3px;
+            text-align: center;
+        }
+        
+        .table7row2{
+            padding-top: 3px;
+            text-align: center;
+        }
+
+        .table7row3{
+            padding-top: 3px;
+            text-align: center;
+        }
+
+        .table8tdright{
+            
+            padding-left: -140px;
+        }
+
+       
+        .table9{
+            border:#7db9e4 1px solid;
+            margin-top: 15px;
+        }
+        
+      
+
+        .table10tdleft{
+            padding-left: -65px;
+        }
+
+        .table10tdright{
+            padding-left: -30px;
+            padding-bottom: 3px;
+            
+        }
+       
+        .table13tdright{
+            text-align: right;
+        }
+
+        .table10row{
+        padding-top: 0;
+
+        }
+
+        .table10headline{
+         padding-bottom: -20px;
+        }
+
+        .table15td{
+         background-color: #D3D3D3;
+         padding-left: 3px;
+        }
+
+        .table15tdright{
+            text-align: right;
+            padding-right: 2px;
+        }
+        .certificate{
+            display:flex;
+            justify-content:flex-end;
+            height:50px;
+        }
+
+        .table3datas{
+            padding-left: -40px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header_content">
+        <table class="table1">
+         <tr>
+            <td class="logo">
+                <img height="100px" src="{% static 'images/landing/entech-semar-logo.png' %}" ></img>
+            </td>
+
+            <td class="date">
+                <table class="table2">
+                    <tr>
+                        <td>
+                            <span><b>PAGES:</b> </span>
+                        </td>
+                        <td>
+                            <pdf:pagenumber />
+                            /
+                            <pdf:pagecount />
+                        </td>
+                    </tr>
+                </table>
+            </td>
+          </tr>
+        </table>
+
+
+        <h1 class="stageheadline" >ORDER CONFIRMATION</h1>
+
+
+
+
+        <table class="table3">
+
+            <tr class="table3row1">
+
+                <td class="table3data1">
+                    <table>
+                        <tr>
+                            <td><b>VESSEL/PLANT:</b></td>
+                            <td class="table3datas">{{project.request.vessel}}</td>
+                        </tr>
+                        <tr >
+                            <td><b>IMO:</b></td>
+                            <td class="table3datas">{{project.request.vessel.imo}}</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: -30px;"><b>COMPANY:</b></td>
+                            <td class="table3datas">
+                               
+                                <span>
+                                {{project.request.customer.name}} </br>
+                                {{project.request.customer.address}} </br>
+                                {{project.request.customer.city}} / 
+                                {{project.request.customer.country}}</br>
+                                {{project.request.customer.direct_phone}}</br>
+                                {{project.request.customer.fax_address}}
+                                </span>
+                                </td>
+                        </tr>
+                    </table>
+                   
+                </td>
+
+                <td class="table3data2">
+                    <table class="table4" >
+                        <tr class="table3row">
+                            <td class="table3dt">ORDER DATE</td>
+                            <td>
+                               {{quotation.quotation_date}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table3dt">CUSTOMER REF</td>
+                            <td>{{project.request.customer_ref}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table3dt">OUR REF</td>
+                            <td>{{quotation.no}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table3dt">CURRENCY</td>
+                            <td>{{quotation.currency}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table3dt">DELIVERY TERMS</td>
+                            <td>{{quotation.delivery}}</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table3dt">PAYMENT TERMS</td>
+                            <td>{{quotation.payment|get_choice_value }}</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+        <table class="table5">
+            <tr class="table5row1">
+                <td style="border:gray 1px solid;">
+                    <table style="border:gray 1px solid; ">
+                        <tr class="table5row">
+                            <td class="table5dt">MAKER</td>
+                            <td>{{project.request.maker}}</td>
+                        </tr>
+                        <tr class="table5row">
+                            <td class="table5dt">TYPE</td>
+                            <td>{{project.request.maker_type}}</td>
+                        </tr>
+                    </table>
+                </td>
+
+                <td style="padding-left: 1em;">
+                    <table class="table6" style="border:gray 1px solid;">
+                        <tr class="table3row">
+                            <td class="table5dt">SERIAL</td>
+                            <td>0</td>
+                        </tr>
+                        <tr class="table3row">
+                            <td class="table5dt">CYL</td>
+                            <td>0</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+
+        <table class="table7">
+            <tbody>
+                <tr class="table7row1" style="background-color: #D3D3D3;">
+                    <th>No</th>
+                    <th>Part No</th>
+                    <th>Description of Goods</th>
+                    <th>Qty</th>
+                    <th>Unit</th>
+                    <th>Unit Price </th>
+                    <th>C.</th>
+                    <th>Total Price</th>
+                </tr>
+                {% for quotationPart in quotationParts %}
+                <tr class="table7row2">
+                    <td>1</td>
+                    <td>{{quotationPart.inquiry_part.request_part.part.code}} </td>
+                    <td>{{quotationPart.inquiry_part.request_part.part.name}}</td>
+                    <td>{{quotationPart.inquiry_part.quantity}}</td>
+                    <td>{{quotationPart.inquiry_part.request_part.part.unit.name}}</td>
+                    <td>{{quotationPart|get_currency_unit_price}}</td>
+                    <td>{{quotation.currency}}</td>
+                    
+                    <td>
+                    {{quotationPart.get_total_price_2}}  {{quotation.currency}}
+                    
+                    </td>
+                    
+                </tr>
+                {% endfor %}
+                
+            </tbody>
+
+        </table>
+
+
+
+        <table class="table15">
+            <tr style="border: gray 1px solid;">
+                <td style="width: 60%;"></td>
+                <td>
+                    <table style="border: gray 1px solid;">
+                    <tr class="table3row">
+                        <td class="table15td"><b>SUB-TOTAL </b><span>{{quotation.currency}}</span></td>
+                        <td class="table15tdright"><b>{{subTotal}}</b></td>
+                    </tr>  
+                    <tr class="table3row">
+                        <td class="table15td"><b>DISCOUNT</b><span>%{{discount}}</span></td>
+                        <td class="table15tdright"><b>- {{discountTotal}}</b></td>
+                    </tr>  
+                    <tr class="table3row">
+                        <td class="table15td"><b>VAT</b><span>%{{quotation.vat}}</span></td>
+                        <td class="table15tdright"><b>{{vatTotal}} </b></td>
+                    </tr>  
+                    <tr class="table3row">
+                        <td class="table15td"><b>NET TOTAL </b><span>{{quotation.currency}}</span></td>
+                        <td class="table15tdright"><b>{{netTotal}}</b></td>
+                    </tr>    
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+
+        
+        <table class="table9">
+            <tr>
+                <td style="padding: 5px; text-align: center;">
+                    <span style="padding-top: 0;color: #7db9e4;">
+                    {{company.legal_warning_text}}
+
+                    </span>
+                </td>
+            </tr>
+        </table>
+
+        <table class="table10" style="margin-top: 20px;">
+          
+            <tr class="table10row">
+                <td>
+                    <table>
+                        <h3 class="table10headline">{{company.name }}</h3>
+                        <tr>
+                            <td><b>Office:</b> </td>
+                            <td class="table10tdleft">{{company.address}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Tel:</b> </td>
+                            <td class="table10tdleft">{{company.phone_number}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Fax:</b></td>
+                            <td class="table10tdleft">{{company.fax_number}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>E-Mail:</b></td>
+                            <td class="table10tdleft">{{company.email}}</td>
+                        </tr>
+                        <tr>
+                            <td><b>Web:</b></td>
+                            <td class="table10tdleft">{{company.url}}</td>
+                        </tr>
+
+
+                    </table>
+
+                </td>
+
+                <td style="margin-left:70px;">
+                    <table class="table11">
+                        <h3 class="table10headline">BANK DETAILS :</h3>
+                       
+                        
+                        {% for account in bankAccounts%}
+                            {% if not account.swift%}
+                            <tr>
+                                <td><b>{{account.name}}:</b></td>
+                                <td class="table10tdright">{{account.iban}}</td>
+                            </tr>
+                           {% else %} 
+                                <tr>
+                                    <td><b>{{account.name}}:</b></td>
+                                    <td class="table10tdright">{{account.swift}}</td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                        
+                    </table>
+                </td>
+
+            </tr>
+        </table>
+    
+    
+    <table style="text-align: right;" class="table12">
+    <tr>
+        <td>
+              <img  class="certificate" src="{% static 'images/pdfcert/certificate.jpeg' %}" ></img>
+          
+        </td>
+    </tr>
+    </table>
+
+
+
+
+
+
+        <hr>
+
+        <table class="table13">
+            <tr>
+                <td>
+                    <h5>{{responsible.first_name}} {{responsible.last_name}}/ {{responsible.profile.employee_type}}</h5>
+                </td>
+                <td class="table13tdright">
+                    <h5>{{date}} - {{time}}</h5>
+                </td>
+
+            </tr>
+        </table>
+
+
+
+
+    </div>
+</body>
+
+</html>

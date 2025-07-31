@@ -1,0 +1,143 @@
+{% load static %}
+
+<!-- Logout Modal -->
+<div class="modal fade" id="logoutModalCenter" tabindex="-1" role="dialog" aria-labelledby="logoutModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLongTitle">Log out?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+            {% comment %} <span aria-hidden="true">&times;</span> {% endcomment %}
+        </button>
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <form method="post" action="{% url 'user:logout' %}">
+          {% csrf_token %}
+          <button class="btn btn-danger" type="submit">logout</button>
+        </form>
+        {% comment %} <a class="btn btn-danger" href="/user/logout">Logout</a> {% endcomment %}
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal fade" id="aboutMichoModal" tabindex="-1" role="dialog" aria-labelledby="aboutMichoModalTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <button type="button" class="btn btn-close shadow-0" data-bs-dismiss="modal" aria-label="Close" style="position: absolute;right:0;top:0;font-size:0.65rem;"></button>
+          <!-- <div class="row mb-3">
+            <div class="col-md-12">
+              <img src="/static/images/landing/logo/{{user.profile.theme}}/esms-logo.png" style="height: 40px;">
+            </div>
+          </div> -->
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <span>MichoApp {{michoAppVersion}}</span>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <span>Novu Technology Group - 2021</span>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <img src="/static/images/landing/ntg-logo.png" style="height: 40px;">
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- Add/Update Data Modal X-Large-->
+<div id="addUpdateDataModalXl" class="modal fade" tabindex="-1">
+  <div id="addUpdateDataDialogXl" class="modal-dialog modal-xl modal-dialog-top modal-dialog-scrollable" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal Full-Screen-->
+<div id="addUpdateDataModalFs" class="modal fade" tabindex="-1">
+  <div id="addUpdateDataDialogFs" class="modal-dialog model-xl modal-fs modal-dialog-top modal-dialog-scrollable" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal Large-->
+<div id="addUpdateDataModalL" class="modal fade" tabindex="-1">
+  <div id="addUpdateDataDialogL" class="modal-dialog modal-lg modal-dialog-top modal-dialog-scrollable" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal X-Large / Redirect-->
+<div id="addUpdateDataModalXl-r" class="modal fade" tabindex="-1">
+  <div id="addUpdateDataDialogXl-r" class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal Small Centered-->
+<div id="addUpdateDataModalSmall" class="modal fade modal-sm smallModal" tabindex="-1" data-mdb-modal-non-invasive="true">
+  <div id="addUpdateDataDialogSmall" class="modal-dialog modal-small modal-dialog-top modal-dialog-scrollable" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal Small Centered-->
+<div id="addUpdateDataModalSmall-c" class="modal fade modal-sm smallModal smallModal-{{elementTag}}-{{elementTagId}}" tabindex="-1" data-mdb-modal-non-invasive="true">
+  <div id="addUpdateDataDialogSmall-c" class="modal-dialog smallDialog-{{elementTag}}-{{elementTagId}}" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal-->
+<div id="addUpdateDataModal" class="modal fade smallModal smallModal-{{elementTag}}-{{elementTagId}}" tabindex="-1">
+  <div id="addUpdateDataDialog" class="modal-dialog smallDialog-{{elementTag}}-{{elementTagId}}" hx-target="this"></div>
+</div>
+
+
+
+
+
+
+
+<!-- Add/Update Data Modal Small / Redirect-->
+<div id="addUpdateDataModal-r" class="modal fade smallModal" tabindex="-1">
+  <div id="addUpdateDataDialog-r" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!-- Add/Update Data Modal Small / In Form-->
+<div id="addUpdateDataModal-inform" class="modal fade smallModal" tabindex="-1">
+  <div id="addUpdateDataDialog-inform" class="modal-dialog" hx-target="this"></div>
+</div>
+
+<!--Messages Top-Right-->
+<div data-toast-container class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div data-toast-template class="toast align-items-center border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div data-toast-body class="toast-body"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+
+<!--Messages Bottom-Right-->
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="toast-body">
+      Updated Successfully!
+    </div>
+  </div>
+</div>
+
+<!--Delete Data Modal-->
+
+{% comment %} 
+<style>
+  .btn-secondary{
+    border: 0px solid;
+    border-radius: 15px;
+    background-color: #2b2d2f!important;
+    color: #fff;
+    text-transform: none!important;
+  }
+  .btn-danger{
+    border: 0px solid;
+    border-radius: 15px;
+    background-color: #ff3800!important;
+    color: #fff;
+    text-transform: none!important;
+  }
+</style> {% endcomment %}

@@ -1,0 +1,45 @@
+{% load static %}
+
+<div class="row w-100 h-100 p-0 m-0">
+    <div class="col-md-6 text-start w-50">
+        <img src="{{logo}}" alt="" height="54">
+    </div>
+    <div class="col-md-6 text-end w-50">
+        <div class="row w-50 h-100 ms-auto p-0 m-0" style="border: 1px solid rgba(0,56,101,0.65);">
+            <div class="col-md-12 w-100 h-100 p-0 m-0">
+                <div class="row d-flex align-items-center h-50 pdfTextBold" style="border-bottom: 1px solid rgba(0,56,101,0.65);font-size:11px;">
+                    <div class="col-md-12 text-center">
+                        <span>FATURA / INVOICE</span>
+                    </div>
+                </div>
+                <div class="row d-flex align-items-center h-50" style="font-size:12px;">
+                    <div class="col-md-12 text-center">
+                        <span>{{invoiceNo}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row p-0 m-0">
+    <div class="col-md-12 text-end">
+        <span style="line-height:26px;"><strong class="pdfTextBold">TARİH / DATE&nbsp;:</strong> &nbsp;&nbsp;{{invoiceDate}}</span>
+    </div>
+</div>
+
+
+
+
+<!-- <div class="pdfHeader">
+    <div class="pdfHeaderLogo">
+        <img src="{{logo}}" alt="">
+    </div>
+    <div class="pdfHeaderTitleBlock">
+        <div class="pdfHeaderTitle">
+            <span>FATURA / INVOICE</span>
+        </div>
+        <div class="pdfHeaderInvoiceNo">
+            <span>sdf</span>
+        </div>
+    </div>
+</div> -->

@@ -1,0 +1,82 @@
+
+//body
+$font-size-base: 0.875rem;
+
+//progress
+//progress-height: 2px;
+
+//button
+$btn-border-radius: 0px;
+
+//tabs
+$nav-tabs-link-font-size: 10px;
+$nav-tabs-link-border-bottom-width: 0px;
+
+//pill
+$nav-pills-margin: 0.2rem;
+$nav-pills-link-padding-top: 11px;
+$nav-pills-link-padding-bottom: 10px;
+$nav-pills-link-hover-bg: #E0E0E0;
+$nav-pills-link-color: rgb(96, 103, 109);
+$nav-pills-link-active-bg: #bbd3eb; //#bbd3eb
+$nav-pills-link-active-color: #5f46a1; //#5f46a1
+
+//datepicker
+$datepicker-header-background-color: #263238;
+
+//modal
+$modal-xl: 1200px;
+$modal-content-border-radius: 0px;
+
+//datatable
+$pagination-border-radius: 0px;
+$pagination-padding-y: 0.1rem;
+
+@import '../src/mdb/scss/mdb.pro.scss';
+
+//color
+
+@import "../src/mdb/scss/bootstrap/functions";
+@import "../src/mdb/scss/bootstrap/variables";
+@import "../src/mdb/scss/bootstrap/mixins";
+@import "../src/mdb/scss/bootstrap/utilities";
+
+$blue-esms: #003865 !default;
+$red-esms: #9d2235 !default;
+
+$esms-colors: (
+  'blue-esms': $blue-esms,
+  'red-esms': $red-esms,
+) !default;
+
+$all-colors: map-merge-multiple($blues, $indigos, $purples, $pinks, $reds, $oranges, $yellows, $limes, $ambers, $greens, $teals, $cyans, $blue-grays, $esms-colors);
+
+$utilities: map-merge(
+  $utilities,
+  (
+    "color": map-merge(
+      map-get($utilities, "color"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "color"), "values"),
+          (
+            $all-colors
+          ),
+        ),
+      ),
+    ),
+    "background-color": map-merge(
+      map-get($utilities, "background-color"),
+      (
+        values: map-merge(
+          map-get(map-get($utilities, "background-color"), "values"),
+          (
+            $all-colors
+          ),
+        ),
+      ),
+    ),
+  )
+);
+
+@import "../src/mdb/scss/bootstrap/utilities/api";

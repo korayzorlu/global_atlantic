@@ -1,0 +1,71 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n%}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}Sales Process{% endblock %}
+{% block mainDirectory %}Sales{% endblock %}
+{% block childDirectory %}Sales Process{% endblock childDirectory %}
+{% block href %}{% url 'user:dashboard' %}{% endblock %}
+{% block mainRoute %}Sales Process{% endblock %}
+{% block childRoute %}-{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% url 'sales:project_create' as add_url %}
+
+<!-- StyleSheet-->
+<!-- /StyleSheet End-->
+
+<!-- Basic initialization -->
+<div class="card">
+    <div class="card-header header-elements-inline">
+        <div class="header-elements">
+            <h5 class="m-0">Sales Processs</h5>
+        </div>
+        {% block buttonaddinforemove %}
+        {% include "components/buttonaddinforemove.html" with add_url=add_url|add:"?next="|add:request.path %}
+        {% endblock %}
+    </div>
+
+    <table class="table table-striped table-hover table-bordered dataTable no-footer">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th class="d-none">is_claim</th>
+                <th>Project No</th>
+                <th>Customer</th>
+                <th>Vessel</th>
+                <th>Maker Type</th>
+                <th>Created At</th>
+                <th>Updated At</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+</div>
+<!-- /Basic initialization -->
+
+{% endblock %}
+{% block javascript %}
+<script>
+    const project_create_url = "{% url 'sales:project_create' %}";
+    const projects_api_url = "{% url 'sales:projects_api' %}?format=datatables";
+    const project_continue_url = "{% url 'sales:project_continue' 0 %}";
+    const project_update_api_url = "{% url 'sales:project_update_api' 0 %}";
+</script>
+<script type="module" src="{% static 'js/sales/process/sales_data.js' %}"></script>
+{% endblock javascript %}

@@ -1,0 +1,392 @@
+{% load static %}
+
+{% include "layout/pdf.html" %}
+
+{% block pdf %}
+
+<style>
+    @font-face {
+        font-family: 'Inter';
+        src: url("/static/fonts/Inter-Regular.ttf") format('truetype');
+    }
+    @font-face {
+        font-family: 'Inter-Bold';
+        src: url("/static/fonts/Inter-SemiBold.ttf") format('truetype');
+    }
+
+    @page {
+        size: A4;
+        margin: 120px 30px 120px 30px;
+        display: flex;
+        flex-direction: column;
+        @top-center {
+            content: element(header);
+            width: 100%;
+            height: 80px;
+            margin-bottom: 10px;
+        };
+        @bottom-center {
+            content: element(footer);
+            width: 100%;
+            height: 80px;
+            vertical-align: bottom;
+            margin-top: 10px;
+        }
+        
+    }
+
+    @media print {
+        .page-number:before {
+            content: "SAYFA / PAGE     " counter(page) " of " counter(pages);
+        }
+    }
+
+    body {font-family: "Inter", sans-serif!important;background-color: #fff!important;color: #000;margin: 0;padding: 0;}
+
+    .pdfHeaderTitle table{max-width: 100px;border-collapse: collapse;}
+    .pdfHeaderTitle table tr th,
+    .pdfHeaderTitle table tr td{font-size: 8px;border: 1px solid rgba(0,56,101,0.65);padding: 5px;text-align: left;}
+
+    .pdfTextBold{font-family: "Inter-Bold", sans-serif!important;}
+
+    header {position: running(header);left: 0;right: 0;font-size: 8px;}
+    footer.pdfFooter {position: running(footer);left: 0;right: 0;background-color: #fff;font-size: 8px;}
+
+    .companyInfo {display: block;}
+
+    .pdfTableBlock{margin-bottom: 10px;}
+
+    .pdfTableBlock table{width: 100%;border-collapse: collapse;page-break-inside: auto;}
+
+    .pdfTableBlock table tr{page-break-inside: avoid;}
+
+    .pdfTableBlock table tr th{background-color: #c7d3e1;}
+    .pdfTableBlock table tr th,
+    .pdfTableBlock table tr td{font-size: 8px;border: 1px solid rgba(0,56,101,0.65);text-align: left;padding: 2px;}
+
+    .companyInfo{margin-bottom: 10px}
+    .companyInfo table{width: 100%;height:100%;border-collapse: collapse;}
+
+   
+    .companyInfo table tr th,
+    .companyInfo table tr td{font-size: 8px;border: 1px solid rgba(0,56,101,0.65);text-align: left;padding: 2px;vertical-align: top;}
+
+    .projectInfo{margin-bottom: 10px}
+    .projectInfo table{width: 100%;height:100%;border-collapse: collapse;}
+
+    .projectInfo table tr > th,
+    .projectInfo table tr > td{font-size: 8px;text-align: left;padding: 0;vertical-align: top;}
+
+    .projectInfo table tr th th,
+    .projectInfo table tr td td{font-size: 8px;border: 1px solid rgba(0,56,101,0.65);text-align: left;padding: 2px;vertical-align: top;}
+    
+    .pdfColoredCol{background-color: #c7d3e1;}
+
+    .pdfEndBlock {page-break-inside: avoid;left: 0;right: 0;background-color: #fff;font-size: 8px;}
+    .pdfEndBlock table{width: 100%;height:100%;border-collapse: collapse;}
+
+    .pdfBorderlessTd {font-size: 8px;text-align: left;padding: 0;vertical-align: top;}
+    .pdfBorderTd {font-size: 8px;border: 1px solid rgba(0,56,101,0.65);text-align: left;padding: 2px;vertical-align: top;}
+  
+
+</style>
+
+<header>
+    {% include "includes/pdf/header_invoice.html" %}
+</header>
+
+<footer class="pdfFooter">
+    {% include "includes/pdf/footer_invoice.html" %}
+</footer>
+
+
+<div class="pdfContent h-100" style="position: relative;">
+
+    <div class="companyInfo">
+        <table>
+            <tbody>
+                <tr>
+                    <td class="ps-1 pe-1 text-start" style="width: 49%;">
+                        <div class="row p-0 m-0">
+                            <div class="col-md-12 w-100">
+                                <span class="pdfTextBold">ALICI / BUYER&nbsp;:&nbsp;</span>{{vesselName}}
+                            </div>
+                        </div>
+                        <div class="row p-0 m-0">
+                            <div class="col-md-12 w-100">
+                                {{billingName}}
+                            </div>
+                        </div>
+                        <div class="row p-0 m-0">
+                            <div class="col-md-12 w-100">
+                                {{billingAddress}}
+                            </div>
+                        </div>
+                        <div class="row p-0 m-0">
+                            <div class="col-md-12 w-100">
+                                {{invoiceCareOf}}
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width: 2%;border: none;"></td>
+                    <td class="ps-1 pe-1 text-start" style="width: 49%;">
+                        <div class="row p-0 m-0">
+                            <div class="col-md-12 w-100">
+                                <span class="pdfTextBold">TESLİMAT ADRESİ / DELIVERY ADDRESS</span>
+                            </div>
+                        </div>
+                        <div class="row p-0 m-0">
+                            <div class="col-md-12 w-100">
+                                {{deliveryAddress}}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="projectInfo">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width: 49%;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        PROJE NO / PROJECT NO
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.projectNo}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        SİPARİŞ TARİHİ / ORDER DATE
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.orderDate}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        TESLİMAT ŞEKLİ / DELİVERY TYPE
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.deliveryType}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        TESLİMAT NO / DELİVERY NO
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.deliveryNo}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="width: 2%;border: none;"></td>
+                    <td style="width: 49%;">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        MAKER
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.maker}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        TİP / TYPE
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.makerType}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        MÜŞTERİ REF / CUSTOMER REF
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.customerRef}}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="ps-1 pe-1 text-start w-50 pdfColoredCol pdfTextBold">
+                                        ÖDEME ŞEKLİ / PAYMENT TERM
+                                    </td>
+                                    <td class="ps-1 pe-1 text-start w-50">
+                                        {{projectData.payment}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="pdfTableBlock">
+        <table>
+            <thead>
+                <tr>
+                    <th class="ps-1 pe-1 text-center pdfTextBold">Sıra<br/>Item</th>
+                    <th class="ps-1 pe-1 text-center pdfTextBold">Açıklama<br/>Description</th>
+                    <th class="ps-1 pe-1 text-center pdfTextBold">Adet<br/>Qty</th>
+                    <th class="ps-1 pe-1 text-center pdfTextBold">Birim<br/>Unit</th>
+                    <th class="ps-1 pe-1 text-center pdfTextBold">Birim Fiyatı<br/>Unit Price</th>
+                    <th class="ps-1 pe-1 text-center pdfTextBold">Toplam Fiyat<br/>Total Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Çoklu satır örneği -->
+                {% for item in items %}
+                <tr>
+                    <td class="ps-1 pe-1 text-end" style="width: 5%;">{{ item.sequency }}</td>
+                    <td class="ps-1 pe-1" style="width: 61%;">
+                        <div class="row p-0 m-0 w-100">
+                            <div class="text-start p-0 m-0 w-25">{{ item.name }}</div>
+                            <div class="text-start p-0 m-0 w-75">{{ item.description }}</div>
+                        </div>
+                    </td>
+                    <td class="ps-1 pe-1 text-end" style="width: 5%;">{{ item.quantity }}</td>
+                    <td class="ps-1 pe-1 text-center" style="width: 5%;">{{ item.unit }}</td>
+                    <td class="ps-1 pe-1 text-end" style="width: 12%;">{{ item.unitPrice|floatformat:2 }} {{invoiceCurrency}}</td>
+                    <td class="ps-1 pe-1 text-end" style="width: 12%;">{{ item.totalPrice|floatformat:2 }} {{invoiceCurrency}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="pdfEndBlock w-100 mt-auto">
+        <div class="row">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="pdfBorderTd pdfTextBold text-center text-red-esms" style="width: 68%;padding: 0;vertical-align: middle;">
+                            <span>Tüm satışlar {{sourceCompany.formalName}} satış şartları dahilinde yapılmaktadır.</span><br>
+                            <span>Satış şartları kopyası www.esmarinesolutions.com adresinde bulunmaktadır.</span>
+                        </td>
+                        <td class="pdfBorderlessTd" style="width: 2%;"></td>
+                        <td class="pdfBorderlessTd" style="width: 30%;">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="ps-1 pe-1 text-start pdfColoredCol pdfTextBold pdfBorderTd" style="width: 60%;">
+                                            ARA TOPLAM / SUB TOTAL
+                                        </td>
+                                        <td class="ps-1 pe-1 text-end pdfBorderTd pdfTextBold" style="width: 40%;">
+                                           {{invoiceNetPrice}} {{invoiceCurrency}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-1 pe-1 text-start pdfColoredCol pdfTextBold pdfBorderTd" style="width: 60%;">
+                                            İSKONTO / DISCOUNT
+                                        </td>
+                                        <td class="ps-1 pe-1 text-end pdfBorderTd pdfTextBold" style="width: 40%;">
+                                            {{invoiceDiscountPrice}} {{invoiceCurrency}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-1 pe-1 text-start pdfColoredCol pdfTextBold pdfBorderTd" style="width: 60%;">
+                                            {{invoiceVatText}}
+                                        </td>
+                                        <td class="ps-1 pe-1 text-end pdfBorderTd pdfTextBold" style="width: 40%;">
+                                            {{invoiceVatPrice}} {{invoiceCurrency}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="ps-1 pe-1 text-start pdfColoredCol pdfTextBold pdfBorderTd" style="width: 60%;">
+                                            TOPLAM / G.AMOUNT
+                                        </td>
+                                        <td class="ps-1 pe-1 text-end pdfBorderTd pdfTextBold" style="width: 40%;">
+                                            {{invoiceTotalPrice}} {{invoiceCurrency}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+
+    <div class="pdfEndBlock w-100 mt-auto">
+        <div class="row mt-2">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="ps-1 pe-1 text-start pdfColoredCol pdfTextBold pdfBorderTd" style="width: 20%;">
+                            Yalnız / Only
+                        </td>
+                        <td class="ps-1 pe-1 text-start pdfBorderTd" style="width: 80%;">
+                            {{invoiceOnly}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-2">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="pdfBorderTd pdfTextBold text-start" style="width: 49%;vertical-align: middle;">
+                            <span>TESLİM ALAN</span>
+                        </td>
+                        <td class="pdfBorderlessTd" style="width: 2%;"></td>
+                        <td class="pdfBorderTd pdfTextBold text-start" style="width: 49%;vertical-align: middle;">
+                            <span>TESLİM EDEN</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="row mt-2">
+            <table>
+                <tbody>
+                    <tr>
+                        {% if isBanks %}
+                            <td class="pdfBorderlessTd" style="width: 33%;">
+                                <span>Türkiye İş Bankası (Swift: ISBKTRIS)</span><br>
+                                {% for isBank in isBanks %}
+                                    IBAN: {{isBank.ibanNo}} {{isBank.currency.code}}<br>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                        {% if vakifBanks %}
+                            <td class="pdfBorderlessTd" style="width: 34%;">
+                                <span>Vakıfbank (Swift: TVBATR2A)</span><br>
+                                {% for vakifBank in vakifBanks %}
+                                    IBAN: {{vakifBank.ibanNo}} {{vakifBank.currency.code}}<br>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                        {% if halkBanks %}
+                            <td class="pdfBorderlessTd" style="width: 33%;">
+                                <span>Halkbank (Swift: TRHBTR2A)</span><br>
+                                {% for halkBank in halkBanks %}
+                                    IBAN: {{halkBank.ibanNo}} {{halkBank.currency.code}}<br>
+                                {% endfor %}
+                            </td>
+                        {% endif %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock pdf %}
+

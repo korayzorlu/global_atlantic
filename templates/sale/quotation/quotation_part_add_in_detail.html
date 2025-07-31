@@ -1,0 +1,126 @@
+{% load static %}
+
+<style>
+  .select2-results__option{font-size:8px;}
+</style>
+
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}-part" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="row border-bottom">
+        <div class="col-md-4 mb-3">
+          <div class="form-outline">
+            <select name="quotationPartAddInquiryForm" id = "inquiryBlock" class="">
+              <option value="" selected>-----</option>
+              {% for inquiry in inquiries %}
+                <option value="{{inquiry.id}}">{{inquiry.inquiryNo}} - {{inquiry.supplier.name}}</option>
+              {% endfor %}
+            </select>
+            {% comment %} <label for="selectFormOutline" class="form-label select-label">Inquiry</label> {% endcomment %}
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="form-outline">
+            <select name="quotationPartAddInquiryPartForm" id = "inquiryPartBlock" class="">
+                <option value="" selected>-----</option>
+            </select>
+            {% comment %} <label for="selectFormOutline" class="form-label select-label">Part</label> {% endcomment %}
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+  var detailRefererPathSub = "{{refererPath}}";
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var quotationPartId = "{{quotationPart.id}}";
+  var quotationId = "{{quotationPart.quotation.id}}";
+  var pageUrl = "/sale/quotation_part_add_in_detail/q_" + quotationId + "/";
+  var addSubDataHxGet = "/sale/quotation_part_add_in_detail/q_" + quotationId + "/";
+
+    $(document).ready(function () {
+      $('#inquiryPartBlock').select2({
+        placeholder: "Part",
+        allowClear: true,
+        width: "100%"
+      });
+      $('#inquiryBlock').select2({
+        placeholder: "Inquiry",
+        allowClear: true,
+        width: "100%"
+      });
+    });
+    
+    // Company seçildiğinde AJAX isteği yaparak Vessel ve Person'ları günceller
+    $('#inquiryBlock').on('change', function() {
+      var inquiryInformId = $(this).val();
+      console.log(inquiryInformId);
+      $("#select-wrapper-inquiryPartBlock .form-label.select-fake-value").text("");
+      $.ajax({
+          url: '/sale/api/inquiry_parts',
+          data: {'inquiry': inquiryInformId},
+          dataType: 'json',
+          success: function(data) {
+              $('#inquiryPartBlock').empty();
+              $('#inquiryPartBlock').append($('<option>').val("").text("--------"));
+              $.each(data, function(i, inquiryPart) {
+                  $('#inquiryPartBlock').append($('<option>').addClass('addedInquiryPart').val(inquiryPart.id).text(inquiryPart.sequency + " - " + inquiryPart.partNo + " || " + inquiryPart.description));
+              });
+          }
+      });
+
+    });
+    $('#inquiryPartBlock').select2();
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        $("#form-{{elementTagSub}}-{{elementTagId}}-part").remove();
+    });
+
+    $("#form-{{elementTagSub}}-{{elementTagId}}-part").submit(function (event) {
+      $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}} .dataTables_scrollBody").busyLoad("show", {
+          animation: false,
+          spinner: "pulsar",
+          maxSize: "150px",
+          minSize: "150px",
+          text: "Loading ...",
+          background: "rgba(69, 83, 89, 0.6)",
+          color: "#455359",
+          textColor: "#fff"
+      });
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().ajax.reload()
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}").on( 'draw.dt', function () {
+          htmx.process("#table-{{elementTagSub}}-{{elementTagId}}");
+          $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}} .dataTables_scrollBody").busyLoad("hide", {
+            animation: "fade"
+          });
+      });
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+      
+    });
+
+    
+
+    
+    
+</script>
+
+

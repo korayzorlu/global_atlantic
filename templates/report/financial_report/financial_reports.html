@@ -1,0 +1,490 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        {% comment %} <i class="fa-solid fa-file-invoice-dollar me-2"></i> {% endcomment %}
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+
+    <!-- Tabs navs Sub-->
+    <ul class="nav nav-pills  sortable-list d-flex" style="background-color: #f1f2f7" id="tabNavSub-{{elementTag}}" data-mdb-sortable="sortable" role="tablist" style="margin-bottom: 0 !important;">
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-table">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-table" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-table" role="tab" aria-controls="tabPane-{{elementTag}}-table" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                List
+            </a>
+        </li>
+    </ul>
+    <!-- Tabs navs Sub-->
+
+    <!-- Tabs content -->
+    <div class="tab-content" id="tabContSub-{{elementTag}}" hx-target="this">
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-table" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-table">
+
+            <div class="globalBoxes split">
+
+                {% comment %} <div class="col-md-1">
+                    <button class="btn btn-danger bg-blue-esms me-auto" type="button" id="getSFinancialReports">Reports</button>
+                </div> {% endcomment %}
+                <div class="row">
+                    <div class="col-md-12 overflow-auto" style="max-height:89vh;">
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-order pb-1" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-order" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">RECEIVED ORDERS AND DETAILS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-sendInvoice pb-1" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-sendInvoice" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">DAILY OUTGOING INVOICES</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-incomingInvoice pb-1" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-incomingInvoice" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">DAILY INCOMING INVOICES</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-paymentIn pb-1" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-paymentIn" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">DAILY INCOMING TRANSFERS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-paymentOut pb-1" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-paymentOut" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">DAILY OUTGOING TRANSFERS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankHalkbank pb-0 mb-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankHalkbank" class="table table-striped table-hover table-bordered dataTable no-footer border-info pb-0 mb-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">BANK ACCOUNT DETAILS</th>
+                                    </tr>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">HALKBANK - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankVakifbank p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankVakifbank" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">VAKIFBANK - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankIsbank p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankIsbank" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">TÜRKİYE İŞ BANKASI - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankAlbarakaturk p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankAlbarakaturk" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">ALBARAKA TÜRK - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankEmlakkatilim p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankEmlakkatilim" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">EMLAK KATILIM - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankVakifkatilim p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankVakifkatilim" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">VAKIF KATILIM - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankZiraatkatilim p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankZiraatkatilim" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#00386566;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">ZIRAAT KATILIM - ESMS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-bankTotal pb-1" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-bankTotal" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">BANK BALANCE TOTAL</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white">RUB</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentOutUSD pb-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentOutUSD" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">DAILY OUTGOING TRANSFERS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentOutEUR p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentOutEUR" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentOutTRY p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentOutTRY" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentOutRUB p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentOutRUB" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">RUB</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentInUSD pb-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentInUSD" class="table table-striped table-hover table-bordered dataTable no-footer border-info" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr style="background:#9d2235;">
+                                        <th class="text-white text-white text-center fw-bold" colspan="12">DAILY INCOMING TRANSFERS</th>
+                                    </tr>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">USD</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentInEUR p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentInEUR" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">EUR</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentInTRY p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentInTRY" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">TRY</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}-dailyPaymentInRUB p-0 m-0" style="transition: all 1s ease;">
+                            <table id="table-{{elementTag}}-dailyPaymentInRUB" class="table table-striped table-hover table-bordered dataTable no-footer border-info p-0 m-0" style="width:100%;transition: all 1s ease;">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center bg-blue-esms text-white">RUB</th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                        <th class="bg-blue-esms text-white"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbody">
+        
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+                
+                
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="dt-button btn border-0 shadow-0 bg-white pb-0" id="startDatePickerTableBlock" style="background:none!important;">
+    <div class="form-outline datepicker pb-1 d-none" id="startDatePickerTable">
+        <input type="text" id="startDateTable" class="form-control form-control-sm">
+        <label for="startDateTable" class="form-label">Start Date</label>
+    </div>
+</div>
+
+<div class="dt-button btn border-0 shadow-0 bg-white pb-0" id="endDatePickerTableBlock" style="background:none!important;">
+    <div class="form-outline datepicker pb-1 d-none" id="endDatePickerTable">
+        <input type="text" id="endDateTable" class="form-control form-control-sm">
+        <label for="endDateTable" class="form-label">End Date</label>
+    </div>
+</div>
+
+
+<script>
+    
+    
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "table";
+    var pageUrl = "/report/financial_report_data/"
+    var user = "{{user.id}}"
+
+    $("#getFinancialReports").on("click", function(){
+        htmx.ajax("GET", "/report/financial_report_filter_pdf", {target : "#addUpdateDataDialogXl"});
+    });
+
+    var day = new Date().getDate()
+    var month = new Date().getMonth() + 1
+    var year = new Date().getFullYear()
+
+    $('#startDateTable').val(day + "/" + month + "/" + year)
+    $('#endDateTable').val(day + "/" + month + "/" + year)
+    
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/report/financial_report/list.js' %}"></script>
+
+{% endblock javascript %}
+

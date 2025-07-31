@@ -1,0 +1,21 @@
+table {
+    th,
+    td {
+        &:first-child {
+            display: none;
+        }
+        &:nth-child(2) {
+            display: none;
+        }
+    }
+}
+
+.dataTable {
+    thead {
+        th {
+            &:nth-child(3) {
+                border-left: 0px;
+            }
+        }
+    }
+}

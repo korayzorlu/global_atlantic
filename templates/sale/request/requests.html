@@ -1,0 +1,255 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    
+
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        {% comment %} <i class="fa-solid fa-code-pull-request"></i> {% endcomment %}
+        {% comment %} <i class="fa-solid fa-sheet-plastic me-2"></i> {% endcomment %}
+        {{tag}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 15%;">
+            <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+        </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}" style="height:100%;">
+
+    <!-- Tabs navs Sub-->
+    <ul class="nav nav-pills  sortable-list d-flex" style="background-color: #f1f2f7" id="tabNavSub-{{elementTag}}" data-mdb-sortable="sortable" role="tablist" style="margin-bottom: 0 !important;">
+        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-table">
+            <a class="nav-link mainNavLinkSub-{{elementTag}} active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-table" data-mdb-pill-init data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-table" role="tab" aria-controls="tabPane-{{elementTag}}-table" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+                List
+            </a>
+        </li>
+    </ul>
+    <!-- Tabs navs Sub-->
+
+    <!-- Tabs content -->
+    <div class="tab-content" id="tabContSub-{{elementTag}}" hx-target="this">
+
+        <div class="tab-pane mainTabPaneSub-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-table" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-table">
+
+            <div class="globalBoxes split">
+                <div id="addFormBlock-left-{{elementTag}}" hx-target="this" class="box addFormBlock addForm-left-{{elementTag}} d-none">
+                    
+                </div>
+
+                <div id="tablotablo" class="box tableBox tableBox-{{elementTag}}" style="transition: all 1s ease;">
+                    <table id="table-{{elementTag}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%;transition: all 1s ease;">
+                        <thead>
+                            <!-- Filter -->
+                            <tr class="bg-transparent">
+                                <th class="p-0 border-0" colspan="13">
+                                    <div id="{{elementTag}}-filterBlock" class="p-2 m-2 border">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                {% comment %} <div class="row p-2 pt-0">
+                                                    <div class="col-md-12 bg-red-esms text-white">
+                                                        Filter Project Status
+                                                    </div>
+                                                </div> {% endcomment %}
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="projectSwitchPF" />
+                                                            <label for="projectSwitchPF" class="form-check-label me-4 text-dark" name="projectSwitchPF-name">Project</label>
+                                                        </div>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="inquirySwitchPF" />
+                                                            <label for="inquirySwitchPF" class="form-check-label me-4 text-dark" name="inquirySwitchPF-name">Inquiry</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="quotationSwitchPF" />
+                                                            <label for="quotationSwitchPF" class="form-check-label me-4 text-dark" name="quotationSwitchPF-name">Quotation</label>
+                                                        </div>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="orderConfirmationSwitchPF" />
+                                                            <label for="orderConfirmationSwitchPF" class="form-check-label me-4 text-dark" name="orderConfirmationSwitchPF-name">Order Confirmation</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="orderNotConfirmationSwitchPF" />
+                                                            <label for="orderNotConfirmationSwitchPF" class="form-check-label me-4 text-dark" name="orderNotConfirmationSwitchPF-name">Order Not Confirmed</label>
+                                                        </div>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="purchaseOrderSwitchPF" />
+                                                            <label for="purchaseOrderSwitchPF" class="form-check-label me-4 text-dark" name="purchaseOrderSwitchPF-name">Purchase Order</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="orderTrackingSwitchPF" />
+                                                            <label for="orderTrackingSwitchPF" class="form-check-label me-4 text-dark" name="orderTrackingSwitchPF-name">Order Tracking</label>
+                                                        </div>
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input" type="checkbox" role="switch" id="invoicedSwitchPF" />
+                                                            <label for="invoicedSwitchPF" class="form-check-label me-4 text-dark" name="invoicedSwitchPF-name">Invoiced</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </th>
+                            </tr>
+                            <!-- Filter-end -->
+                            <tr>
+                                {% comment %} <th><input class="form-check-input" type="checkbox" value="" id="select-all-{{elementTag}}" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></th> {% endcomment %}
+                                <th>Select</th>
+                                <th>Line</th>
+                                <th>ID</th>
+                                <th>Project No</th>
+                                <th>Project Date</th>
+                                <th>Customer</th>
+                                <th>Contact</th>
+                                <th>Referance</th>
+                                <th>Vessel</th>
+                                <th>Maker</th>
+                                <th>Type</th>
+                                <th>Project Creator</th>
+                                <th>Note</th>
+                                <th>Project Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="addFormBlock-{{elementTag}}" hx-target="this" class="box addFormBlock addForm-{{elementTag}}">
+                    
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Add/Update Data Modal Small-->
+<div id="addUpdateDataModal-{{elementTag}}" class="modal fade smallModal" tabindex="-1" aria-hidden="true">
+    <div id="addUpdateDataDialog-{{elementTag}}" class="modal-dialog" hx-target="this"></div>
+</div>
+
+
+
+{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.6.0/split.min.js"></script> {% endcomment %}
+
+
+<script>
+    
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "table";
+    var pageUrl = "/sale/request_data/";
+
+    $("#{{elementTag}}-filterBlock").css({"display":"none"});
+    $("#{{elementTag}}-filterBlock.open").css({"display":"block"});
+
+    var requestFilters = "";
+
+    $("#projectSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "request,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("request,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#inquirySwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "inquiry,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("inquiry,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#quotationSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "quotation,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("quotation,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#orderConfirmationSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "order_confirmation,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("order_confirmation,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#orderNotConfirmationSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "order_not_confirmation,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("order_not_confirmation,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#purchaseOrderSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "purchase_order,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("purchase_order,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#orderTrackingSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "order_tracking,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("order_tracking,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    $("#invoicedSwitchPF").on('change', function(){
+        if(this.checked){
+            requestFilters = requestFilters + "invoiced,"
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        }else{
+            requestFilters = requestFilters.replace("invoiced,", "")
+            $("#table-{{elementTag}}").DataTable().ajax.url('/sale/api/requests?project__stage__in=' + requestFilters + '&format=datatables').load();
+        };
+    });
+
+    
+    
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+
+<script src="{% static 'js/sale/request/list.js' %}"></script>
+
+{% endblock javascript %}
+

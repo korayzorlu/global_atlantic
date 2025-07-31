@@ -1,0 +1,33 @@
+{% load static i18n %}
+{% block modals %}
+<!-- Modal add inquiry -->
+<div id="modal_inquiry_add" class="modal fade " aria-modal="true">
+    <div class="modal-dialog modal-md ">
+        <div class="modal-content" style="border-radius: 25px;">
+            <div class="modal-header">
+                <h1 class="text-center">Add Inquiry</h1>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="inquiry_add_form" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        {% for field in project_inquiry_form_fresh %}
+                        <div class="form-group col-lg-12">
+                            <label>{{field.label}}</label>
+                            {{ field }}
+                            {{ field.errors }}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <fieldset class="card-footer border-top w-100 text-right">
+                        <button id="add_inquiry" type="submit" class="btn btn-primary btn-block">
+                            {% trans 'Create' %}</button>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /modal -->
+{% endblock %}

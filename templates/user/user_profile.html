@@ -1,0 +1,205 @@
+{% load static %}
+
+{% block body %}
+{% load crispy_forms_tags %}
+{% load widget_tweaks %}
+
+<style>
+    * html body{font-family: "Roboto", sans-serif!important;}
+    .file-upload-remove-file-btn{left:0!important;margin:10px!important;}
+</style>
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}" style="display:none;flex: 0 0 auto;">
+    <a class="nav-link mainNavLink position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}" role="tab" aria-controls="tabPane-{{elementTag}}" aria-selected="true">
+        <i class="fa-solid fa-code-pull-request me-2"></i>
+        Profile - {{request.user}}
+        <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}" style="margin-left: 13%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+    </a>
+</li>
+
+<div class="tab-pane mainTabPane fade" id="tabPane-{{elementTag}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}">
+  
+    <form hx-post="{{ request.path }}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.media }}
+        <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;">
+          <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+            <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+          </button>
+          <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+        </div>
+  
+        <div class="modal-body" style="box-shadow:none; padding:0;">
+  
+          <!-- Tabs navs -->
+          <!-- <ul class="nav nav-pills mb-3" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+            <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+              <a class="nav-link mainNavLinkSubDetail-{{elementTag}} active" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                  Info
+              </a>
+            </li>
+            {% comment %} <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+              <a class="nav-link mainNavLinkSubDetail-{{elementTag}}" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                  Documents
+              </a>
+            </li> {% endcomment %}
+          </ul> -->
+          <!-- Tabs navs -->
+  
+          <!-- Tabs content -->
+          <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+  
+              <div class="row mt-4 ms-2 me-2">
+
+                  <div class="row">
+                    <div class="col-md-2 mb-2">
+                        <div class="row">
+                          <div class="col-md-12 mb-2">
+                              <div class="file-upload-wrapper">
+                                  {% comment %} {% render_field profileForm.image data-mdb-default-file=user.profile.image.url data-mdb-height="110" %} {% endcomment %}
+                              </div>
+                          </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-2">
+                                <strong>{{user.first_name}} {{user.last_name}}</strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-2 text-center">
+                                {{user.profile.position}}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-10">
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                              <div class="form-outline">
+                                {{userForm.first_name}}
+                                <label for="textFormOutline" class="form-label">First Name</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                              <div class="form-outline">
+                                {{userForm.last_name}}
+                                <label for="textFormOutline" class="form-label">Last Name</label>
+                              </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                              <div class="form-outline">
+                                {{userForm.email}}
+                                <label for="textFormOutline" class="form-label">Email</label>
+                              </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                              <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                  {{profileForm.department}}
+                                  <label for="textFormOutline" class="form-label select-label">Department</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                  {{profileForm.positionType}}
+                                  <label for="textFormOutline" class="form-label">Position</label>
+                                </div>
+                              </div>
+                              <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                  <input type="text" id="form6Example4" class="form-control" />
+                                  <label class="form-label" for="textFormOutline">Address</label>
+                                </div>
+                              </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-4 mb-2">
+                            <div class="form-outline">
+                              <input type="number" id="form6Example6" class="form-control" />
+                              <label class="form-label" for="textFormOutline">Phone</label>
+                            </div>
+                          </div>
+                          <div class="col-md-8 mb-2">
+                            <div class="form-outline">
+                              <div class="form-outline">
+                                <textarea class="form-control" id="form6Example7" rows="1"></textarea>
+                                <label class="form-label" for="textFormOutline">Additional information</label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+
+              </div>
+
+              <div class="row">
+
+              <!-- Tabs navs -->
+              <ul class="nav nav-pills mb-3 ms-2" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+                {% comment %} <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                  <a class="nav-link mainNavLinkSubDetail-{{elementTag}}" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                      Documents
+                  </a>
+                  </li> {% endcomment %}
+              </ul>
+              <!-- Tabs navs -->
+
+
+                <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+                    <div class="row mb-2">
+
+
+            
+                    </div>
+      
+                </div>
+
+              </div>
+    
+          </div>
+          <!-- Tabs content -->
+  
+        </div>
+        
+        {% comment %} <div class="modal-footer shadow-5-strong d-flex justify-content-between" style="padding: 10px;box-shadow:none!important;">
+          <a hx-get="/sale/quotation_add/i_{{inquiry.id}}" hx-target="#addFormBlock-left-{{elementTag}}" class="tableTopButtons inTableButtons"><i class="fa-solid fa-file-invoice-dollar" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Create Quotation"></i></a>
+       
+        </div> {% endcomment %}
+        
+    </form>
+
+
+</div>
+
+<script type="text/javascript" src="{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/plugins/js/file-upload.min.js' %}"></script>
+<script>
+
+    var elementTag = "{{elementTag}}";
+    var pageUrl = "/user/user_profile/{{request.user}}/"
+
+    setTimeout(function() {
+        //$(".file-upload-preview-img").addClass("rounded-circle");
+    }, 100);
+</script>
+
+{% endblock body %}
+
+{% block javascript %}
+<script>
+    
+
+    setNavTab();
+    setHTMX();
+    formSubmitMessage();
+    
+</script>
+
+
+{% endblock javascript %}
+

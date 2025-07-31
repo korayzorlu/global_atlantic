@@ -1,0 +1,348 @@
+{% load static %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+
+      {{purchaseOrder.purchaseOrderNo}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 13%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{request.path}}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+       
+        <button class="tableTopButtons inTableButtons" type="button" name="saveButton" hx-get="{% url 'purchasing:purchase_order_delete' purchaseOrder.id%}" hx-target="#addUpdateDataDialog" data-mdb-toggle="tooltip" data-mdb-placement="right" title="Delete">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/trash_bin.svg" alt="" style="height: 18px;">
+        </button>
+        
+        <button class="tableTopButtons inTableButtons" type="button" name="saveButton" hx-get="/purchasing/purchase_order_pdf/{{elementTagId}}/" hx-target="#tabContSub-{{elementTag}}" hx-swap="afterbegin" hx-push-url="true">
+          <img src="/static/images/icons/datatable/printer.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+
+
+      </div>
+
+        <div class="modal-body p-2" style="box-shadow:none;;">
+
+            <div class="row mb-3">
+                <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-6 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-supplier" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.supplier}}" readonly>
+                            <label for="formOutline-{{elementTag}}-supplier" class="form-label">Supplier</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-supplierRef" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.supplierRef}}" readonly>
+                            <label for="formOutline-{{elementTag}}-supplierRef" class="form-label">Supplier Ref</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline datepicker">
+                            {{form.purchaseOrderDate}}
+                            <label for="{{form.purchaseOrderDate.field.widget.attrs.id}}" class="form-label">Date</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline datepicker">
+                            {{form.orderDueDate}}
+                            <label for="{{form.orderDueDate.field.widget.attrs.id}}" class="form-label">Order Due Date</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-inquiryNo" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.inquiryNo}}" readonly>
+                            <label for="formOutline-{{elementTag}}-inquiryNo" class="form-label">Inquiry No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-purchaseOrderNo" class="form-control form-control-sm" value="{{purchaseOrder.purchaseOrderNo}}" readonly>
+                            <label for="formOutline-{{elementTag}}-purchaseOrderNo" class="form-label">Purchase Order No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            {{form.customsDuty}}
+                            <label for="{{form.customsDuty.field.widget.attrs.id}}" class="form-label">Customs Duty({{purchaseOrder.currency.symbol}})</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            {{form.additionalCustomsDuty}}
+                            <label for="{{form.additionalCustomsDuty.field.widget.attrs.id}}" class="form-label">A. Customs Duty({{purchaseOrder.currency.symbol}})</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            {{form.stampDuty}}
+                            <label for="{{form.stampDuty.field.widget.attrs.id}}" class="form-label">Stamp Duty({{purchaseOrder.currency.symbol}})</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <div class="form-outline">
+                            {{form.delivery}}
+                            <label for="{{form.delivery.field.widget.attrs.id}}" class="form-label">Delivery</label>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3 mb-2">
+                        <div class="form-outline">
+                            {{form.payment}}
+                            <label for="{{form.payment.field.widget.attrs.id}}" class="form-label">Payment</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            {{form.discount}}
+                            <label for="{{form.discount.field.widget.attrs.id}}" class="form-label">Discount(%)</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            {{form.discountAmount}}
+                            <label for="{{form.discountAmount.field.widget.attrs.id}}" class="form-label">Discount({{purchaseOrder.currency.symbol}})</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-currency" class="form-control form-control-sm" value="{{purchaseOrder.inquiry.currency.code}}" readonly>
+                            <label for="formOutline-{{elementTag}}-currency" class="form-label">Currency</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-outline">
+                            {{form.note}}
+                            <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <!-- Tabs navs -->
+                    <ul class="nav nav-pills mb-1" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+                        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                            <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle active" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                                Items
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+                            <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+                                Documents
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- Tabs navs -->
+
+                    <!-- Tabs Content -->
+                    <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+                        <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade show active" id="tabPane-{{elementTag}}-{{elementTagId}}-add-1" style="border-radius:0;margin:2px;" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-1">
+
+                            <div class="row mb-3">
+
+                                <div class="col-md-12">
+                                    <div id="addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}" hx-target="this" class="row mb-1 addForm-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}">
+                                        
+                                    </div>
+                                
+                                    <div class="row mb-1 tableBox-inform-{{elementTagSub}}-{{elementTagId}}">
+                                        <table id="table-{{elementTagSub}}-{{elementTagId}}" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <th>Select</th>
+                                                <th>Line</th>
+                                                <th>ID</th>
+                                                <th>Part</th>
+                                                <th>Description</th>
+                                                <th>Quantity</th>
+                                                <th>Unit</th>
+                                                <th>Unit Price</th>
+                                                <th>Total Price</th>
+                                                <th>Availability</th>
+                                                <th>Note</th>
+                                                <th>Remark</th>
+                                                <th>Currency</th>
+                                                <th>Placed</th>
+                                                <th>Placement</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tbody">
+                                            
+                                        </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="row" style="display: flex;justify-content: end;">
+                                        <div class="col-md-4">
+                                        <div class="input-group input-group-sm mb-1">
+                                            <label class="input-group-text w-50 rounded-0 bg-red-esms text-white" id="inputGroup-sizing-sm">Gross Total</label>
+                                            <input type="text" class="form-control rounded-0 text-end bg-red-esms text-white" style="opacity: 0.9;" id="purchasingPurchaseOrderTotalBuyingPrice-{{purchaseOrder.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{purchaseOrder.currency.symbol}} {{totalBuyingPriceFixed}}" readonly/>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                        <div class="input-group input-group-sm mb-1">
+                                            <label class="input-group-text w-50 rounded-0 bg-blue-esms text-white" id="inputGroup-sizing-sm">Discount Total</label>
+                                            <input type="text" class="form-control rounded-0 text-end bg-blue-esms text-white" style="opacity: 0.9;" id="purchasingPurchaseOrderTotalDiscountPrice-{{purchaseOrder.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{purchaseOrder.currency.symbol}} {{totalDiscountPriceFixed}}" readonly/>
+                                        </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                        <div class="input-group input-group-sm">
+                                            <label class="input-group-text w-50 rounded-0 fw-bold bg-blue-esms text-white" id="inputGroup-sizing-sm">TOTAL</label>
+                                            <input type="text" class="form-control rounded-0 text-end fw-bold bg-blue-esms text-white" style="opacity: 0.9;" id="purchasingPurchaseOrderTotalTotalPrice-{{purchaseOrder.id}}" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" value="{{purchaseOrder.currency.symbol}} {{totalTotalPriceFixed}}" readonly/>
+                                        </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            
+                            </div>
+                    
+                        </div>
+                        <div class="tab-pane mainTabPaneSubDetail-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}-add-2" style="border-radius:0;margin:2px;" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}-add-2">
+                        
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    
+                                    <div class="row p-2">
+                                        <div class="col-md-12 text-start fs-5 d-flex justify-content-between">
+                                            <span class="">Documents</span>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="purchaseOrderDocumentRow-{{elementTag}}-{{elementTagId}}">
+                                        <div class="col-md-12" style="height:240px;">
+        
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        
+                        </div>
+                    </div>
+                    <!-- Tabs Content -->
+
+                </div>
+            </div>
+
+        </div>
+      
+  </form>
+
+</div>
+
+<style>
+    /* CSS */
+    .button-30 {
+      align-items: center;
+      appearance: none;
+      background-color: #9d2235 ;
+      border-radius: 4px;
+      border-width: 0;
+      box-shadow: rgba(45, 35, 66, 0.4) 0 2px 4px,rgba(45, 35, 66, 0.3) 0 7px 13px -3px,#7b0013  0 -3px 0 inset;
+      box-sizing: border-box;
+      color: #fff;
+      cursor: pointer;
+      display: inline-flex;
+      font-family: "JetBrains Mono",monospace;
+      height: 24px;
+      justify-content: center;
+      line-height: 1;
+      list-style: none;
+      overflow: hidden;
+      padding-left: 16px;
+      padding-right: 16px;
+      position: relative;
+      text-align: left;
+      text-decoration: none;
+      transition: box-shadow .15s,transform .15s;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      white-space: nowrap;
+      will-change: box-shadow,transform;
+      font-size: 0.75rem;
+    }
+    
+    .button-30:focus {
+      box-shadow: #7b0013 0 0 0 1.5px inset, rgba(45, 35, 66, 0.4) 0 2px 4px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #7b0013 0 -3px 0 inset;
+    }
+    
+    .button-30:hover {
+      box-shadow: rgba(45, 35, 66, 0.4) 0 4px 8px, rgba(45, 35, 66, 0.3) 0 7px 13px -3px, #7b0013 0 -3px 0 inset;
+      transform: translateY(-2px);
+    }
+    
+    .button-30:active {
+      box-shadow: #7b0013 0 3px 7px inset;
+      transform: translateY(2px);
+    }
+</style>
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var purchaseOrderId = "{{purchaseOrder.id}}";
+  var pageUrl = "/purchasing/purchase_order_update/{{elementTagId}}/"
+
+  $(".addClose-{{elementTag}}").click(function() {
+    document.getElementById("addFormBlock-{{elementTag}}").innerHTML = "";
+    $(".tableBox-{{elementTag}}").eq(0).removeClass("col-md-4");
+    $(".addForm-{{elementTag}}").eq(0).removeClass("col-md-8");
+    $("#table-{{elementTag}}").DataTable().ajax.reload(function(){
+      htmx.process('#table-{{elementTag}}');
+    },false);
+    $("#table-{{elementTag}}_filter").show();
+  });
+
+  $("#navTagLink-{{elementTag}}-{{elementTagId}}-add-1").on("shown.bs.tab", function(e){
+    $("#table-{{elementTagSub}}-{{elementTagId}}").DataTable().columns.adjust();
+  });
+
+  //documents get
+//spinner başlatır
+$("#purchaseOrderDocumentRow-{{elementTag}}-{{elementTagId}}").busyLoad("show", {
+    animation: false,
+    spinner: "pulsar",
+    maxSize: "150px",
+    minSize: "150px",
+    text: "Loading ...",
+    background: "rgba(69, 83, 89, 0.6)",
+    color: "#455359",
+    textColor: "#fff"
+});
+htmx.ajax('GET', "/purchasing/purchase_order_document/{{elementTagId}}", "#purchaseOrderDocumentRow-{{elementTag}}-{{elementTagId}}");
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/purchasing/purchase_order/detail.js' %}"></script>
+
+{% endblock javascript %}
+

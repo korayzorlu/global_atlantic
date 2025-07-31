@@ -1,0 +1,113 @@
+{% load static %}
+
+<div class="col-md-12 border notesWidget">
+    <div class="row p-3 pt-1 d-block">
+        <div class="col-md-12">
+            <div class="row p-0">
+                <div class="col-md-12 text-center fs-5 p-0">
+                    
+                    <div class="accordion accordion-flush p-0" id="accordionOfferNote-{{elementTagId}}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="accordion-item rounded-0">
+                                    <h2 class="accordion-header" id="">
+                                        <button data-mdb-collapse-init class="accordion-button accordion-button-add text-red-esms fw-bold rounded-0" type="button"
+                                            data-mdb-toggle="collapse"
+                                            data-mdb-target="#accordion-offerNote-new"
+                                            aria-expanded="true"
+                                            aria-controls="accordion-offerNote-new"
+                                            style="height:20px;">
+                                            New
+                                        </button>
+                                    </h2>
+                                    <div id="accordion-offerNote-new" class="accordion-collapse collapse" aria-labelledby="">
+                                        <div class="accordion-body text-start">
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <div class="form-outline" data-mdb-input-init>
+                                                        <input type="text" id="offerNoteTitleAdd-{{elementTagId}}" class="form-control form-control-sm">
+                                                        <label class="form-label" for="offerNoteTitleAdd-{{elementTagId}}">Title</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-outline" data-mdb-input-init>
+                                                        <textarea type="text" id="offerNoteTextAdd-{{elementTagId}}" class="form-control form-control-sm" rows="4" name="noteText">
+
+                                                        </textarea>
+                                                        <label class="form-label" for="offerNoteTextAdd-{{elementTagId}}">Text</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-sm btn-danger bg-red-esms w-100" id="offerNoteAdd-{{elementTagId}}" type="button" style="">
+                                                        Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion accordion-flush p-0" id="accordionOfferNote-{{elementTagId}}"> 
+                        <div class="row">
+                            <div class="col-md-12 overflow-auto" id="offerNoteList-{{elementTagId}}" style="max-height:38vh;">
+                                {% for note in notes %}
+                                    <div class="accordion-item rounded-0" id="accordion-offerNote-item-{{note.id}}">
+                                        <h2 class="accordion-header" id="">
+                                            <button data-mdb-collapse-init class="accordion-button collapsed rounded-0" type="button" data-mdb-toggle="collapse"
+                                            data-mdb-target="#accordion-offerNote-{{note.id}}" aria-expanded="false"
+                                            aria-controls="accordion-offerNote-{{note.id}}"
+                                            style="height:20px;">
+                                            {{note.created_date|date:"d.m.Y"}} - {{note.user.first_name}}  {{note.user.last_name}} - {{note.title}}
+                                            </button>
+                                        </h2>
+                                        <div id="accordion-offerNote-{{note.id}}" class="accordion-collapse collapse" aria-labelledby="">
+                                            <div class="accordion-body text-start" style="font-size:0.75rem;">
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    {{note.text}}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-sm btn-tertiary text-red-esms removeOfferNote" type="button" data-note="{{note.id}}">
+                                                        <i class="fa-solid fa-trash-can fs-5"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#offerNoteAdd-{{elementTagId}}").on("click", function(){
+        $(this).attr("disabled","")
+        $(this).text("Loading...")
+
+        htmx.ajax("GET", "/service/active_project_note_add/o_{{activeProject.id}}?title=" + $("#offerNoteTitleAdd-{{elementTagId}}").val() + "&text=" + $("#offerNoteTextAdd-{{elementTagId}}").val(), {target : "#addUpdateDataDialog-inform"});
+    });
+
+    $(".removeOfferNote").on("click", function(){
+        $(this).html('<i class="fa-solid fa-circle-notch fa-spin fs-5"></i>');
+        htmx.ajax("GET", "/service/active_project_note_delete?note=" + $(this).attr("data-note"), {target : "#addUpdateDataDialog-inform"});
+    });
+
+</script>
+

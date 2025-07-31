@@ -1,0 +1,38 @@
+{% load static %}
+
+<div class="row"><span class="page-number"></span></div>
+<div class="row w-100 h-100 p-0 m-0 pt-1" style="border-top: 1px solid #000;font-size:9px;">
+    <div class="col-md-10 text-start" style="width: 70%;">
+        <div class="row p-0 m-0 w-100">
+            <span class="pdfTextBold">{{sourceCompany.formalName}}</span>
+        </div><br>
+        <div class="row p-0 m-0 w-100">
+            <div class="text-start" style="width: 8%;">
+                <span class="pdfTextBold">Office</span>
+            </div>
+            <div class="text-start" style="width: 92%;">
+                <span>{{sourceCompany.address}}</span>
+            </div>
+        </div>
+        <div class="row p-0 m-0 w-100">
+            <div class="text-start" style="width: 8%;">
+                <span class="pdfTextBold">Phone</span>
+            </div>
+            <div class="text-start" style="width: 92%;">
+                <span>{{sourceCompany.phone1}}</span>
+            </div>
+        </div>
+        <div class="row p-0 m-0 w-100">
+            <div class="text-start" style="width: 8%;">
+                <span class="pdfTextBold">Fax</span>
+            </div>
+            <div class="text-start" style="width: 92%;">
+                <span>{{sourceCompany.fax}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 text-end" style="width: 30%;">
+        <img src="/static/images/sale/lr-logo4.jpg" alt="" height="65">
+    </div>
+</div>
+

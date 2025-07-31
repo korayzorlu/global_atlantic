@@ -1,0 +1,44 @@
+.company-info table tbody th,
+.company-info table tbody td {
+  word-break: break-all;
+}
+.company-info table tbody th {
+  color: rgba(255, 255, 255, 0.698);
+}
+
+.modal-body .card-body {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  padding: 0;
+}
+.modal-body .card-body .media-list {
+  max-height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 2.5rem;
+}
+.modal-body .card-body .media-list .media {
+  padding: 2rem;
+  margin: 0;
+}
+.modal-body .card-body .media-list .media:not(:last-child) {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+.modal-body .card-body .media-list .media ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  height: 100%;
+  width: 100%;
+}
+.modal-body .card-body .media-list .media ul li {
+  display: flex;
+  justify-content: flex-start;
+  align-self: center;
+}
+.modal-body .card-body .media-list .media ul li:not(:first-child) {
+  flex: 1 1;
+}/*# sourceMappingURL=company_detail.css.map */

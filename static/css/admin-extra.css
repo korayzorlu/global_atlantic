@@ -1,0 +1,13 @@
+/* HEADER */
+
+#header {
+    width: auto;
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 40px;
+    background: #000;
+    color: var(--header-color);
+    /*overflow: hidden;*/
+}

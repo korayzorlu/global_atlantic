@@ -1,0 +1,505 @@
+{% include 'includes/control/htmx_control.html' %}
+
+<!--FORM-->
+<form method="post" class="container-fluid form-container" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+
+    <!--bootstrap switch
+    <div class="mb-3">
+    <div class="form-check form-switch">
+        <label class="form-check-label" for="flexSwitchCheckDefaultCustomer">Customer</label>
+        {{ form.customerCheck }}
+    </div>
+    </div>
+    /bootstrap switch-->
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Type</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;padding-top:15px;">
+            <div class="row mb-3">
+                <div class="col-md-4">
+                <div class="form-check form-check-right form-check-switchery form-check-switchery-sm" style="padding:0;">
+                    <label class="custom-control custom-switch custom-control-left">
+                    {{ form.customerCheck }}
+                    <span class="custom-control-label">Customer</span>
+                    </label>
+                </div>
+                </div>
+                <div class="col-md-4">
+                <div class="form-check form-check-right form-check-switchery form-check-switchery-sm" style="padding:0;">
+                    <label class="custom-control custom-switch custom-control-left">
+                    {{ form.supplierCheck }}
+                    <span class="custom-control-label">Supplier</span>
+                    </label>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Company Info</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row mb-3">
+                <div class="col-md-3 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Logo</label>
+                {{ form.logo }}
+                </div>
+                <div class="col-md-9 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Company Name</label>
+                {{ form.name }}
+                </div>
+            </div>
+        
+            <div class="row mb-3">
+                <div class="col-md-3">
+                <div class="switchConnect">
+                    <label for="exampleFormControlTextarea1" class="form-label">Country</label>
+                    {{ form.country }}
+                </div>
+            
+                <div class="switchConnect">
+                    <label for="exampleFormControlTextarea1" class="form-label">City</label>
+                    {{ form.city }}
+                </div>
+                </div>
+    
+                <div class="col-md-9 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Address</label>
+                {{ form.address }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Vat Office</label>
+                {{ form.vatOffice }}
+                </div>
+        
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Vat No</label>
+                {{ form.vatNo }}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Key Account</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Hesap kodu</label>
+                {{ form.hesapKodu }}
+                </div>
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Satış Temsilcisi(ESMS)</label>
+                {{ form.satisTemsilcisi }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Telefon Numarası Alanları -->
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Contact</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row">
+                <div class="col-md-6">
+                <div class="row mb-3" id="phoneBlock1">
+                    <div class="col-md-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Phone</label>
+                    <div class="row">
+                        <div class="col-md-8">
+                        {{ form.phone1 }}
+                        </div>
+                        <div class="col-md-4" id="phoneButtons1">
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton1" type="button" style="color: #11101d;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            
+                <div class="row mb-3 phoneConnect" id="phoneBlock2" style="display: none;">
+                    <div class="col-md-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Phone 2</label>
+                    <div class="row">
+                        <div class="col-md-8">
+                        {{ form.phone2 }}
+                        </div>
+                        <div class="col-md-4" id="phoneButtons2">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton2" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton2" type="button" style="color: #11101d;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            
+                <div class="row mb-3 phoneConnect" id="phoneBlock3" style="display: none;">
+                    <div class="col-md-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Phone 3</label>
+                    <div class="row">
+                        <div class="col-md-8">
+                        {{ form.phone3 }}
+                        </div>
+                        <div class="col-md-4" id="phoneButtons3">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton3" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton3" type="button" style="color: #11101d;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            
+                <div class="row mb-3 phoneConnect" id="phoneBlock4" style="display: none;">
+                    <div class="col-md-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Phone 4</label>
+                    <div class="row">
+                        <div class="col-md-8">
+                        {{ form.phone4 }}
+                        </div>
+                        <div class="col-md-4" id="phoneButtons4">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton4" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                            <button class="btn btn-tertiary btn-floating" id="addPhoneButton4" type="button" style="color: #11101d;"><i class="fa-solid fa-plus fa-lg"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            
+                <div class="row mb-3 phoneConnect" id="phoneBlock5" style="display: none;">
+                    <div class="col-md-12">
+                    <label for="exampleFormControlTextarea1" class="form-label">Phone 5</label>
+                    <div class="row">
+                        <div class="col-md-8">
+                        {{ form.phone5 }}
+                        </div>
+                        <div class="col-md-4" id="phoneButtons5">
+                            <button class="btn btn-tertiary btn-floating" id="removePhoneButton5" type="button" style="color: #dc4c64;"><i class="fa-solid fa-trash-can fa-lg"></i></button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Fax</label>
+                {{ form.fax }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">E-Mail</label>
+                {{ form.email }}
+                </div>
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Web</label>
+                {{ form.web }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Telefon Numarası Alanları -->
+
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Persons</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-6 switchConnect">
+                    <label for="exampleFormControlTextarea1" class="form-label">
+                        Person
+                        <a class="addAttributeButton" hx-get="{% url 'card:person_add' %}" hx-target="#addUpdateDataDialog"><i class="fa-solid fa-plus"></i></a>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <table id="personsTable" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+                        {% comment %} {% for person in company.persons.all %}
+                        <tr style="vertical-align: middle;">
+                            <td>{{person.id}}</td>
+                            <td>{{person.name}}</td>
+                            <td>{{person.title}}</td>
+                            <td>{{person.email}}</td>
+                            <td>{{person.phone}}</td>
+                        </tr>
+                        {% endfor %} {% endcomment %}
+                        
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Credit Details</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Credit Periot</label>
+                {{ form.creditPeriot }}
+                </div>
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Unit</label>
+                {{ form.unit }}
+                </div>
+            </div>
+
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Credit Limit</label>
+                {{ form.creditLimit }}
+                </div>
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Currency</label>
+                {{ form.currency }}
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-4">
+                <div class="form-check form-check-right form-check-switchery form-check-switchery-sm" style="padding:0;">
+                    <label class="custom-control custom-switch custom-control-left">
+                    {{ form.unlimitedCheck }}
+                    <span class="custom-control-label">Unlimited</span>
+                    </label>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Bank Details</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-4 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Bank</label>
+                {{ form.bankName }}
+                </div>
+                <div class="col-md-4 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Account No</label>
+                {{ form.bankAccountNo }}
+                </div>
+                <div class="col-md-4 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">IBAN</label>
+                {{ form.ibanNo}}
+                </div>
+            </div>
+
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-4 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Account Type</label>
+                {{ form.bankAccountType }}
+                </div>
+                <div class="col-md-4 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Swift No</label>
+                {{ form.swiftNo }}
+                </div>
+                <div class="col-md-4 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Account Currency</label>
+                {{ form.bankAccountCurrency}}
+                </div>
+            </div>
+
+            <div class="row mb-3 switchConnect">
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Branch Name</label>
+                {{ form.bankBranchName }}
+                </div>
+                <div class="col-md-6 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">Branch Code</label>
+                {{ form.bankBranchCode }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if company.role.customer == True %}
+    <div class="box" style="margin-bottom:10px;">
+        <span style="font-weight:600;">Fleets</span>
+        <div class="row mb-4 switchConnect" style="margin:2px;">
+            <div class="row mb-3 switchConnect">
+                <table id="vesselsTable" class="table table-striped table-hover table-bordered dataTable no-footer" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Owner</th>
+                            <th>Type</th>
+                            <th>IMO</th>
+                            <th>PIC</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody">
+                        {% comment %} {% for vessel in vessels %}
+                            <tr style="vertical-align: middle;">
+                                <td>{{vessel.id}}</td>
+                                <td>
+                                <a hx-get="{% url 'card:vessel_update_modal' vessel.id%}" hx-target="#addUpdateDataDialogXl-r" style="cursor: pointer;text-decoration:underline;">{{vessel.name}}</a>
+                                </td>
+                                <td>{{vessel.company}}</td>
+                                <td>{{vessel.owner}}</td>
+                                <td>{{vessel.type}}</td>
+                                <td>{{vessel.imo}}</td>
+                                <td>{{vessel.pic}}</td>
+                            </tr>
+                        {% endfor %} {% endcomment %}
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Owner</th>
+                        <th>Type</th>
+                        <th>IMO</th>
+                        <th>PIC</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="box" style="margin-bottom:10px;">
+        <div class="row mb-3">
+            <div class="col-md-12 switchConnect">
+                <label for="exampleFormControlTextarea1" class="form-label">About</label>
+                {{ form.about }}
+            </div>
+        </div>
+    </div>
+
+   
+
+    
+
+    <div class="box" style="margin-bottom:10px;">
+        <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+            <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+            <button class="btn btn-danger" type="submit">Save</button>
+        </div>
+    </div>
+
+    
+</form>
+<!--/FORM-->
+
+<script>
+    /*
+    //customer switch control
+    var customerSwitch = document.getElementById('flexSwitchCheckDefaultCustomer');
+    customerSwitch.addEventListener("change", function() {
+      if(customerSwitch.checked){
+        for (var i = 0; i < $(".switchConnect").length; i++) {
+          $(".switchConnect")[i].style.display = "block";
+        };
+      } else {
+        for (var i = 0; i < $(".switchConnect").length; i++) {
+          $(".switchConnect")[i].style.display = "none";
+        };
+      }
+    });*/
+    /*
+    //supplier switch control
+    var supplierSwitch = document.getElementById('flexSwitchCheckDefaultSupplier');
+    supplierSwitch.addEventListener("change", function() {
+      if(supplierSwitch.checked){
+        for (var i = 0; i < $(".switchConnect").length; i++) {
+          $(".switchConnect")[i].style.display = "block";
+        };
+      } else {
+        for (var i = 0; i < $(".switchConnect").length; i++) {
+          $(".switchConnect")[i].style.display = "none";
+        };
+      }
+    });
+    */
+  
+    //phone button control
+    $("#addPhoneButton1").click(function() {
+      $("#phoneBlock2")[0].style.display = "block";
+      $("#phoneButtons1")[0].style.display = "none";
+    });
+  
+    $("#addPhoneButton2").click(function() {
+      $("#phoneBlock3")[0].style.display = "block";
+      $("#phoneButtons2")[0].style.display = "none";
+    });
+  
+    $("#addPhoneButton3").click(function() {
+      $("#phoneBlock4")[0].style.display = "block";
+      $("#phoneButtons3")[0].style.display = "none";
+    });
+  
+    $("#addPhoneButton4").click(function() {
+      $("#phoneBlock5")[0].style.display = "block";
+      $("#phoneButtons4")[0].style.display = "none";
+    });
+  
+    $("#removePhoneButton2").click(function() {
+      $("#phoneBlock2")[0].style.display = "none";
+      $("#phoneButtons1")[0].style.display = "block";
+      $("#id_phone2")[0].value = "";
+    });
+  
+    $("#removePhoneButton3").click(function() {
+      $("#phoneBlock3")[0].style.display = "none";
+      $("#phoneButtons2")[0].style.display = "block";
+      $("#id_phone3")[0].value = "";
+    });
+  
+    $("#removePhoneButton4").click(function() {
+      $("#phoneBlock4")[0].style.display = "none";
+      $("#phoneButtons3")[0].style.display = "block";
+      $("#id_phone4")[0].value = "";
+    });
+  
+    $("#removePhoneButton5").click(function() {
+      $("#phoneBlock5")[0].style.display = "none";
+      $("#phoneButtons4")[0].style.display = "block";
+      $("#id_phone5")[0].value = "";
+    });
+  
+  
+    // Ülke seçildiğinde AJAX isteği yaparak şehirleri güncelleyen JavaScript kodu
+    $('#id_country').on('change', function() {
+      var countryId = $(this).val();
+      $.ajax({
+          url: '/card/api/cities',
+          data: {'country': countryId},
+          dataType: 'json',
+          success: function(data) {
+              console.log(data);
+              $('#id_city').empty();
+              $.each(data, function(i, city) {
+                  $('#id_city').append($('<option>').val(city.id).text(city.name));
+              });
+          }
+      });
+    });
+
+  
+  
+  </script>
+  
+
+  

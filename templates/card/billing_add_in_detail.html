@@ -1,0 +1,55 @@
+{% load static %}
+{% include 'includes/control/htmx_control.html' %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="row border-bottom">
+        <div class="col-md-5 mb-3">
+          <div class="form-outline">
+            {{form.name}}
+            <label for="{{form.name.field.widget.attrs.id}}" class="form-label">Billing Name</label>
+          </div>
+        </div>
+        <div class="col-md-5 mb-3">
+          <div class="form-outline">
+            {{form.address}}
+            <label for="{{form.address.field.widget.attrs.id}}" class="form-label">Address</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var billingId = "{{billing.id}}";
+    var vesselId = "{{billing.vessel.id}}";
+    var pageUrl = "/card/billing_add_in_detail/v_" + vesselId + "/";
+    var addSubDataHxGet = "/card/billing_add_in_detail/v_" + vesselId + "/";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        console.log("{{elementTagSub}}-{{elementTagId}}");
+        console.log("addFormBlock-inform-d-justDetail-{{elementTagSub}}-{{elementTagId}}")
+        $("#form-{{elementTagSub}}-{{elementTagId}}").remove();
+        
+    });
+    
+    
+</script>
+

@@ -1,0 +1,128 @@
+@-webkit-keyframes animateGear {
+  0% {
+    -webkit-transform: rotate(0deg) translateY(0) translateX(0);
+            transform: rotate(0deg) translateY(0) translateX(0);
+  }
+  /* Finish changes by here */
+  10% {
+    -webkit-transform: rotate(0deg) translateY(0) translateX(0);
+            transform: rotate(0deg) translateY(0) translateX(0);
+  }
+  20% {
+    -webkit-transform: rotate(30deg) translateY(3px) translateX(-3px);
+            transform: rotate(30deg) translateY(3px) translateX(-3px);
+  }
+  30% {
+    -webkit-transform: rotate(30deg) translateY(3px) translateX(-3px);
+            transform: rotate(30deg) translateY(3px) translateX(-3px);
+  }
+  40% {
+    -webkit-transform: rotate(10deg) translateY(1px) translateX(-1px);
+            transform: rotate(10deg) translateY(1px) translateX(-1px);
+  }
+  50% {
+    -webkit-transform: rotate(10deg) translateY(1px) translateX(-1px);
+            transform: rotate(10deg) translateY(1px) translateX(-1px);
+  }
+  60% {
+    -webkit-transform: rotate(10deg) translateY(1px) translateX(-1px);
+            transform: rotate(10deg) translateY(1px) translateX(-1px);
+  }
+  70% {
+    -webkit-transform: rotate(20deg) translateY(2px) translateX(-2px);
+            transform: rotate(20deg) translateY(2px) translateX(-2px);
+  }
+  80% {
+    -webkit-transform: rotate(20deg) translateY(2px) translateX(-2px);
+            transform: rotate(20deg) translateY(2px) translateX(-2px);
+  }
+  90% {
+    -webkit-transform: rotate(20deg) translateY(2px) translateX(-2px);
+            transform: rotate(20deg) translateY(2px) translateX(-2px);
+  }
+  100% {
+    -webkit-transform: rotate(0deg) translateY(0) translateX(0);
+            transform: rotate(0deg) translateY(0) translateX(0);
+  }
+}
+
+@keyframes animateGear {
+  0% {
+    -webkit-transform: rotate(0deg) translateY(0) translateX(0);
+            transform: rotate(0deg) translateY(0) translateX(0);
+  }
+  /* Finish changes by here */
+  10% {
+    -webkit-transform: rotate(0deg) translateY(0) translateX(0);
+            transform: rotate(0deg) translateY(0) translateX(0);
+  }
+  20% {
+    -webkit-transform: rotate(30deg) translateY(3px) translateX(-3px);
+            transform: rotate(30deg) translateY(3px) translateX(-3px);
+  }
+  30% {
+    -webkit-transform: rotate(30deg) translateY(3px) translateX(-3px);
+            transform: rotate(30deg) translateY(3px) translateX(-3px);
+  }
+  40% {
+    -webkit-transform: rotate(10deg) translateY(1px) translateX(-1px);
+            transform: rotate(10deg) translateY(1px) translateX(-1px);
+  }
+  50% {
+    -webkit-transform: rotate(10deg) translateY(1px) translateX(-1px);
+            transform: rotate(10deg) translateY(1px) translateX(-1px);
+  }
+  60% {
+    -webkit-transform: rotate(10deg) translateY(1px) translateX(-1px);
+            transform: rotate(10deg) translateY(1px) translateX(-1px);
+  }
+  70% {
+    -webkit-transform: rotate(20deg) translateY(2px) translateX(-2px);
+            transform: rotate(20deg) translateY(2px) translateX(-2px);
+  }
+  80% {
+    -webkit-transform: rotate(20deg) translateY(2px) translateX(-2px);
+            transform: rotate(20deg) translateY(2px) translateX(-2px);
+  }
+  90% {
+    -webkit-transform: rotate(20deg) translateY(2px) translateX(-2px);
+            transform: rotate(20deg) translateY(2px) translateX(-2px);
+  }
+  100% {
+    -webkit-transform: rotate(0deg) translateY(0) translateX(0);
+            transform: rotate(0deg) translateY(0) translateX(0);
+  }
+}
+
+.rounded {
+  position: relative;
+  z-index: 10;
+}
+
+#iconManufacturer {
+  position: relative;
+  background: transparent;
+}
+
+#iconManufacturer::before {
+  content: "";
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  background: url("../../../images/icons/conveyor2.svg");
+  top: 4%;
+  left: 38%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  -webkit-filter: brightness(1.2);
+          filter: brightness(1.2);
+  -webkit-animation: animateGear 5s linear infinite;
+          animation: animateGear 5s linear infinite;
+}
+
+@media screen and (max-width: 768px) {
+  #iconManufacturer {
+    display: none;
+  }
+}
+/*# sourceMappingURL=manufacturer_add.css.map */

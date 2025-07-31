@@ -1,0 +1,26 @@
+.navbar-brand {
+    a {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        img {
+            height: 45px;
+        }
+    }
+}
+
+@media (max-width: 855px) {
+    .navbar-brand {
+        flex: 1;
+        min-width: 1px !important;
+        a {
+            img {
+                margin-right: 1.25rem;
+                position: static;
+            }
+            h5 {
+                display: none;
+            }
+        }
+    }
+}

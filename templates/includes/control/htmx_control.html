@@ -1,0 +1,13 @@
+<!--Tarayıcı kapanıp açıldığında sekmede bir htmx url'i kaldıysa anasayfaya yönlendirir.-->
+
+{% load static %}
+
+<script>
+
+    var bodyCheck = document.querySelector("body");
+
+    if(!bodyCheck){
+        window.location.href = "/";
+    };
+
+</script>

@@ -1,0 +1,60 @@
+@keyframes animateGear {
+    0% {
+        transform: rotate(0deg);
+    }
+    /* Finish changes by here */
+    10% {
+        transform: rotate(0deg);
+    }
+    20% {
+        transform: rotate(300deg);
+    }
+    30% {
+        transform: rotate(300deg);
+    }
+    40% {
+        transform: rotate(150deg);
+    }
+    50% {
+        transform: rotate(150deg);
+    }
+    60% {
+        transform: rotate(150deg);
+    }
+    70% {
+        transform: rotate(250deg);
+    }
+    80% {
+        transform: rotate(250deg);
+    }
+    90% {
+        transform: rotate(250deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+#iconMaker {
+    position: relative;
+    background: transparent;
+    &::before {
+        content: "";
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        background: url("../../../images/icons/gear.svg");
+        top: 50%;
+        left: 50%;
+        background-size: 100%;
+        background-repeat: no-repeat;
+        filter: brightness(1.2);
+        animation: animateGear 5s linear infinite;
+    }
+}
+
+@media screen and(max-width: 768px) {
+    #iconMaker {
+        display: none;
+    }
+}

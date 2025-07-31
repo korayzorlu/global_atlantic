@@ -1,0 +1,315 @@
+<!-- Layout eklemimizi sağlayan komut. -->
+{% extends "layout.html" %}
+<!-- Static dosyalarından yararlanmamız için. -->
+{% load static i18n qr_code %}
+
+<!-- Her sayfada sayfa özelinde dinamik olarak değişmesi gereken kısımlar burada tanımlanıyor. -->
+{% block title %}{% trans 'Part Detail' %}{% endblock %}
+{% block mainDirectory %}{% trans 'Sales' %}{% endblock %}
+{% block childDirectory %}{% trans 'Part Detail' %}{% endblock childDirectory %}
+{% block href %}{% url 'information:contact_person_data' %}{% endblock %}
+{% block mainRoute %}Data{% endblock %}
+{% block childRoute %}Part Detail{% endblock %}
+
+{% block plugins %}
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/select2.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/forms/selects/bootstrap_multiselect.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/select.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/jszip/jszip.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/pdfmake.min.js' %}"></script>
+<script
+    src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/pdfmake/vfs_fonts.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/buttons.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/row_reorder.min.js' %}"></script>
+<script src="{% static 'lib/global_assets/js/plugins/tables/datatables/extensions/responsive.min.js' %}"></script>
+{% endblock %}
+
+{% block demo_pages %}
+<script src="{% static 'lib/global_assets/js/demo_pages/form_select2.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+{% url 'parts:part_edit' part.id as edit_url %}
+{% url 'parts:part_delete' part.id as delete_url %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/parts/maker/maker_detail.css' %}">
+<!-- /StyleSheet End-->
+
+<!-- Navbar Starts -->
+{% block part_detail_modals %}
+{% include "./part_detail_modals.html" %}
+{% endblock %}
+<!-- Navbar Ends -->
+
+<div id="qr_code" class="modal fade" aria-modal="true">
+    <div class="modal-dialog modal-xs">
+        <div class="modal-content">
+            <div class="modal-body d-flex justify-content-center align-content-center p-4 pb-4">
+                <a href="{{ part_client_full_url }}" target="_blank">
+                    {% qr_from_text part_client_full_url options=qr_options %}
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content bloğu -->
+<div class="row">
+    <!-- Company info -->
+    <div class="col-xl-7">
+        <div class="card company-info">
+            <div class="card-header">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/details.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Part Info' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Part</u> general information.</li>
+                        </ul>
+                    </div>
+                    {% block buttonqreditremove %}
+                        {% include "components/buttonqreditremove.html" with edit_url=edit_url delete_url=delete_url %}
+                    {% endblock %}
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <table class="table">
+                    <thead>
+                        <colgroup>
+                            <col span="1" style="width: 30%;">
+                            <col>
+                        </colgroup>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th class="text-muted">{% trans "Part Name" %}</th>
+                            <td>{{ part.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Unit" %}</th>
+                            <td>{{ part.unit.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Description" %}</th>
+                            <td>{{ part.description }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Category" %}</th>
+                            <td>{{ part.category.name }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Part Code" %}</th>
+                            <td>{{ part.code }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Dimensions" %}</th>
+                            <td>{{ part.dimensions }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">{% trans "Material" %}</th>
+                            <td>{{ part.material }}</td>
+                        </tr>
+                        <tr>
+                            <th class="text-muted">
+                                {% trans 'Documents' %}
+                            </th>
+                            <td class="p-0">
+                                <a class="cursor-pointer pl-3" data-toggle="modal" data-target="#modal_documents">
+                                    <img height="38" src="{% static 'images/icons/file.svg' %}">
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /Manufacturer info -->
+    <div class="col-xl-5">
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/puzzle3.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Compatibility' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Compatibility</u> list of this part.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal"
+                            data-target="#part_compatibility_data">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 35rem;">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'ID' %}</th>
+                                <th class="w-100">{% trans 'Maker' %} /
+                                    <span class="text-muted">{% trans 'Maker Type' %}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyList">
+                            {% for compatibility in part.compatibilities.all %}
+                            <tr id="{{compatibility.id}}">
+                                <td>{{compatibility.id}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a class="text-default font-weight-semibold letter-icon-title">
+                                                {{compatibility.maker}}</a>
+                                            <div class="text-muted font-size-sm">
+                                                <i>{{compatibility.maker_type}}</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/building.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Supplier' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Supplier</u> list of this part.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal" data-target="#part_supplier_data">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 35rem;">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'ID' %}</th>
+                                <th class="w-100">{% trans 'Supplier' %} /
+                                    <span class="text-muted">{% trans 'Supplier Code' %}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyList">
+                            {% for supplier in part.suppliers.all %}
+                            <tr id="{{supplier.id}}">
+                                <td>{{supplier.id}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a class="text-default font-weight-semibold letter-icon-title">
+                                                {{supplier.supplier.name}}</a>
+                                            <div class="text-muted font-size-sm">
+                                                <i>{{supplier.code}}</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header pb-0">
+                <div class="media flex-md-row mb-2">
+                    <a id="iconBuild" class="align-self-md-start mr-3">
+                        <img src="{% static 'images/icons/conveyor.svg' %}" class="rounded" width="44" height="44"
+                            alt="">
+                    </a>
+                    <div class="media-body">
+                        <h5 class="media-title font-weight-semibold">{% trans 'Manufacturer' %}</h5>
+                        <ul class="list-inline list-inline-dotted text-muted mb-0">
+                            <li class="list-inline-item"><u>Manufacturer</u> list of this part.</li>
+                        </ul>
+                    </div>
+                    <div class="actionButtonsForList">
+                        <a class="button-table cursor-pointer" data-toggle="modal"
+                            data-target="#part_manufacturer_data">
+                            <img src="{% static 'images/icons/table.svg' %}">
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body p-0">
+                <div class="table-responsive table-scrollable" style="max-height: 35rem;">
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>{% trans 'ID' %}</th>
+                                <th class="w-100">{% trans 'Manufacturer' %} /
+                                    <span class="text-muted">{% trans 'Manufacturer Code' %}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyList">
+                            {% for manufacturer in part.manufacturers.all %}
+                            <tr id="{{manufacturer.id}}">
+                                <td>{{manufacturer.id}}</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div>
+                                            <a class="text-default font-weight-semibold letter-icon-title">
+                                                {{manufacturer.manufacturer.name}}</a>
+                                            <div class="text-muted font-size-sm">
+                                                <i>{{manufacturer.code}}</i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+<!-- Content bloğu sonu -->
+{% block javascript %}
+<script>
+    let partEditURL = "{% url 'parts:part_edit' part.id %}"
+    let partDeleteURL = "{% url 'parts:part_delete' part.id %}"
+    maker_types_api_url = new URL(window.location.href)
+    maker_types_api_url.pathname = "{% url 'parts:maker_types_api' %}"
+    {% if modal_to_show %}
+    $('#{{modal_to_show}}').modal('toggle');
+    {% endif %}
+</script>
+<script src="{% static 'js/parts/part/part_detail/part_detail_forms.js' %}"></script>
+<script type="module" src="{% static 'js/parts/part/part_detail/part_detail.js' %}"></script>
+{% endblock javascript %}

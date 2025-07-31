@@ -1,0 +1,99 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+      <div class="row mb-1 switchConnect">
+        <div class="col-md-6 switchConnect">
+          {{ form.maker }}
+        </div>
+        <div class="col-md-6 switchConnect">
+          {{ form.makerType }}
+        </div>
+      </div>
+
+      <div class="row mb-1 switchConnect">
+        <div class="col-md-6 switchConnect">
+          {{ form.part }}
+        </div>
+        <div class="col-md-3 switchConnect">
+            {{ form.quantity }}
+        </div>
+        <div class="col-md-3 switchConnect">
+            <div class="d-grid gap-2">
+                <button class="btn btn-sm btn-dark btn-rounded" type="submit">Add Part</button>
+              </div>
+        </div>
+      </div>
+
+
+
+
+<script>
+    
+
+    // Maker seçildiğinde AJAX isteği yaparak Type'ları günceller
+    $('#id_maker').on('change', function() {
+        var makerInformId = $(this).val();
+        $.ajax({
+            url: '/data/api/maker_types',
+            data: {'maker': makerInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#id_makerType').empty();
+                $.each(data, function(i, type) {
+                    $('#id_makerType').append($('<option>').val(type.id).text(type.type));
+                });
+                $("#id_makerType").trigger("change");
+            }
+        });
+    });
+
+    $('#id_makerType').on('change', function() {
+        var makerTypeInformId = $(this).val();
+        $.ajax({
+            url: '/data/api/parts',
+            data: {'type': makerTypeInformId},
+            dataType: 'json',
+            success: function(data) {
+                $('#id_part').empty();
+                $.each(data, function(i, part) {
+                    $('#id_part').append($('<option>').val(part.id).text(part.partNo));
+                });
+            }
+        });
+    });
+
+    var detailRefererPathSub = "{{refererPath}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var addSubDataHxGet = "/sale/request_part_add/";
+    
+    $(".addClose-{{elementTagSub}}").click(function() {
+        console.log("{{elementTagSub}}");
+        document.getElementById("addFormBlock-inform-{{elementTagSub}}").innerHTML = "";
+        $(".tableBox-inform-" + elementTagSub).eq(0).removeClass("col-md-6");
+        $(".addForm-inform-" + elementTagSub).eq(0).removeClass("col-md-6");
+        $("#table-" + elementTagSub).DataTable().ajax.reload(function(){
+            htmx.process("#table-" + elementTagSub);
+        },false);
+        $("#table-" + elementTagSub + "_filter").show();
+    });
+
+    setTimeout(function(){
+        if($("#table-{{elementTagSub}}").DataTable().data().count() > 0){
+            let theMaker = $("#table-{{elementTagSub}}").DataTable().row(0).data()["maker"]
+            let theMakerType = $("#table-{{elementTagSub}}").DataTable().row(0).data()["makerType"]
+            $('#id_maker').empty();
+            $('#id_maker').append($('<option>').val(theMaker.id).text(theMaker.name));
+            $('#id_makerType').empty();
+            $('#id_makerType').append($('<option>').val(theMakerType.id).text(theMakerType.type));
+            $("#id_makerType").trigger("change")
+            
+            console.log("item var");
+            //$('#id_maker').attr("disabled", "true");
+        }else{
+            console.log("item yok");
+        }
+    },500
+    );
+    
+</script>

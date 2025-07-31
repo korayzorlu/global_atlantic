@@ -1,0 +1,49 @@
+.company-info {
+    table {
+        tbody {
+            th,
+            td {
+                word-break: break-all;
+            }
+            th {
+                color: rgba(255, 255, 255, 0.698);
+            }
+        }
+    }
+}
+.modal-body {
+    .card-body {
+        user-select: none;
+        padding: 0;
+        .media-list {
+            max-height: 600px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            min-height: 2.5rem;
+            .media {
+                padding: 2rem;
+                margin: 0;
+                &:not(:last-child) {
+                    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                }
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    display: flex;
+                    justify-content: center;
+                    align-self: center;
+                    height: 100%;
+                    width: 100%;
+                    li {
+                        display: flex;
+                        justify-content: flex-start;
+                        align-self: center;
+                        &:not(:first-child) {
+                            flex: 1 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

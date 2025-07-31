@@ -1,0 +1,31 @@
+{% load static %}
+
+<!-- Calendar -->
+<div class="col-md-6 calendarWidget">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="row p-2 border border-1 shadow-1 drag">
+                <div class="col-md-12" style="display: flex;justify-content: end;">
+                    <button class="btn btn-tertiary p-2 removeCalendarWidget">
+                        <i class="fa-solid fa-xmark mt-2" style="font-size: 1rem;"></i>
+                    </button>
+                </div>
+                <div class="col-md-12" style="height: 485px;">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="text-start fs-5 widgetHeader">Calendar</div>
+                        </div>
+                        <div class="col-md-12" style="height: 300px;">
+                            <div class="container" style="align-items: center;">
+                                <div class="calendar" id="calendar-2" data-mdb-monday-first="true" style="perspective: 1000;transition: .9s;transform-style: preserve-3d;">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Calendar -->

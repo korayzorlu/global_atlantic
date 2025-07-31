@@ -1,0 +1,79 @@
+<form hx-post="{{ request.path }}" class="modal-content form-container border" id="form-{{elementTag}}-{{elementTagId}}-addToInquiry" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Send to inquiry this part</h5>
+    </div>
+    <div class="modal-body">
+        {% for inquiry in inquiries %}
+            <div class="row">
+                <div class="col-md-1">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="{{inquiry.id}}" id="flexCheckChecked" name="addToInquiryInquiry" checked/>
+                    </div>
+                </div>
+                <div class="col-md-11">
+                    <span>{{inquiry.inquiryNo}} - {{inquiry.supplier.name}}</span>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger" type="submit" name="deleteRequest">Send</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var elementTagId = "{{elementTagId}}";
+    var pageUrl = "/sale/request_part_add_to_inquiry/{{elementTagId}}/"
+    var sessionKey = "{{sessionKey}}";
+
+    
+    $("#form-" + elementTag +  "-" + elementTagId + "-delete").submit(function (event) {
+        //spinner başlatır
+        $("body").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+
+        event.preventDefault();
+
+        setTimeout(function() {
+                        
+            let eSub = elementTag +  "-" + elementTagId + "-delete";
+            let removeNavSub = $("#removeNav-" + elementTag +  "-" + elementTagId);
+
+            let navTagSub = $("#navTag-" + elementTag +  "-" + elementTagId);
+            let tabPaneSub = $("#tabPane-" + elementTag +  "-" + elementTagId);
+            let sideBarButtonSub = $(".nav-list li ." + elementTag +  "-" + elementTagId);
+
+            navTagSub.prev().children("a").addClass("active");
+            tabPaneSub.prev().addClass("show active");
+            navTagSub.prev().children("a").children("button").show();
+            $("#table-" + elementTag).DataTable().columns.adjust();
+            navTagSub.remove();
+            tabPaneSub.remove();
+            sideBarButtonSub.attr("hx-swap", "afterbegin");
+
+            $("#table-" + elementTag).DataTable().ajax.reload(function(){
+                htmx.process("#table-" + elementTag);
+            },false);
+            
+            setTimeout(function() {
+                //spinner durdurur
+                $("body").busyLoad("hide", {
+                animation: "fade"
+                });
+            }, 1000);
+
+        }, 2000);
+    });
+</script>

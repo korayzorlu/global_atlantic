@@ -1,0 +1,339 @@
+{% load static %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-new" style="display:none;">
+  <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-new" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-new" role="tab" aria-controls="tabPane-{{elementTag}}-new" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;">
+      New Part
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-new" style="margin-left: 15%;">
+          <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-new" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-new">
+    <form method="post" action="/part_add/" class="modal-content form-container border mainAddForm needs-validation" id="form-{{elementTag}}-new" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.media }}
+      <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+        <button class="tableTopButtons inTableButtons" type="submit" name="saveButton">
+          <img src="/static/images/icons/flaticon/{{user.profile.theme}}/diskette.svg" alt="" style="height: 18px;">
+        </button>
+        <div class="me-auto" id="message-container-{{elementTag}}-new"></div>
+        <div class="form-check form-switch me-4">
+          {{form.consumable}}
+          <label for="{{form.consumable.field.widget.attrs.id}}" class="form-check-label">Consumable</label>
+        </div>
+        <div id="test-full"></div>
+      </div>
+
+      <div class="modal-body p-2" style="box-shadow:none;">
+
+        <!-- Tabs navs -->
+        <!-- <ul class="nav nav-pills mb-3 ms-2" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+            <a class="nav-link active border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                Info
+            </a>
+          </li>
+          <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-2">
+            <a class="nav-link mainNavLinkSubDetail-{{elementTag}} border border-1 rounded-0 border-secondary-subtle" id="navTagLink-{{elementTag}}-{{elementTagId}}-add-2" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-2" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-2" aria-selected="true">
+              Image
+            </a>
+          </li>
+        </ul> -->
+        <!-- Tabs navs -->
+
+        <!-- Tabs content -->
+          <div class="tab-content" id="tab-{{elementTag}}-{{elementTagId}}-add">
+
+            <div class="col-md-12">
+              <div class="row mb-3">
+
+                <div class="col-md-12">
+                  <div class="row">
+                    <div class="col-md-3 mb-2">
+                      
+                        {{form.partUnique}}
+                        {% comment %} <label for="textFormOutline" class="form-label select-label">Part Unique</label> {% endcomment %}
+                      
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.maker}}
+                        <label for="{{form.maker.field.widget.attrs.id}}" class="form-label select-label">Maker</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.type}}
+                        <label for="{{form.type.field.widget.attrs.id}}" class="form-label select-label">Type</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.manufacturer}}
+                        <label for="{{form.manufacturer.field.widget.attrs.id}}" class="form-label">Manufacturer</label>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.partNo}}
+                        <label for="{{form.partNo.field.widget.attrs.id}}" class="form-label">Part No</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.group}}
+                        <label for="{{form.group.field.widget.attrs.id}}" class="form-label">Group</label>
+                      </div>
+                    </div>
+                    {% comment %} <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        <input type="text" id="textFormOutline" class="form-control form-control-sm" value="{{part.techncialSpecification}}" readonly>
+                        <label for="textFormOutline" class="form-label">Techncial Specification</label>
+                      </div>
+                    </div> {% endcomment %}
+                    <div class="col-md-3 mb-2">
+                      {% comment %} {{form.techncialSpecification}} {% endcomment %}
+                      <div id="search-autocomplete" class="form-outline autocomplete">
+                        <input type="text" id="textFormSearchTS" class="form-control form-control-sm" name="techSpecName">
+                        <label for="textFormSearchTS" class="form-label">Techncial Specification</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div id="search-autocomplete-matched" class="form-outline autocomplete">
+                        <input type="text" id="textFormMatchedTS" class="form-control form-control-sm" readonly>
+                        <label for="textFormMatchedTS" class="form-label"></label>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-9 mb-2">
+                      <div class="form-outline">
+                        {{form.description}}
+                        <label for="{{form.description.field.widget.attrs.id}}" class="form-label">Description *</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.hsCode}}
+                        <label for="{{form.hsCode.field.widget.attrs.id}}" class="form-label">HS Code</label>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.crossRef}}
+                        <label for="{{form.crossRef.field.widget.attrs.id}}" class="form-label">Cross Ref.</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.ourRef}}
+                        <label for="{{form.ourRef.field.widget.attrs.id}}" class="form-label">Our Ref.</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.drawingNr}}
+                        <label for="{{form.drawingNr.field.widget.attrs.id}}" class="form-label">Drawing Nr</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.barcode}}
+                        <label for="{{form.barcode.field.widget.attrs.id}}" class="form-label">Barcode</label>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.quantity}}
+                        <label for="{{form.quantity.field.widget.attrs.id}}" class="form-label select-label">Quantity</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.unit}}
+                        <label for="{{form.unit.field.widget.attrs.id}}" class="form-label select-label">Unit</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.buyingPrice}}
+                        <label for="{{form.buyingPrice.field.widget.attrs.id}}" class="form-label">Buying Price</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.retailPrice}}
+                        <label for="{{form.retailPrice.field.widget.attrs.id}}" class="form-label">Retail Price</label>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-6 mb-2">
+                      <div class="form-outline">
+                        {{form.dealerPrice}}
+                        <label for="{{form.dealerPrice.field.widget.attrs.id}}" class="form-label">Dealer Price</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.wholesalePrice}}
+                        <label for="{{form.wholesalePrice.field.widget.attrs.id}}" class="form-label">Wholesale Price</label>
+                      </div>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                      <div class="form-outline">
+                        {{form.currency}}
+                        <label for="{{form.currency.field.widget.attrs.id}}" class="form-label select-label">Currency</label>
+                      </div>
+                    </div>
+                  </div>
+    
+                  <div class="row">
+                    <div class="col-md-12 mb-2">
+                      <div class="form-outline">
+                        {{form.note}}
+                        <label for="{{form.note.field.widget.attrs.id}}" class="form-label">Note</label>
+                      </div>
+                    </div>
+                  </div>
+    
+                </div>
+
+              </div>
+              
+              <div class="row mb-3">
+                <ul class="nav nav-pills ms-3" id="nav-{{elementTag}}-{{elementTagId}}-add" role="tablist">
+                  <li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}-add-1">
+                    <a class="nav-link border border-1 rounded-0 border-secondary-subtle  mainNavLinkSubDetail-{{elementTag}} active m-0" data-mdb-pill-init id="navTagLink-{{elementTag}}-{{elementTagId}}-add-1" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}-add-1" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}-add-1" aria-selected="true">
+                      Image
+                    </a>
+                  </li>
+                </ul>
+              </div>
+  
+            </div>
+
+          </div>
+        <!-- Tabs content -->
+
+      </div>
+    </form>
+</div>
+
+
+
+<script>
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "new";
+  var pageUrl = "/data/part_add/";
+  var sessionKey = "{{sessionKey}}";
+  var user = "{{user.id}}";
+
+  $('#id_partUnique').addClass("form-control form-control-sm form-select select");
+  $('#id_partUnique').data("mdb-size", "sm");
+  $('#id_partUnique').data("mdb-filter", "true");
+
+  // Maker seçildiğinde AJAX isteği yaparak Type'ları günceller
+  $('#{{form.maker.field.widget.attrs.id}}').on('change', function() {
+    var makerId = $(this).val();
+    $.ajax({
+        url: '/data/api/maker_types',
+        data: {'maker': makerId},
+        dataType: 'json',
+        success: function(data) {
+            console.log(data);
+            $('#{{form.type.field.widget.attrs.id}}').empty();
+            $('#{{form.type.field.widget.attrs.id}}').append($('<option>').val("").text("--------"));
+            $.each(data, function(i, type) {
+                $('#{{form.type.field.widget.attrs.id}}').append($('<option>').val(type.id).text(type.type));
+            });
+        }
+    });
+  });
+
+  var asyncAutocomplete = document.querySelector('#search-autocomplete');
+  var asyncAutocompleteMatched = document.querySelector('#search-autocomplete-matched');
+  var asyncFilter = async (query) => {
+    var url = `/data/api/parts_for_ts?search=${encodeURI(query)}`;
+    var response = await fetch(url);
+    var data = await response.json();
+    $.ajax({
+      url:'/data/api/parts_for_ts?techncialSpecification=' + $("#textFormSearchTS").val(),
+      dataType: 'json',
+      success: function(data) {
+        console.log(data.length)
+        if(data.length > 0){
+          console.log(data)
+          $("#textFormMatchedTS").val("Matched!");
+          $('#id_partUnique').empty();
+            $.each(data, function(i, part) {
+                $('#id_partUnique').append($('<option>').val(part.id).text(`${part.partUnique.code}.${part.partUniqueCode} | ${part.partNo} | ${part.maker.name} | ${part.type.type}`));
+            });
+        }else{
+          $("#textFormMatchedTS").val("");
+        };
+      }
+    });
+    //console.log($("#textFormSearchTS").val());
+    return data;
+  };
+
+  new mdb.Autocomplete(asyncAutocomplete, {
+    filter: asyncFilter,
+    displayValue: (value) => value.techncialSpecification
+  });
+
+  new mdb.Autocomplete(asyncAutocompleteMatched, {
+    filter: asyncFilter,
+    displayValue: (value) => value.partNo
+  });
+
+  {% comment %} const basicAutocomplete = document.querySelector('#search-autocomplete');
+  $.ajax({
+    url: '/data/api/parts',
+    dataType: 'json',
+    success: function(data){
+
+      const dataFilter = (value) => {
+        return data.filter((item) => {
+          console.log(item.partNo)
+          if(item.techncialSpecification){
+            return item.techncialSpecification.toLowerCase().startsWith(value.toLowerCase());
+          }else{
+            return "";
+          };
+        });
+      };
+    
+      new mdb.Autocomplete(basicAutocomplete, {
+        filter: dataFilter,
+        displayValue: (value) => value.techncialSpecification,
+      });
+    }
+  }); {% endcomment %}
+
+  
+
+</script>
+
+
+{% block javascript %}
+
+<script src="{% static 'js/data/part/add.js' %}"></script>
+
+{% endblock javascript %}

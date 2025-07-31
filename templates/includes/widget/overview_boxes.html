@@ -1,0 +1,232 @@
+{% load static %}
+
+
+
+<div class="row">
+    <!-- Card Başlangıç -->
+    <div class="col-md-3">
+        <div class="row cardMobileHeight">
+            <div class="card col-md-12 border border-1 rounded-0 border-secondary-subtle dashboardCard" style="background-color: {{user.profile.cardColor}};">
+                <div class="row p-2">
+                    <div class="col-md-12 text-start fs-5 text-white">Profile</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 p-0">
+                        {% if user.profile.image %}
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    {% comment %} <img src="{% static 'images/landing/esms-logo-light.png' %}" style="width:auto;max-height:80px;border-radius:50%;" class="michoAppLogoGif text-center"> {% endcomment %}
+                                    <img src="{{user.profile.image.url}}" style="width:auto;max-height:80px;border-radius:50%;" class="text-center">
+                                    {% comment %} <img src="{% static 'images/landing/esms-logo.png' %}" style="width:auto;max-height:80px;border-radius:50%;background:#fff;" class="text-center"> {% endcomment %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <img src="/static/images/icons/no-image.png" style="max-width:44px;border-radius:50%;" class="text-center">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8 cardWidth">
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white text-truncate">
+                                <a id="requestFormDashboard" 
+                                    hx-get="#"
+                                    hx-target="#tabContSub-request"
+                                    hx-swap="afterbegin"
+                                    hx-push-url="true"
+                                    style="max-width:100px;font-size:0.75rem;">
+                                    <strong>Name: </strong>{{user.first_name}} {{user.last_name}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white text-truncate">
+                                <a id="requestFormDashboard" 
+                                    hx-get="#"
+                                    hx-target="#tabContSub-request"
+                                    hx-swap="afterbegin"
+                                    hx-push-url="true"
+                                    style="max-width:100px;font-size:0.75rem;">
+                                    <strong>Position: </strong>{{user.profile.position}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white text-truncate">
+                                <a id="requestFormDashboard" 
+                                    hx-get="#"
+                                    hx-target="#tabContSub-request"
+                                    hx-swap="afterbegin"
+                                    hx-push-url="true"
+                                    style="max-width:100px;font-size:0.75rem;">
+                                    <strong>Phone: </strong>{{user.profile.phone}}
+                                </a>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white text-truncate">
+                                <a id="requestFormDashboard" 
+                                    hx-get="#"
+                                    hx-target="#tabContSub-request"
+                                    hx-swap="afterbegin"
+                                    hx-push-url="true"
+                                    style="max-width:100px;font-size:0.75rem;">
+                                    <strong>Bonus: </strong>$0
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% comment %} <div class="col-md-8 p-0">
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white">{{user.profile.company}}</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12 text-start text-white"></div>
+                        </div>
+                    </div> {% endcomment %}
+                </div>
+                <div class="row p-2 cardMobileMargin">
+                    <div class="col-md-12 p-0 text-end"><button class="btn btn-sm text-white shadow-0" hx-get="{% url 'user:user_profile' request.user %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true">Profile <i class="fa-solid fa-up-right-from-square"></i></button></div>
+                </div>
+                <!-- <i class="bx bxs-cart cart three"></i> -->  
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row cardMobileHeight">
+            <div class="card col-md-12 border border-1 rounded-0 border-secondary-subtle dashboardCard" style="background-color: {{user.profile.cardColor}};">
+                <div class="row p-2">
+                    <div class="col-md-12 text-start fs-5 text-white">Last Projects</div>
+                </div>
+                {% for request in requests|slice:":4" %}
+                    <div class="row">
+                        <div class="col-md-12 text-start text-white text-truncate">
+                            <a id="requestFormDashboard" 
+                                hx-get="/sale/request_update/{{request.pk}}/"
+                                hx-target="#tabContSub-request"
+                                hx-swap="afterbegin"
+                                hx-push-url="true"
+                                style="max-width:100px;font-size:0.75rem;">
+                                {{request.requestNo}} - {{request.customer.name}}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if requests|length < 4 %}
+                    {% for i in ''|center:emptyLineRequestCounter %}
+                    <div class="row">
+                        <div class="col-md-12 text-center text-white"><span class="text-red-500" style="font-size:0.75rem;"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="row p-2 cardMobileMargin">
+                    <div class="col-md-12 p-0 text-end text-white"><button class="btn btn-sm text-white shadow-0" data-mdb-ripple-color="dark" hx-get="{% url 'sale:request_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More <i class="fa-solid fa-up-right-from-square"></i></button></div>
+                </div>
+                <!-- <i class="bx bxs-cart cart three"></i> -->  
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row cardMobileHeight">
+            <div class="card col-md-12 border border-1 border-secondary-subtle rounded-0 dashboardCard" style="background-color: {{user.profile.cardColor}};">
+                <div class="row p-2">
+                    <div class="col-md-12 text-start fs-5 text-white">Pending Invoices</div>
+                </div>
+                {% for approvalInvoice in approvalInvoices|slice:":4" %}
+                    <div class="row">
+                        <div class="col-md-12 text-start text-white text-truncate">
+                            <a id="requestFormDashboard" 
+                                hx-get="#"
+                                hx-target="#tabContSub-request"
+                                hx-swap="afterbegin"
+                                hx-push-url="true"
+                                style="max-width:100px;font-size:0.75rem;">
+                                {{approvalInvoice.project.projectNo}} - {{approvalInvoice.quotation.inquiry.theRequest.customer}}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if approvalInvoices|length < 4 %}
+                    {% for i in ''|center:emptyLineOCCounter %}
+                    <div class="row">
+                        <div class="col-md-12 p-0 text-center text-white"><span class="text-red-500" style="font-size:0.75rem;"> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="row p-2 cardMobileMargin">
+                    <div class="col-md-12 p-0 text-end text-white"><button class="btn btn-sm text-white shadow-0" hx-get="{% url 'account:order_in_process_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalInvoices|length}}</span> <i class="fa-solid fa-up-right-from-square"></i></button></div>
+                </div>
+                <!-- <i class="bx bxs-cart cart three"></i> -->  
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="row cardMobileHeight">
+            <div class="card col-md-12 border border-1 rounded-0 border-secondary-subtle dashboardCard" style="background-color: {{user.profile.cardColor}};">
+                <div class="row p-2">
+                    <div class="col-md-12 text-start fs-5 text-white">Pending Approval</div>
+                </div>
+                {% for approvalQuotation in approvalQuotations|slice:":4" %}
+                    <div class="row">
+                        <div class="col-md-12 text-start text-white text-truncate">
+                            <a id="requestFormDashboard" 
+                                hx-get="{% url 'sale:manager_approval_update_in_dashboard' approvalQuotation.id %}"
+                                hx-target="#addUpdateDataDialogXl"
+                                style="max-width:100px;font-size:0.75rem;cursor:pointer;">
+                                <span class="">{{approvalQuotation.quotationDate|date:'d.m.Y'}} - </span>
+                                {{approvalQuotation.quotationNo}} - 
+                                {{approvalQuotation.user.first_name}} {{approvalQuotation.user.last_name}}
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                {% if approvalQuotations|length < 4 %}
+                    {% for i in ''|center:emptyLineMACounter %}
+                    <div class="row">
+                        <div class="col-md-12 text-center text-white"><span class=""> - </span><a href="#" style="text-decoration:underline;"></a></div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+                <div class="row p-2 cardMobileMargin">
+                    <div class="col-md-12 text-end text-white"><button class="btn btn-sm text-white shadow-0" hx-get="{% url 'sale:manager_approval_data' %}" hx-target="#tabCont" hx-swap="afterbegin">View More<span class="badge bg-danger ms-2">{{approvalQuotations|length}}</span> <i class="fa-solid fa-up-right-from-square"></i></button></div>
+                </div>
+                <!-- <i class="bx bxs-cart cart three"></i> -->  
+            </div>
+        </div>
+    </div>
+    <!-- Card Son -->
+</div>
+
+<script>
+
+    // Hex renk kodunun koyuluğunu hesaplayan fonksiyon
+    function isDarkColor(hexColor) {
+        // Hex kodunu RGB'ye çevir
+        let rgb = parseInt(hexColor.slice(1), 16); // #CCCCCC gibi rengi alıp int'e çevir
+        let r = (rgb >> 16) & 0xff;
+        let g = (rgb >>  8) & 0xff;
+        let b = (rgb >>  0) & 0xff;
+
+        // Luma formülü ile renk açıklığını hesapla
+        let luma = 0.299 * r + 0.587 * g + 0.114 * b;
+        return luma < 128; // 128'in altındaki değerler koyu kabul edilir
+    };
+
+    // Hex renk kodunu koyuluğa göre kontrol et
+    if (isDarkColor("{{user.profile.cardColor}}")) {
+        //$(".dashboardCard .row div").css({"color":"white"}); // Koyu renk ise yazı rengini beyaz yap
+        $('.dashboardCard .row div').attr('style', 'color: white !important');
+        $('.dashboardCard .row div a').attr('style', 'max-width:100px;font-size:0.75rem;color: white !important');
+        $('.dashboardCard .row div button').attr('style', 'color: white !important');
+    } else {
+        //$(".dashboardCard .row div").css({"color":"black"}); // Açık renk ise yazı rengini siyah yap
+        $('.dashboardCard .row div').attr('style', 'color: black !important');
+        $('.dashboardCard .row div a').attr('style', 'max-width:100px;font-size:0.75rem;color: black !important');
+        $('.dashboardCard .row div button').attr('style', 'color: black !important');
+    };
+
+</script>

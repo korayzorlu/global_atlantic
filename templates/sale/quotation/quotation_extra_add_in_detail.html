@@ -1,0 +1,72 @@
+{% load static %}
+<form hx-post="{{ request.path }}" class="" id="form-{{elementTagSub}}-{{elementTagId}}-extra" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% load widget_tweaks %}
+
+    <div class="row border-bottom">
+        <div class="col-md-10 mb-3">
+          <div class="form-outline">
+            {{form.description}}
+            <label for="selectFormOutline" class="form-label select-label">Description</label>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-dark" id="addSubmit-{{elementTagSub}}-{{elementTagId}}" type="submit">Add</button>
+          </div>
+        </div>
+        <div class="col-md-1 mb-3">
+          <div class="d-grid gap-2">
+            <button class="btn btn-sm btn-danger" id="addClose-{{elementTagSub}}-{{elementTagId}}" type="button">Close</button>
+          </div>
+        </div>
+      </div>
+</form>
+
+<script>
+
+    
+
+    var detailRefererPathSub = "{{refererPath}}";
+
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var quotationExtraId = "{{quotationExtra.id}}";
+    var quotationId = "{{quotationExtra.quotation.id}}";
+    var pageUrl = "/sale/quotation_extra_add_in_detail/i_" + quotationId + "/";
+    var addSubDataHxGet = "/sale/quotation_extra_add_in_detail/i_" + quotationId + "/";
+    
+    $("#addClose-{{elementTagSub}}-{{elementTagId}}").click(function() {
+        $("#form-{{elementTagSub}}-{{elementTagId}}-extra").remove();
+        
+    });
+
+    $("#form-{{elementTagSub}}-{{elementTagId}}-extra").submit(function (event) {
+      $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-extra .dataTables_scrollBody").busyLoad("show", {
+          animation: false,
+          spinner: "pulsar",
+          maxSize: "150px",
+          minSize: "150px",
+          text: "Loading ...",
+          background: "rgba(69, 83, 89, 0.6)",
+          color: "#455359",
+          textColor: "#fff"
+      });
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}-extra").DataTable().ajax.reload()
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}-extra").on( 'draw.dt', function () {
+          htmx.process(tableId);
+          $(".tableBox-inform-{{elementTagSub}}-{{elementTagId}}-extra .dataTables_scrollBody").busyLoad("hide", {
+            animation: "fade"
+          });
+      });
+
+      $("#table-{{elementTagSub}}-{{elementTagId}}-extra").DataTable().columns.adjust();
+      
+  });
+
+    
+    
+</script>
+

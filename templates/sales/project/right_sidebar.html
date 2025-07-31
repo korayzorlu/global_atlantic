@@ -1,0 +1,252 @@
+{% load static i18n %}
+{% load abs_filter %}
+<div  class="sidebar sidebar-light sidebar-right sidebar-expand-lg sidebar-collapsed">
+    <!-- Sidebar content -->
+    <div  class="sidebar-content">
+        <div class="sidebar-section sidebar-section-body d-flex align-items-center justify-content-lg-center">
+            <h5 class="mb-0">{% trans "Project Overview" %}</h5>
+            <div class="ml-auto d-lg-none">
+                <button type="button"
+                    class="btn btn-outline-light text-body border-transparent btn-icon rounded-pill btn-sm sidebar-mobile-right-toggle d-lg-none">
+                    <i class="icon-cross2"></i>
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <table class="table table-bordered" style="border-left: hidden!important;">
+                <thead>
+                </thead>
+                <colgroup>
+                    <col span="1" style="white-space: nowrap">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th class="text-muted">{% trans "Project Number" %}</th>
+                        <td>{{ project.no }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Responsible" %}</th>
+                        <td>
+                            
+                            {% if not claim %}
+                            <select name="responsible-select" class="form-control select-search" data-old="{{ project.responsible.id }}">
+                                <option value="">---------</option>
+                                {% for user in users %}
+                                <option value="{{ user.id }}" {% if project.responsible == user %}selected{% endif %}>
+                                    {{ user.username }}</option>
+                                {% endfor %}
+                            </select>
+                            {% else %}
+                            <a href="{% url 'hr:user_detail' project.responsible.id %}"
+                            class="text-default font-weight-semibold letter-icon-title" target="_blank">
+                            {{ project.responsible }}
+                            </a>
+                            {% endif %}        
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Vessel" %}</th>
+                        <td>
+                            {% if project.request.vessel %}
+                            <a href="{% url 'information:vessel_detail' project.request.vessel.id %}"
+                                class="text-default font-weight-semibold letter-icon-title" target="_blank">
+                                {{ project.request.vessel.name }}
+                            </a>
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Customer" %}</th>
+                        <td>
+                            {% if project.request.customer %}
+                            <a href="{% url 'information:company_detail' project.request.customer.id %}"
+                                class="text-default font-weight-semibold letter-icon-title" target="_blank">
+                                {{ project.request.customer.name }}
+                            </a>
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Person in Contact" %}</th>
+                        <td>
+                            {% if project.request.person_in_contact %}
+                            <a href="{% url 'information:contact_detail' project.request.person_in_contact.id %}"
+                                class="text-default font-weight-semibold letter-icon-title" target="_blank">
+                                {{ project.request.person_in_contact.get_full_name }}
+                            </a>
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Project Date" %}</th>
+                        <td>{{ project.project_date }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Maker" %}</th>
+                        <td>
+                            {% if project.request.maker %}
+                            <a href="{% url 'parts:maker_detail' project.request.maker.id %}"
+                                class="text-default font-weight-semibold letter-icon-title" target="_blank">
+                                {{ project.request.maker.name }}
+                            </a>
+                            {% else %} - {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Type" %}</th>
+                        <td>{% if project.request.maker_type %}{{ project.request.maker_type.type }}{% else %} - {% endif %}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Project Status" %}</th>
+                        <td>{{ project.get_stage_display }}</td>
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Project Deadline" %}</th>
+                        {% if humanized_days > 0 %}
+                        <td>{{ humanized_days }} Days Left</td>
+                        {% else %}
+                        <td style="color:rgb(252, 63, 63);">{{ humanized_days|abs }} Days Passed</tdst>
+                        {% endif %}
+                    </tr>                   
+                    {% if not claim %}                     
+                    <tr>
+                        <td colspan="2">
+                            <button type="button" class="btn btn-lg btn-danger w-100 finish_project" {% if project.is_closed %}disabled{% endif %}>{% trans 'Finish' %}</button>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+       
+        {% if  not_confirmed_quotation %} 
+        <div class="sidebar-section sidebar-section-body d-flex align-items-center justify-content-lg-center">
+            <h5 class="mb-0">{% trans "Not Confirmation Info" %}</h5>
+            <div class="ml-auto d-lg-none">
+                <button type="button"
+                    class="btn btn-outline-light text-body border-transparent btn-icon rounded-pill btn-sm sidebar-mobile-right-toggle d-lg-none">
+                    <i class="icon-cross2"></i>
+                </button>
+            </div>
+        </div>
+        <div class="sidebar-section">
+            <table class="table table-bordered" style="border-left: hidden!important;">
+                <thead>
+                </thead>
+                <colgroup>
+                    <col span="1" style="white-space: nowrap">
+                    <col>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th class="text-muted">{% trans "Delivered Delay" %}</th>
+                        <td>{{not_confirmed_quotation.notconfirmation.delievery_delay}}</td>
+                    </tr> 
+                    <tr>
+                        <th class="text-muted">{% trans "Delivery Process Type" %}</th>
+                        <td>{{not_confirmed_quotation.notconfirmation.delivery_process_type}}</td>
+                    </tr> 
+                    <tr>
+                        <th class="text-muted">{% trans "Customer Reaction" %}</th>
+                        <td>{{not_confirmed_quotation.notconfirmation.customer_reaction}}</td>
+                    </tr> 
+                    <tr>
+                        <th class="text-muted">{% trans "Final Decision" %}</th>
+                        <td>{{not_confirmed_quotation.notconfirmation.final_decision}}</td>
+                    </tr> 
+                    <tr>
+                        <th class="text-muted">{% trans "Not Confirmation Reasons" %}</th>
+                        <td>
+                            {% if not_confirmed_quotation.notconfirmation.reason_choices %}
+                            {% for choice in not_confirmed_quotation.notconfirmation.reason_choices.all %}
+                            {{choice.get_name_display}}</br>
+                            {% endfor %}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        
+                    </tr>
+                    <tr>
+                        <th class="text-muted">{% trans "Suggestion" %}</th>
+                        <td>{{not_confirmed_quotation.notconfirmation.suggestion}}</td>
+                    </tr> 
+                </tbody>
+            </table>
+        {% endif %}
+        
+        <div class="sidebar-section {% if not claim %} mt-3 {% endif %} text-center">
+            {% if claim %}
+            {% elif not_confirmed_quotation%}
+            {% else %}
+            <label class="btn btn-primary">
+                <span>{% trans "Add File" %} ({% trans "Max" %}: 5 MB)</span>
+                <input id="file-add" type="file" hidden>
+            </label>
+            {% endif %}
+            <div class="table-responsive">
+                <table id="file-table" class="table table-bordered" style="border-left: hidden!important;">
+                    <colgroup>
+                        <col span="1" style="width: 1%; white-space: nowrap">
+                        <col span="1" style="width: 1%; white-space: nowrap">
+                        <col span="1" style="width: 1%; white-space: nowrap">
+                        {% if claim %}
+                        {% elif not_confirmed_quotation%}
+                        {% else %}
+                            <col span="1" style="width: 1%; white-space: nowrap;"> 
+                        {% endif %}
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th hidden=""></th>
+                            <th class="px-1">{% trans "File" %}</th>
+                            <th class="px-1">{% trans "Size" %}</th>
+                            <th class="px-1">{% trans "Date" %}</th>
+                            {% if claim %}
+                            {% elif not_confirmed_quotation%}
+                            {% else %}  
+                                <th class="px-1">{% trans "Action" %}</th> 
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /sidebar content -->
+
+<style>
+    .sidebar-right {
+        width: auto;
+        max-width: 24rem;
+        position: fixed;
+        z-index: 1072 !important;
+        right: -24rem;
+
+    }
+
+    .sidebar-expand-lg.sidebar-right {
+        box-shadow: 0.25rem 0 1rem rgb(0 0 0 / 35%);
+        transition: left ease-in-out .15s, right ease-in-out .15s;
+    }
+
+    td div {
+        width: 125px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .select2-container--open {
+        z-index: 1073
+    }
+
+    .swal2-container {
+        z-index: 1074;
+    }
+</style>

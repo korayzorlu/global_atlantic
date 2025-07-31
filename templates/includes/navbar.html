@@ -1,0 +1,693 @@
+{% load static %}
+{% block header %}
+{% load get_objects %}
+<!-- StyleSheet-->
+<link rel="stylesheet" href="{% static 'css/layout/components/header/header.css' %}">
+<!-- /StyleSheet End-->
+
+<!-- Main navbar -->
+<div class="navbar navbar-expand-md fixed-top" style="position: sticky; padding: 0;display: flex;width: 100%;justify-content:start;">
+    <div class="navbar-brand text-lg-left p-0">
+        <div style="padding: 0 15px;">
+            {% comment %} {% if request.user.profile.theme == 'light' %}
+            <img id="logo-navbar" src="{% static 'images/icons/anchor.svg' %}">
+            <h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:#333">MichoAPP</h5>
+            {% else %}
+            <img id="logo-navbar" src="{% static 'images/icons/anchor.svg' %}">
+            <h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:#fff">MichoAPP</h5>
+            {% endif %} {% endcomment %}
+            {% if request.user.profile.theme == 'light' %}
+            <i class='fa-solid fa-bars btnmenu' id="btnmenu"></i>
+            {% comment %} <i class='fa-solid fa-bars' data-mdb-ripple-init id="slim-toggler"></i> {% endcomment %}
+            <span style="display:flex;align-items:center;"></span>
+            <div style="width:100%;display:flex;justify-content:center;gap:20px;">
+                {% comment %} <a><i class="fa-solid fa-gear"></i></a> {% endcomment %}
+            </div>
+            {% comment %} <img id="logo-navbar" src="{% static 'images/landing/logo-dark.png' %}">
+            <h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:#333">MichoAPP</h5> {% endcomment %}
+            {% else %}
+            <i class='fa-solid fa-bars btnmenu' id="btnmenu" style="color: #fff;"></i>
+            {% comment %} <i class='fa-solid fa-bars' data-mdb-ripple-init id="slim-toggler" style="color: #fff;"></i> {% endcomment %}
+            <span></span>
+            <div style="width:100%;display:flex;justify-content:center;gap:20px;">
+                {% comment %} <a><i class="fa-solid fa-gear"></i></a> {% endcomment %}
+            </div>
+            {% comment %} <img id="logo-navbar" src="{% static 'images/landing/logo-light.png' %}">
+            <h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:#fff">MichoAPP</h5> {% endcomment %}
+            {% endif %} 
+        </div>
+    </div>
+
+    {% comment %} <div class="d-md-none" id="" style="margin-inline-start: auto;">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-mobile">
+            <i class="icon-tree5"></i>
+        </button>
+    </div> {% endcomment %}
+
+    <!-- Tabs navs -->
+    <ul class="nav nav-pills sortable-list d-flex" id="tabNav" data-mdb-sortable="sortable" role="tablist">
+                    
+                    
+    </ul>
+    <!-- Tabs navs -->
+    <div class="collapse navbar-collapse" id="navbar-mobile" style="justify-content: end;">
+        <span class="my-3 my-md-0 ml-md-3 mr-md-auto">&nbsp;</span>
+        <ul class="navbar-nav">
+            
+            <div class="nav-item dropdown me-3 navbarSourceCompany">
+                {% comment %} <button class="dropdown-toggle border-0 bg-transparent" type="button" data-mdb-dropdown-init data-mdb-dropdown-init aria-expanded="false"> {% endcomment %}
+                <button class="dropdown-toggle border-0 bg-transparent" type="button" data-mdb-dropdown-init aria-expanded="false">
+                    {% if user.profile.sourceCompany.logo %}
+                        <img src="{{user.profile.sourceCompany.logo.url}}" alt="" style="height: 20px;">
+                    {% else %}
+                        <img src="" alt="" style="height: 20px;">
+                    {% endif %}
+                    {% if user.profile.sourceCompany %}
+                        <span class="d-inline text-truncate" style="max-width: 150px;">{{user.profile.sourceCompany.name}}</span>
+                    {% else %}
+                        <span class="d-inline text-truncate" style="max-width: 150px;">No Company</span>
+                    {% endif %}
+                </button>
+                <ul class="dropdown-menu" style="margin-left:-100px;">
+                    {% for sourceCompany in sourceCompanies %}
+                        <li>
+                            <a class="dropdown-item text-truncate" href="/source_company_update?sc={{sourceCompany.id}}" style="cursor:pointer;">
+                                {% if sourceCompany == user.profile.sourceCompany %}
+                                    <i class="fa-solid fa-circle-check" style="margin-right:0;"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-circle-check" style="margin-right:0;visibility:hidden;"></i>
+                                {% endif %}
+                                {% if sourceCompany.logo %}
+                                    <img src="{{sourceCompany.logo.url}}" alt="" style="height: 20px;">
+                                {% else %}
+                                    <img src="" alt="" style="height: 20px;">
+                                {% endif %}
+                                {{sourceCompany.name}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <!-- Default dropstart button -->
+            <div class="nav-item btn-group dropdown-center shadow-0 me-3">
+                <a href="#" class="navbar-nav-link dropdown-toggle" data-mdb-dropdown-init aria-expanded="false">
+            
+                    <!-- <i class="fa-solid fa-bell" style="font-size:22px;"></i> -->
+                    <img src="/static/images/icons/navbar/google_icons/{{user.profile.theme}}/notification.svg" alt="" style="height: 20px;width: 20px;" class="mt-1">
+                    {% if not notifications %}
+                        <span id="bellNotify" class="badge rounded-pill badge-notification bg-danger" data-count="0" style="margin-left:-0.75rem;"></span>
+                    {% else %}
+                        <span id="bellNotify" class="badge rounded-pill badge-notification bg-danger" data-count="{{notifications.count}}" style="margin-left:-0.75rem;">{{notifications.count}}</span>
+                    {% endif %}
+
+                 </a>
+                <ul class="dropdown-menu p-2" id="notify" style="min-width:300px;/*margin-left:-50px;*/margin-left:-150px;">
+                    <li class="media list-unstyled" id="notifyTitle">
+                        <div>
+                            <h6 class="card-title text-decoration-underline mt-3 mb-3">Notifications</h6>
+                        </div>
+                    </li>
+
+                    {% if not notifications %}
+                        <li class="media list-unstyled" id="noNotifyText">
+
+                            <div class="media-body mb-3 mt-3 {% if  notification.is_read %} text-muted {% endif %}">
+                                There is no notification.
+                            </div>
+                        </li>
+                        
+                    {% endif %}
+                    
+                    {% for notification in notifications %}
+                        <li>
+                            <a class="dropdown-item text-wrap" href="#">
+                                {{notification.message}}
+                            </a>
+                        </li>
+                    {% endfor %}
+                    
+                    
+                    {% comment %} <div class="justify-content-center p-1">
+                        <a href="#" class="text-muted w-100 py-3" data-popup="tooltip" title="Load more"><i
+                                class="icon-menu7 d-block top-0"></i></a>
+                    </div> {% endcomment %}
+                </ul>
+            </div>
+
+            <div class="dropdown me-3">
+                <a
+                    class="dropdown-toggle d-flex align-items-center"
+                    href="#"
+                    id="navbarDropdownMenuAvatar"
+                    role="button"
+                    data-mdb-toggle="dropdown"
+                    aria-expanded="false"
+                >
+                    {% if request.user.profile.image %}
+                    <img src="{{ request.user.profile.image.url }}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image me-2 ms-2" height="20">
+                    {% else %}
+                    <img src="/static/images/icons/navbar/user(1).svg" alt="" class="profile-image ms-2" style="height: 20px;width: 40px;">
+                    <!-- <img src="{% static 'images/icons/user-default.png' %}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image me-2" height="38"> -->
+                    {% endif %}
+                    <span class="me-2">{{ request.user.username }}</span>
+                </a>
+                <ul
+                    class="dropdown-menu dropdown-menu-end"
+                    aria-labelledby="navbarDropdownMenuAvatar"
+                >
+                    <li>
+                        <a class="dropdown-item" hx-get="{% url 'user:user_profile' request.user %}" hx-target="#tabCont" hx-swap="afterbegin" hx-push-url="true" style="cursor:pointer;">
+                            <i class="icon-user-plus"></i> Profile
+                        </a>
+                    </li>
+
+                    <li>
+
+                    {% comment %} <div class="row ps-2 pe-2">
+                        <div class="col-md-12 d-flex justify-content-center">
+                            <div class="form-check form-switch">
+                                {% if user.profile.theme == "light" %}
+                                    <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch">
+                                    <label class="form-check-label" for="themeSwitch">Dark</label>
+                                {% elif user.profile.theme == "dark" %}
+                                    <label class="form-check-label" for="themeSwitch">Light</label>
+                                    <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch" checked>
+                                {% else %}
+                                    <input class="form-check-input" type="checkbox" role="switch" id="themeSwitch">
+                                    <label class="form-check-label" for="themeSwitch">Light</label>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div> {% endcomment %}
+                    
+                    {% if user.profile.theme == "light" %}
+                        <a href="/dark_theme_update/" class="dropdown-item" id="themeSwitchh">
+                            <i class="fa-solid fa-moon"></i> Dark
+                        </a>
+                    {% elif user.profile.theme == "dark" %}
+                    <a href="/light_theme_update/" class="dropdown-item" id="themeSwitchh">
+                        <i class="fa-solid fa-sun"></i> Light
+                    </a>
+                    {% else %}
+                        <a href="/dark_theme_update/" class="dropdown-item" id="themeSwitchh">
+                            <i class="fa-solid fa-moon"></i> Dark
+                        </a>
+                    {% endif %}
+
+                    </li>
+
+                    {% comment %} <li>
+                        <a href="javascript:void(0)" class="dropdown-item" id="themeButton">
+                            <i class="fa-solid fa-moon"></i> {{user.profile.theme}}
+                        </a>
+                    </li> {% endcomment %}
+
+                    <li>
+                        <form class="dropdown-item d-flex" style="gap:5px;align-items:center;">
+                            <input type="color" class="form-control form-control-color form-control-sm" id="dashboardCardColor" value="{{user.profile.cardColor}}" title="Choose a color" style="border:none;padding: 0;width:1rem;height:1rem;border-radius:50%;">
+                            <span>Theme Color</span>
+                        </form>
+                    </li>
+                    {% comment %} <li class="nav-item language-switch m-1">
+                    <div class="color-picker" data-mdb-picker="color-picker" data-mdb-color-picker-dropdown="true">Card Thema</div>
+                    </li> {% endcomment %}
+                    <li>
+                        <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#aboutMichoModal" style="cursor: pointer;"><i class="icon-switch2"></i>About Micho</a>
+                        
+                    </li>
+                    <li>
+                        {% comment %} <a href="{% url 'user:logout' %}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a> {% endcomment %}
+                        <a class="dropdown-item logoutButton" title="Çıkış Yap" data-bs-toggle="modal" data-bs-target="#logoutModalCenter"><i class="icon-switch2"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- <li class="nav-item dropdown dropdown-user ms-2 mt-2">
+                <a href="#" class="navbar-nav-link d-flex align-items-center dropdown-toggle" data-toggle="dropdown">
+                    {% if request.user.profile.image %}
+                    <img src="{{ request.user.profile.image.url }}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image me-2" height="38">
+                    {% else %}
+                    <img src="{% static 'images/icons/user-default.png' %}" alt="avatar"
+                        class="rounded-circle mr-2 profile-image me-2" height="38">
+                    {% endif %}
+                    <span>{{ request.user.username }}</span>
+                </a>
+ 
+                <div class="dropdown-menu drop_menu_animation_half_second">
+                    <a href="{% url 'user:profile_page' %}" class="dropdown-item"><i class="icon-user-plus"></i> My
+                        Profile</a>
+                    <a href="#" class="dropdown-item"><i class="icon-coins"></i> My Balance</a>
+                    <a href="#" class="dropdown-item"><i class="icon-comment-discussion"></i> Messages 
+                        <span
+                            class="badge badge-pill bg-blue ml-auto">58</span>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="#" class="dropdown-item"><i class="fa-solid fa-gears"></i> Account Settings</a>
+                    <a href="{% url 'user:logout' %}" class="dropdown-item"><i class="icon-switch2"></i> Logout</a>
+                </div>
+            </li> -->
+
+        </ul>
+    </div>
+
+    <div class="navbar-item ms-auto me-3 d-flex" id="mobileLogo">
+        <img src="{% static 'images/landing/logo/' %}{{ user.profile.theme }}/esms-logo.png" alt="" height="20">
+    </div>
+
+</div>
+<!-- /main navbar -->
+
+<script>
+    {% comment %} const notifySocket = new WebSocket(
+        (window.location.protocol === 'https:' ? 'wss://' : 'ws://')
+        + window.location.host
+        + '/ws/notify/'
+    ); {% endcomment %}
+
+    {% comment %} notifySocket.onopen = function (e) {
+        console.log('Socket successfully connected.');
+    };
+
+    notifySocket.onclose = function (e) {
+        console.log('Socket closed unexpectedly');
+    };
+
+    notifySocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        const message = data.message;
+        // Call the setMessage function to add the new li element
+        // Create a new li element
+        var newLi = document.createElement('li');
+
+        // Create a new anchor element
+        var newAnchor = document.createElement('a');
+        newAnchor.className = 'dropdown-item text-wrap';
+        newAnchor.href = '#';
+        newAnchor.textContent = message;
+
+        // Append the anchor element to the li element
+        newLi.appendChild(newAnchor);
+
+        var noNotifyText = document.getElementById('noNotifyText');
+        if(noNotifyText){
+            noNotifyText.remove()
+        };
+
+        var notifyTitle = document.getElementById('notifyTitle');
+
+        // Get the ul element with the id "notify"
+        var ulElement = document.getElementById('notify');
+
+        // Append the new li element to the ul element
+        //ulElement.prepend(newLi);
+
+        notifyTitle.parentNode.insertBefore(newLi, notifyTitle.nextSibling);
+
+        // getting object of count
+        count = document.getElementById('bellNotify').getAttribute('data-count');
+        document.getElementById('bellNotify').setAttribute('data-count', parseInt(count) + 1);
+        newCount = parseInt(count) + 1;
+        document.getElementById('bellNotify').innerText = newCount;
+
+        var totalCount = 24000
+        var singleCount = count
+        var percentCount = singleCount/(totalCount/100)
+
+        $("#testProgressBar").css({"width":percentCount + "%"});
+
+    };
+
+    $('#notify').on("shown.bs.dropdown", function(e){
+        console.log("tetiklendi");
+    }); {% endcomment %}
+
+
+
+    //$('.color-picker').on('onChange.mdb.colorPicker', (e) => {
+        //console.log(e.color);
+ 
+    //$(".card.col-md-12").css({"background-color":e.color});
+    //});
+
+    function setSourceCompany(clickedSourceCompany){
+        
+        $.post('/user/source_company_update/' + $(clickedSourceCompany).attr("val") + '/');
+
+        $(".sourceCompany").find("i").css({"visibility" : "hidden"});
+        $(clickedSourceCompany).find("i").css({"visibility" : "visible"});
+
+        //setTimeout(function() {
+        //    window.location.href="/";
+        //}, 750)
+   
+
+    };
+
+    $('#themeSwitch').on('change', function() {
+        if(this.checked == true){
+            window.location.href = "/user/dark_theme_update/";
+
+            {% comment %} var head  = document.getElementsByTagName('head')[0];
+            var link1  = document.createElement('link');
+            link1.id = 'darkThemelink'
+            link1.rel  = 'stylesheet';
+            link1.type = 'text/css';
+            link1.href = '/static/css/style-dark.css';
+            head.appendChild(link1);
+            var link2  = document.createElement('link');
+            link2.id = 'darkThemelinkMDB'
+            link2.rel  = 'stylesheet';
+            link2.type = 'text/css';
+            link2.href = '/static/lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/css/mdb-custom-dark.min.css';
+            head.appendChild(link2); {% endcomment %}
+        }else{
+            window.location.href = "/user/light_theme_update/";
+        };
+    });
+
+    $('#themeButton').on('click', function() {
+        {% if user.profile.theme == "light" %}
+            fetch("/dark_theme_update/")
+                .then((response) => {
+                    const currentThemeMDB = document.getElementById("themeLinkMDB").getAttribute("href");
+                    const newThemeMDB = currentThemeMDB.includes("mdb-custom-dark.min.css") 
+                        ? "{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/css/mdb-custom.min.css' %}" 
+                        : "{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/css/mdb-custom-dark.min.css' %}";
+
+                    
+
+                    const currentTheme = document.getElementById("themeLink").getAttribute("href");
+                    const newTheme = currentTheme.includes("style-dark.css") 
+                        ? "{% static 'css/style.css' %}" 
+                        : "{% static 'css/style-dark.css' %}";
+                        
+                    document.getElementById("themeLinkMDB").setAttribute("href", newThemeMDB);
+                    document.getElementById("themeLink").setAttribute("href", newTheme);
+                });
+        {% elif user.profile.theme == "dark" %}
+            fetch("/light_theme_update/")
+                .then((response) => {
+                    const currentThemeMDB = document.getElementById("themeLinkMDB").getAttribute("href");
+                    const newThemeMDB = currentThemeMDB.includes("mdb-custom-dark.min.css") 
+                        ? "{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/css/mdb-custom.min.css' %}" 
+                        : "{% static 'lib/mdb5-standard-ui-kit-pro-advanced-6.4.0/css/mdb-custom-dark.min.css' %}";
+
+                    const currentTheme = document.getElementById("themeLink").getAttribute("href");
+                    const newTheme = currentTheme.includes("style-dark.css") 
+                        ? "{% static 'css/style.css' %}" 
+                        : "{% static 'css/style-dark.css' %}";
+                        
+                    document.getElementById("themeLinkMDB").setAttribute("href", newThemeMDB);
+                    document.getElementById("themeLink").setAttribute("href", newTheme);
+                });
+        {% endif %}
+
+        
+
+        
+        
+
+        
+    });
+
+    // Hex renk kodunun koyuluğunu hesaplayan fonksiyon
+    function isDarkColor(hexColor) {
+        // Hex kodunu RGB'ye çevir
+        let rgb = parseInt(hexColor.slice(1), 16); // #CCCCCC gibi rengi alıp int'e çevir
+        let r = (rgb >> 16) & 0xff;
+        let g = (rgb >>  8) & 0xff;
+        let b = (rgb >>  0) & 0xff;
+
+        // Luma formülü ile renk açıklığını hesapla
+        let luma = 0.299 * r + 0.587 * g + 0.114 * b;
+        return luma < 128; // 128'in altındaki değerler koyu kabul edilir
+    };
+
+    $("#dashboardCardColor").on('change', function(e) {
+        $(".dashboardCard").css({"background-color":e.target.value});
+
+        // Hex renk kodunu koyuluğa göre kontrol et
+        if (isDarkColor(e.target.value)) {
+            //$(".dashboardCard .row div").css({"color":"white"}); // Koyu renk ise yazı rengini beyaz yap
+            $('.dashboardCard .row div').attr('style', 'color: white !important');
+            $('.dashboardCard .row div a').attr('style', 'max-width:100px;font-size:0.75rem;color: white !important');
+            $('.dashboardCard .row div button').attr('style', 'color: white !important');
+        } else {
+            //$(".dashboardCard .row div").css({"color":"black"}); // Açık renk ise yazı rengini siyah yap
+            $('.dashboardCard .row div').attr('style', 'color: black !important');
+            $('.dashboardCard .row div a').attr('style', 'max-width:100px;font-size:0.75rem;color: black !important');
+            $('.dashboardCard .row div button').attr('style', 'color: black !important');
+        };
+        
+        htmx.ajax("GET", `/card_color_update?color=${encodeURIComponent(e.target.value)}`,{target : "#addUpdateDataDialog-inform"});
+    });
+
+    {% comment %} scrollContainer.addEventListener('wheel', (event) => {
+        event.preventDefault(); // Dikey kaydırmayı engelle
+        scrollContainer.scrollLeft += event.deltaY; // Yatay kaydırma
+    }); {% endcomment %}
+
+    
+
+</script>
+
+<script>
+    // setup chat scoket
+    /*
+    const notifyScoket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/notify/'
+    );
+
+    // on socket open
+    notifyScoket.onopen = function (e) {
+        console.log('Socket successfully connected.');
+    };
+
+    // on socket close
+    notifyScoket.onclose = function (e) {
+        console.log('Socket closed unexpectedly');
+    };
+
+    // on receiving message on group
+    notifyScoket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        const message = data.message;
+        // Call the setMessage function to add the new li element
+        setMessage(message);
+
+    };*/
+
+    function setMessage(message) {
+        // Create a new li element
+        var newLi = document.createElement('li');
+
+        // Create a new anchor element
+        var newAnchor = document.createElement('a');
+        newAnchor.className = 'dropdown-item text-wrap';
+        newAnchor.href = '#';
+        newAnchor.textContent = message;
+
+        // Append the anchor element to the li element
+        newLi.appendChild(newAnchor);
+
+        // Get the ul element with the id "notify"
+        var ulElement = document.getElementById('notificationList');
+
+        // Append the new li element to the ul element
+        ulElement.appendChild(newLi);
+
+        // getting object of count
+        count = document.getElementById('bellCount').getAttribute('data-count');
+        document.getElementById('bellCount').setAttribute('data-count', parseInt(count) + 1);
+    }
+
+
+</script>
+
+{% endblock %}
+
+{% block javascript %}
+<script>
+    let moon = "{% static 'images/icons/moon.svg' %}";
+    let sun = "{% static 'images/icons/sun.svg' %}";
+
+    // Message
+    $(document).ready(function(){
+
+$('#open-chatbox').click(function() {
+
+$('#chatbox-popup').show(); // Pop-up'ı göster
+});
+
+$('#closeButton').click(function() {
+$('#chatbox-popup').hide(); // Pop-up'ı gizle
+});
+
+var preloadbg = document.createElement("img");
+preloadbg.src = "https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/timeline1.png";
+
+$("#searchfield").focus(function(){
+  if($(this).val() == "Search contacts..."){
+      $(this).val("");
+  }
+});
+$("#searchfield").focusout(function(){
+  if($(this).val() == ""){
+      $(this).val("Search contacts...");
+      
+  }
+});
+
+$("#sendmessage input").focus(function(){
+  if($(this).val() == "Send message..."){
+      $(this).val("");
+  }
+});
+$("#sendmessage input").focusout(function(){
+  if($(this).val() == ""){
+      $(this).val("Send message...");
+      
+  }
+});
+  
+
+$(".friend").each(function(){		
+  $(this).click(function(){
+      var childOffset = $(this).offset();
+      var parentOffset = $(this).parent().parent().offset();
+      var childTop = childOffset.top - parentOffset.top;
+      var clone = $(this).find('img').eq(0).clone();
+      var top = childTop+12+"px";
+      
+      $(clone).css({'top': top}).addClass("floatingImg").appendTo("#chatbox");									
+      
+      setTimeout(function(){$("#profile p").addClass("animate");$("#profile").addClass("animate");}, 100);
+      setTimeout(function(){
+          $("#chat-messages").addClass("animate");
+          $('.cx, .cy').addClass('s1');
+          setTimeout(function(){$('.cx, .cy').addClass('s2');}, 100);
+          setTimeout(function(){$('.cx, .cy').addClass('s3');}, 200);			
+      }, 150);														
+      
+      $('.floatingImg').animate({
+          'width': "68px",
+          'left':'108px',
+          'top':'20px'
+      }, 200);
+      
+      var name = $(this).find("p strong").html();
+      var email = $(this).find("p span").html();														
+      $("#profile p").html(name);
+      $("#profile span").html(email);			
+      
+      $(".message").not(".right").find("img").attr("src", $(clone).attr("src"));									
+      $('#friendslist').fadeOut();
+      $('#chatview').fadeIn();
+  
+      
+      $('#close').unbind("click").click(function(){				
+          $("#chat-messages, #profile, #profile p").removeClass("animate");
+          $('.floatingImg').animate({
+              'width': "40px",
+              'top':top,
+              'left': '12px'
+          }, 200, function(){$('.floatingImg').remove()});				
+          
+          setTimeout(function(){
+              $('#chatview').fadeOut();
+              $('#friendslist').fadeIn();				
+          }, 50);
+      });
+      
+  });
+});
+
+$(".team").each(function(){		
+  $(this).click(function(){
+      var childOffset = $(this).offset();
+      var parentOffset = $(this).parent().parent().offset();
+      var childTop = childOffset.top - parentOffset.top;
+      var clone = $(this).find('img').eq(0).clone();
+      var top = childTop+12+"px";
+      
+      $(clone).css({'top': top}).addClass("floatingImg").appendTo("#chatbox");									
+      
+      setTimeout(function(){$("#profile p").addClass("animate");$("#profile").addClass("animate");}, 100);
+      setTimeout(function(){
+          $("#chat-messages").addClass("animate");
+          $('.cx, .cy').addClass('s1');
+          setTimeout(function(){$('.cx, .cy').addClass('s2');}, 100);
+          setTimeout(function(){$('.cx, .cy').addClass('s3');}, 200);			
+      }, 150);														
+      
+      $('.floatingImg').animate({
+          'width': "68px",
+          'left':'108px',
+          'top':'20px'
+      }, 200);
+      
+      var name = $(this).find("p strong").html();
+      var email = $(this).find("p span").html();														
+      $("#profile p").html(name);
+      $("#profile span").html(email);			
+      
+      $(".message").not(".right").find("img").attr("src", $(clone).attr("src"));									
+      $('#friendslist').fadeOut();
+      $('#chatview').fadeIn();
+      
+      $('#close').unbind("click").click(function(){				
+          $("#chat-messages, #profile, #profile p").removeClass("animate");
+          $('.floatingImg').animate({
+              'width': "40px",
+              'top':top,
+              'left': '12px'
+          }, 200, function(){$('.floatingImg').remove()});				
+          
+          setTimeout(function(){
+              $('#chatview').fadeOut();
+              $('#friendslist').fadeIn();				
+          }, 50);
+      });
+      
+  });
+});
+
+// Mesaj gönderme işlevi
+function sendMessage() {
+var messageText = $('#sendmessage input').val().trim();
+if (messageText) {
+    var messageDiv = $('<div/>', {'class': 'message right'});
+    var img = $('<img/>', {src: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/245657/2_copy.jpg'});
+    var bubbleDiv = $('<div/>', {'class': 'bubble'}).text(messageText);
+    var span = $('<span/>').text('just now');
+    
+    bubbleDiv.append(span);
+    messageDiv.append(img).append(bubbleDiv);
+    $('#chat-messages').append(messageDiv);
+    
+    $('#chat-messages').scrollTop($('#chat-messages')[0].scrollHeight);
+    $('#sendmessage input').val('');
+    }
+}
+
+// "Send" butonuna tıklanınca mesaj gönder
+$('#send').click(sendMessage);
+
+// "Enter" tuşuna basıldığında mesaj gönder
+$('#sendmessage input').keypress(function(e) {
+if (e.which === 13) {
+    sendMessage();
+    e.preventDefault(); // Form gönderimini engelle
+}
+});	  
+});
+</script>
+
+<script src="{% static 'js/components/aside.js' %}"></script>
+{% endblock javascript %}

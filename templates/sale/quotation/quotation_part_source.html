@@ -1,0 +1,118 @@
+{% load static %}
+
+<form hx-post="{{request.path}}" class="modal-content form-container border" id="form-{{elementTag}}-" enctype="multipart/form-data" style="height:auto!important">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h5 class="modal-title">Change Source</h5>
+    </div>
+    <div class="modal-body">
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="row p-2 pt-0">
+                    <div class="col-md-12 bg-red-esms text-white">
+                        {{quotationPart.inquiryPart.requestPart.part.partNo}} | {{quotationPart.inquiryPart.requestPart.part.description}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <table id="table-{{elementTagSub}}-{{quotationPart.quotation.id}}-sourcePart" class="table table-sm table-bordered">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width:5%;">Select</th>
+                                <th scope="col" style="width:55%;">Supplier</th>
+                                <th scope="col" style="width:10%;">Unit Price</th>
+                                <th scope="col" style="width:10%;">Currency</th>
+                                <th scope="col" style="width:20%;">Availability</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                                {% for inquiryPart in inquiryParts %}
+                                    <tr>
+                                        {% if quotationPart.inquiryPart.inquiry == inquiryPart.inquiry %}
+                                            <td><input class="form-check-input quotationPartSourceSupplier-{{quotationPart.quotation.id}}" type="radio" value="{{inquiryPart.id}}" checked id="select-all-{{elementTagSub}}-quotationPart" name="quotationPartSourceSupplier" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        {% else %}
+                                            <td><input class="form-check-input quotationPartSourceSupplier-{{quotationPart.quotation.id}}" type="radio" value="{{inquiryPart.id}}" id="select-all-{{elementTagSub}}-quotationPart" name="quotationPartSourceSupplier" style="position:relative;margin-top:.19em;margin-left:0.4em;width:0.875rem;height:0.875rem;border-width:1px;"></td>
+                                        {% endif %}
+                                        <td class="ps-1 pe-1">{{inquiryPart.inquiry.supplier.name}}</td>
+                                        <td class="text-end ps-1 pe-1">{{inquiryPart.unitPrice|floatformat:2}}</td>
+                                        <td class="ps-1 pe-1">{{inquiryPart.inquiry.currency.code}}</td>
+                                        <td class="ps-1 pe-1">{{inquiryPart.availability}} days</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+    <div class="modal-footer shadow-5-strong" style="padding: 10px;">
+        <button class="btn btn-secondary bg-red-esms text-white" type="button" data-bs-dismiss="modal">Cancel</button>
+        <button class="btn btn-danger bg-blue-esms" type="button" id="changeQuotationPartSource">Save</button>
+    </div>
+</form>
+
+<script>
+    var elementTag = "{{elementTag}}";
+    var elementTagSub = "{{elementTagSub}}";
+    var sessionKey = "{{sessionKey}}";
+    var pageUrl = "/sale/quotation_part_source/";
+    var user = "{{user.id}}";
+
+    //$("#table-purchaseOrderPartExcel").DataTable().columns.adjust();
+
+    $("#changeQuotationPartSource").on("click", function(){
+        $(".tableBox-inform-quotationPart-{{quotationPart.quotation.id}} .dataTables_scroll").busyLoad("show", {
+            animation: false,
+            spinner: "pulsar",
+            maxSize: "150px",
+            minSize: "150px",
+            text: "Loading ...",
+            background: "rgba(69, 83, 89, 0.6)",
+            color: "#455359",
+            textColor: "#fff"
+        });
+        
+
+        $('.quotationPartSourceSupplier-{{quotationPart.quotation.id}}').each( function(e) {
+            
+            if ($(this).is( ":checked" )) {
+                var selectedInquiryPartId = $(this).val();
+                htmx.ajax("POST", "/sale/quotation_part_source/?q={{quotationPart.quotation.id}}&qp={{quotationPart.id}}" + "&ip=" + selectedInquiryPartId);
+                addUpdateDataModalXl.hide();
+            };
+        });
+
+        
+
+    });
+    
+
+    var day = new Date().getDate()
+    var month = new Date().getMonth() + 1
+    var year = new Date().getFullYear()
+
+    $('#startDate').val("01/01/2024")
+    $('#endDate').val(day + "/" + month + "/" + year)
+
+    {% comment %} $('#startDatePicker').on("valueChanged.mdb.datepicker", function(e) {
+        // get value from first datepicker and set it as minimum date in a second datepicker
+        console.log(e);
+        console.log($('#startDate').val());
+    });	 {% endcomment %}
+
+
+    //$('#companyListOC').select2();
+
+    
+
+</script>
+
+{% block javascript %}
+
+{% endblock javascript %}

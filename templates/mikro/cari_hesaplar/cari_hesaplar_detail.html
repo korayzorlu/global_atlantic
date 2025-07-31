@@ -1,0 +1,205 @@
+{% load static %}
+
+{% load widget_tweaks %}
+
+<li class="nav-item" role="presentation" id="navTag-{{elementTag}}-{{elementTagId}}" style="display:none;">
+    <a class="nav-link mainNavLinkSub-{{elementTag}} position-relative border border-1 rounded-0 border-secondary-subtle text-truncate" id="navTagLink-{{elementTag}}-{{elementTagId}}" data-mdb-pill-init data-mdb-toggle="tab" href="#tabPane-{{elementTag}}-{{elementTagId}}" role="tab" aria-controls="tabPane-{{elementTag}}-{{elementTagId}}" aria-selected="true" style="font-size:9px;padding:10px 25px 10px 25px;margin: 0px!important;"> 
+  
+      {{cari.unvan1}}
+      <button class="btn btn-tertiary position-absolute top-20 translate-middle badge p-1" href="#" id="removeNav-{{elementTag}}-{{elementTagId}}" style="margin-left: 5%;">
+        <i class="fa-solid fa-xmark" style="font-size:0.75rem;"></i>
+      </button>
+  </a>
+</li>
+
+<div class="tab-pane mainTabPaneSub-{{elementTag}} fade" id="tabPane-{{elementTag}}-{{elementTagId}}" role="tabpanel" aria-labelledby="navTagLink-{{elementTag}}-{{elementTagId}}">
+  <form hx-post="{{request.path}}" class="modal-content form-container border border mainAddForm" id="form-{{elementTag}}-{{elementTagId}}" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.media }}
+    {% load widget_tweaks %}
+    <div class="modal-header border-2 border-bottom" style="box-shadow:none!important;background-color: #c9c9c9;">
+      <div class="me-auto" id="message-container-{{elementTag}}-{{elementTagId}}"></div>
+    </div>
+
+    <div class="modal-body p-2" style="box-shadow:none;">
+
+      <div class="row mb-3">
+        <div class="col-md-12">
+          <div class="row">
+
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-cari-no" class="form-control form-control-sm" value="{{cari.kod}}" readonly>
+                            <label for="formOutline-{{elementTag}}-cari-no" class="form-label">Cari No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-cari-adi" class="form-control form-control-sm" value="{{cari.unvan1}}" readonly>
+                            <label for="formOutline-{{elementTag}}-cari-adi" class="form-label">Cari Ünvan</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-cari-adi2" class="form-control form-control-sm" value="{{cari.unvan2}}" readonly>
+                            <label for="formOutline-{{elementTag}}-cari-adi2" class="form-label">Cari Ünvan 2</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-hareket-tipi" class="form-control form-control-sm" value="{{cari.hareketTipi}}" readonly>
+                            <label for="formOutline-{{elementTag}}-hareket-tipi" class="form-label">Hareket Tipi</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-baglanti-tipi" class="form-control form-control-sm" value="{{cari.baglantiTipi}}" readonly>
+                            <label for="formOutline-{{elementTag}}-baglanti-tipi" class="form-label">Bağlantı Tipi</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-baglanti-ortaklik" class="form-control form-control-sm" value="{{cari.bagliOrtaklikFirmaNo}}" readonly>
+                            <label for="formOutline-{{elementTag}}-baglanti-ortaklik" class="form-label">Bağlantı Ortaklısa Firma No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-2">
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="formOutline-{{elementTag}}-doviz" class="form-control form-control-sm" value="{{cari.doviz}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-doviz" class="form-label">Döviz Cinsi 1</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="formOutline-{{elementTag}}-doviz2" class="form-control form-control-sm" value="{{cari.doviz1}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-doviz2" class="form-label">Döviz Cinsi 2</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="formOutline-{{elementTag}}-doviz3" class="form-control form-control-sm" value="{{cari.doviz2}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-doviz3" class="form-label">Döviz Cinsi 3</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 mb-2">
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="formOutline-{{elementTag}}-muhasebe-kodu" class="form-control form-control-sm" value="{{cari.muhasebeKodu}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-muhasebe-kodu" class="form-label">Muhasebe Kodu 1</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="formOutline-{{elementTag}}-muhasebe-kodu1" class="form-control form-control-sm" value="{{cari.muhasebeKodu1}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-muhasebe-kodu1" class="form-label">Muhasebe Kodu 2</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <div class="form-outline">
+                                    <input type="text" id="formOutline-{{elementTag}}-muhasebe-kodu2" class="form-control form-control-sm" value="{{cari.muhasebeKodu2}}" readonly>
+                                    <label for="formOutline-{{elementTag}}-muhasebe-kodu2" class="form-label">Muhasebe Kodu 3</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-ana-cari-kodu" class="form-control form-control-sm" value="{{cari.anaCariKodu}}" readonly>
+                            <label for="formOutline-{{elementTag}}-ana-cari-kodu" class="form-label">Ana Cari Kodu</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-temsilci-kodu" class="form-control form-control-sm" value="{{cari.temsilciKodu}}" readonly>
+                            <label for="formOutline-{{elementTag}}-temsilci-kodu" class="form-label">Temsilci Kodu</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-grup-kodu" class="form-control form-control-sm" value="{{cari.grupKodu}}" readonly>
+                            <label for="formOutline-{{elementTag}}-grup-kodu" class="form-label">Grup Kodu</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-sektor-kodu" class="form-control form-control-sm" value="{{cari.sektorKodu}}" readonly>
+                            <label for="formOutline-{{elementTag}}-sektor-kodu" class="form-label">Sektör kodu</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-bolge-kodu" class="form-control form-control-sm" value="{{cari.bolgeKodu}}" readonly>
+                            <label for="formOutline-{{elementTag}}-bolge-kodu" class="form-label">Bölge Kodu</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-veri-dairesi-kodu" class="form-control form-control-sm" value="" readonly>
+                            <label for="formOutline-{{elementTag}}-veri-dairesi-kodu" class="form-label">Vergi Dairesi Kodu</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-veri-dairesi-no" class="form-control form-control-sm" value="{{cari.vergiDairesiNo}}" readonly>
+                            <label for="formOutline-{{elementTag}}-veri-dairesi-no" class="form-label">Vergi Dairesi No</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-2">
+                        <div class="form-outline">
+                            <input type="text" id="formOutline-{{elementTag}}-veri-dairesi-adi" class="form-control form-control-sm" value="{{cari.vergiDairesiAdi}}" readonly>
+                            <label for="formOutline-{{elementTag}}-veri-dairesi-adi" class="form-label">Vergi Dairesi Adı</label>
+                        </div>
+                    </div>
+                </div>
+            
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+  
+  </form>
+</div>
+
+
+<script>
+
+  var elementTag = "{{elementTag}}";
+  var elementTagSub = "{{elementTagSub}}";
+  var elementTagId = "{{elementTagId}}";
+  var companyId = "{{cariKod}}";
+  var pageUrl = "/mikro/cari_hesaplar_update/{{elementTagId}}/"
+  var cariKod = "{{cariKod}}";
+
+</script>
+
+{% block javascript %}
+
+<script src="{% static 'js/mikro/cari_hesaplar/detail.js' %}"></script>
+
+{% endblock javascript %}

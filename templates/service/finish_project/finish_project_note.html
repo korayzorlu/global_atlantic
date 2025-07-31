@@ -1,0 +1,113 @@
+{% load static %}
+
+<div class="col-md-12 border notesWidget">
+    <div class="row p-3 pt-1 d-block">
+        <div class="col-md-12">
+            <div class="row p-0">
+                <div class="col-md-12 text-center fs-5 p-0">
+                    
+                    <div class="accordion accordion-flush p-0" id="finishProjectOfferNote-{{elementTagId}}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="accordion-item rounded-0">
+                                    <h2 class="accordion-header" id="">
+                                        <button data-mdb-collapse-init class="accordion-button accordion-button-add text-red-esms fw-bold rounded-0" type="button"
+                                            data-mdb-toggle="collapse"
+                                            data-mdb-target="#accordion-finishProjectNote-new"
+                                            aria-expanded="true"
+                                            aria-controls="accordion-finishProjectNote-new"
+                                            style="height:20px;">
+                                            New
+                                        </button>
+                                    </h2>
+                                    <div id="accordion-finishProjectNote-new" class="accordion-collapse collapse" aria-labelledby="">
+                                        <div class="accordion-body text-start">
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    <div class="form-outline" data-mdb-input-init>
+                                                        <input type="text" id="finishProjectNoteTitleAdd-{{elementTagId}}" class="form-control form-control-sm">
+                                                        <label class="form-label" for="finishProjectNoteTitleAdd-{{elementTagId}}">Title</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <div class="form-outline" data-mdb-input-init>
+                                                        <textarea type="text" id="finishProjectNoteTextAdd-{{elementTagId}}" class="form-control form-control-sm" rows="4" name="noteText">
+
+                                                        </textarea>
+                                                        <label class="form-label" for="finishProjectNoteTextAdd-{{elementTagId}}">Text</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-sm btn-danger bg-red-esms w-100" id="finishProjectNoteAdd-{{elementTagId}}" type="button" style="">
+                                                        Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="accordion accordion-flush p-0" id="finishProjectOfferNote-{{elementTagId}}"> 
+                        <div class="row">
+                            <div class="col-md-12 overflow-auto" id="finishProjectNoteList-{{elementTagId}}" style="max-height:38vh;">
+                                {% for note in notes %}
+                                    <div class="accordion-item rounded-0" id="accordion-finishProjectNote-item-{{note.id}}">
+                                        <h2 class="accordion-header" id="">
+                                            <button data-mdb-collapse-init class="accordion-button collapsed rounded-0" type="button" data-mdb-toggle="collapse"
+                                            data-mdb-target="#accordion-finishProjectNote-{{note.id}}" aria-expanded="false"
+                                            aria-controls="accordion-finishProjectNote-{{note.id}}"
+                                            style="height:20px;">
+                                            {{note.created_date|date:"d.m.Y"}} - {{note.user.first_name}}  {{note.user.last_name}} - {{note.title}}
+                                            </button>
+                                        </h2>
+                                        <div id="accordion-finishProjectNote-{{note.id}}" class="accordion-collapse collapse" aria-labelledby="">
+                                            <div class="accordion-body text-start" style="font-size:0.75rem;">
+                                            <div class="row mb-3">
+                                                <div class="col-md-12">
+                                                    {{note.text}}
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <button class="btn btn-sm btn-tertiary text-red-esms finishProjectNote" type="button" data-note="{{note.id}}">
+                                                        <i class="fa-solid fa-trash-can fs-5"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#finishProjectNoteAdd-{{elementTagId}}").on("click", function(){
+        $(this).attr("disabled","")
+        $(this).text("Loading...")
+
+        htmx.ajax("GET", "/service/finish_project_note_add/o_{{finishProject.id}}?title=" + $("#finishProjectNoteTitleAdd-{{elementTagId}}").val() + "&text=" + $("#finishProjectNoteTextAdd-{{elementTagId}}").val(), {target : "#addUpdateDataDialog-inform"});
+    });
+
+    $(".finishProjectNote").on("click", function(){
+        $(this).html('<i class="fa-solid fa-circle-notch fa-spin fs-5"></i>');
+        htmx.ajax("GET", "/service/finish_project_note_delete?note=" + $(this).attr("data-note"), {target : "#addUpdateDataDialog-inform"});
+    });
+
+</script>
+

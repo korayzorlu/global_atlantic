@@ -1,0 +1,13 @@
+{% load static %}
+
+{% block buttoneditremove %}
+<div class="align-self-md-center actionButtons">
+    <a href="{{edit_url}}" class="button-edit">
+        <img src="{% static 'images/icons/edit.svg' %}">
+    </a>
+    <a href="{{delete_url}}" class="button-remove">
+        <img src="{% static 'images/icons/cancel.svg' %}">
+    </a>
+</div>
+
+{% endblock %}
