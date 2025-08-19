@@ -19,7 +19,7 @@ import logging
 import requests
 
 import threading
-import htmx
+#import htmx
 
 # Her thread için bir yerel kullanıcı değişkeni
 _user = threading.local()

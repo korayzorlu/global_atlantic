@@ -1,12 +1,12 @@
 from django.contrib import admin
 # Register your models here.
 from simple_history.admin import SimpleHistoryAdmin
-from pyheif_pillow_opener import register_heif_opener
+#from pyheif_pillow_opener import register_heif_opener
 
 from .models import *
 
 
-register_heif_opener()
+#register_heif_opener()
 
 @admin.register(Acceptance)
 class AcceptanceAdmin(admin.ModelAdmin):

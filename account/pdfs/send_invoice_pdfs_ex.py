@@ -17,7 +17,7 @@ from reportlab.lib.units import pica
 from PIL import Image
 
 from django.template.loader import render_to_string
-from weasyprint import HTML
+#from weasyprint import HTML
 
 from django.db.models import Count
 from django.db.models import Q
