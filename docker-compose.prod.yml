@@ -11,7 +11,7 @@ services:
     command: ["redis-server", "--appendonly", "yes"]
     restart: always
     networks:
-      - arinet_network
+      - global_atlantic_network
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -24,11 +24,11 @@ services:
       RABBITMQ_DEFAULT_PASS: guest
     restart: always
     networks:
-      - arinet_network
+      - global_atlantic_network
 
   web:
-    container_name: arinet_backend
-    image: arinet_backend
+    container_name: global_atlantic
+    image: global_atlantic
     build: .
     #command: gunicorn core.wsgi:application --bind 0.0.0.0:8000 --timeout 600 --log-level debug
     #command: gunicorn --access-logfile - --workers 33 --limit-request-line 6000 --bind unix:/run/gunicorn.sock core.asgi:application -k uvicorn.workers.UvicornWorker
@@ -43,7 +43,7 @@ services:
     env_file:
       - .env
     networks:
-      - arinet_network
+      - global_atlantic_network
 
   nginx:
     image: nginx:latest
@@ -65,8 +65,8 @@ services:
     depends_on:
       - web
     restart: always
-    networks:
-      - arinet_network
+    networks: 
+      - global_atlantic_network
 
   # certbot:
   #   image: certbot/certbot
@@ -76,7 +76,7 @@ services:
   #     - ./nginx/certbot-www:/var/www/certbot
   #   entrypoint: "/bin/sh -c 'echo ready'"
   #   networks:
-  #     - arinet_network
+  #     - global_atlantic_network
 
   celery:
     build:
@@ -89,7 +89,7 @@ services:
       - .:/app
     restart: always
     networks:
-      - arinet_network
+      - global_atlantic_network
 
   celery-beat:
     #image: arinet_backend:latest  # Django uygulamanın image adı
@@ -104,7 +104,7 @@ services:
       - .:/app
     restart: always
     networks:
-      - arinet_network
+      - global_atlantic_network
 
   db:
     image: postgres:16
@@ -123,13 +123,14 @@ services:
     env_file:
       - .env
     networks:
-      - arinet_network
+      - global_atlantic_network
 
 volumes:
   postgres_data:
   redis_data:
 
 networks:
-  arinet_network:
+  global_atlantic_network:
     external: true
+
 

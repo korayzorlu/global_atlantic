@@ -39,7 +39,7 @@ services:
       - "8000:8000"
     volumes:
       - .:/app
-    restart: always
+    restart: always 
     env_file:
       - .env
     networks:
@@ -99,4 +99,6 @@ volumes:
 networks:
   global_atlantic_network:
     external: true
+
+
 
