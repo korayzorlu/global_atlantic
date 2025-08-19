@@ -10,8 +10,8 @@ toolkit.md
 debug.log
 
 # Ignore migration files
-*/migrations/*.py
-*/migrations/0*.py
+# */migrations/*.py
+# */migrations/0*.py
 
 # Actual development file
 core/settings/development.py
