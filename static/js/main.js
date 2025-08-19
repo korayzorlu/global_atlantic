@@ -141,7 +141,7 @@ $(document).ready(function() {
       sidebarContainer.classList.toggle("active");
       homeSection.classList.toggle("active");
     }else{
-      $("#logo-navbar").after('<h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:black">MichoApp</h5>');
+      $("#logo-navbar").after('<h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:black">Global Atlantic</h5>');
     };
   };
   if (menuState == "closed") {
@@ -255,7 +255,7 @@ btnMenu.click(function(){
     sidebarContainer.classList.toggle("active");
     homeSection.classList.toggle("active");
     if(sidebarv3.classList.contains("active")){
-      $("#logo-navbar").after('<h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:black">MichoApp</h5>');
+      $("#logo-navbar").after('<h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:black">Global Atlantic</h5>');
       //$(".logo").after('<span id="logo-micho-version" class="navbar-text text-dark" style="position:absolute;padding:0;left:40%;top:4%;"><span class="text-dark" style="font-size:0.75rem;">Beta</span></span>');
       localStorage.setItem('menuState', 'open');
 
@@ -287,7 +287,7 @@ if(window.innerWidth <= 768){
     sidebarContainer.classList.toggle("active");
     homeSection.classList.toggle("active");
     if(sidebarv3.classList.contains("active")){
-      $("#logo-navbar").after('<h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:black">MichoApp</h5>');
+      $("#logo-navbar").after('<h5 class="m-0 mt-1 ml-1" id="logo-text-navbar" style="color:black">Global Atlantic</h5>');
       //$(".logo").after('<span id="logo-micho-version" class="navbar-text text-dark" style="position:absolute;padding:0;left:40%;top:4%;"><span class="text-dark" style="font-size:0.75rem;">Beta</span></span>');
       localStorage.setItem('menuState', 'open');
 

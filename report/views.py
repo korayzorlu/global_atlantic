@@ -127,7 +127,7 @@ class FinancialReportDownloadPdfView(LoginRequiredMixin, View):
                 
         # subject = 'Daily Financial Report'
         # message = f'The daily financial report dated {today} is attached.\n\n This is an automated email. \n'
-        # from_email = 'ESMS - Michoapp <reporting@esmarinesolutions.com>'
+        # from_email = 'ESMS - Global Atlanticapp <reporting@esmarinesolutions.com>'
         # recipient_list = ['koray.zorlu@novutechnologies.com']
         
         # today = datetime.today().date().strftime('%d_%m_%Y')

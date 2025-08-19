@@ -76,7 +76,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.office365.com'
 EMAIL_HOST_USER = "koray.zorlu@novutechnologies.com"
 EMAIL_HOST_PASSWORD = "zLR.:786723"
-#DEFAULT_FROM_EMAIL = "MichoApp <michoapp@outlook.com>"
+#DEFAULT_FROM_EMAIL = "Global Atlantic <michoapp@outlook.com>"
 
 
 

@@ -51,9 +51,9 @@ def sendMailDailyFinancialReport():
             
     subject = 'Daily Financial Report'
     message = f'The daily financial report dated {today} is attached.'
-    from_email = 'ESMS - Michoapp <reporting@esmarinesolutions.com>'
+    from_email = 'ESMS - Global Atlanticapp'
     #recipient_list = ['koray.zorlu@novutechnologies.com']
-    recipient_list = ['semih.ege@echoesgroup.com','onur.coban@esmarinesolutions.com','koray.zorlu@novutechnologies.com']
+    recipient_list = []
     
     today = datetime.today().date().strftime('%d_%m_%Y')
     
@@ -92,8 +92,8 @@ def sendMailDailyFinancialReportTest():
             
     subject = 'Daily Financial Report'
     message = f'The daily financial report dated {today} is attached.'
-    from_email = 'ESMS - Michoapp <reporting@esmarinesolutions.com>'
-    recipient_list = ['koray.zorlu@novutechnologies.com']
+    from_email = 'ESMS - Global Atlanticapp'
+    recipient_list = []
     
     today = datetime.today().date().strftime('%d_%m_%Y')
     

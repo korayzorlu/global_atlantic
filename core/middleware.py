@@ -56,8 +56,8 @@ class PostgreSQLConnectionMiddleware(MiddlewareMixin):
         self.pool = psycopg2.pool.ThreadedConnectionPool(
             1,  # Minimum bağlantı sayısı
             300,  # Maksimum bağlantı sayısı
-            database="michoappdb",
-            user="micho",
+            database="globaldb",
+            user="global",
             password="9527",
             host="localhost",
             port='5432',

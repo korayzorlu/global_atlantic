@@ -23,7 +23,7 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 25
 EMAIL_HOST_USER = "info@novuacademy.com"
 EMAIL_HOST_PASSWORD = "Novuacademy2021"
-DEFAULT_FROM_EMAIL = "MichoApp <info@novuacademy.com>"
+DEFAULT_FROM_EMAIL = "Global Atlantic <info@novuacademy.com>"
 
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
