@@ -34,7 +34,7 @@ services:
     #command: gunicorn --access-logfile - --workers 33 --limit-request-line 6000 --bind unix:/run/gunicorn.sock core.asgi:application -k uvicorn.workers.UvicornWorker
     command: gunicorn --access-logfile - --workers 5 --limit-request-line 6000 --bind 0.0.0.0:8000 core.asgi:application -k uvicorn.workers.UvicornWorker
     environment:
-      DJANGO_SETTINGS_MODULE: core.settings
+      DJANGO_SETTINGS_MODULE: core.settings.development
     ports:
       - "8000:8000"
     volumes:
