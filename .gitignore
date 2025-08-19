@@ -14,7 +14,7 @@ debug.log
 # */migrations/0*.py
 
 # Actual development file
-core/settings/development.py
+#core/settings/development.py
 
 card/fixtures/exhnage-rates.json
 card/fixtures/exchange-rates.json
