@@ -131,6 +131,22 @@ CELERY_TIMEZONE = "Europe/Istanbul"
 CELERY_RESULT_BACKEND = 'django-db'
 CELERY_CACHE_BACKEND = 'django-cache'
 
+##
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672//' # Rabbitmq için
+#CELERY_BROKER_URL = 'redis://redis:6379/0' # Redis için
+
+CELERY_TIMEZONE = "Europe/Istanbul"
+CELERY_ENABLE_UTC = False
+#CELERY_TASK_TRACK_STARTED = True
+#CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
+
+CELERY_BROKER_CONNECTION_HEARTBEAT = 60  # saniye
+CELERY_BROKER_CONNECTION_RETRY = True
+##
+
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 # CELERY_ACCEPT_CONTENT = ['json']
